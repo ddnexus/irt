@@ -17,6 +17,13 @@ built-in or user definable directives embedded in comments.
 When fired from a rails root it uses the rails console.
 
 Write files as you were using the console and add your expected results at any point of the file.
+If a test fails IRT will tell you where and will show you the last few lines of the file, before
+opening an interactive session, so you can explore the environment (type q or x will get you out).
+
+In the session you have available all the values at that point of the evaluation, besides the prompt
+has been changed to allow you to eventually copy and paste from the console to the irt file.
+There are also the fh and sh commands to print out the file history and the session history (purged
+by the wrong lines eventually typed).
 
 == Example
 
@@ -27,74 +34,98 @@ Write files as you were using the console and add your expected results at any p
      4  b = 6
      5  a + b
      6  # next comment contains the 'test' or '=>' directive
-     7  #: => 11
+     7  #:=> 11
      8
      9  #:" Will fail
     10  b
-    11  #: => 100
+    11  #:=> 100
 
     $ irt try.irt
-    === Running file try.irt ===
+    irt 0.2.0 (c) 2010 Domizio Demichelis
+    === Running file try.rb ===
       1. OK! Testing sum
       2. FAILED! Will fail
-         > expected: 100
          < got: 6
-         from try.irt:11
-    2 tests: 1 passed, 1 failed.
+         > expected: 100
+           at try.rb:11
+      7  #:=> 11
+      8
+      9  #:" Will fail
+     10  b
+     11  #:=> 100
 
 == Directives
 
 Directives are simple comments followed by a ':'.
 
     #: desc This is a description
-    #: => "this will be evaluated and compared with the current value"
+    #:=> "this will be evaluated and compared with the current value"
     # the following opens an irb session in the current context
     #: >>
 
-You can add your custom directives by extending the IRT module in the
+You can add your custom directives by extending the IRT::Directives module in the
 '~/.irtrc' file:
 
     $ cat ~/.irtrc
+
     require 'rubygems'
     require 'irt'
-    IRT.init
 
-    module IRT
-      def self.my_try(irb_context, arguments, line_no)
+    module IRT::Directives
+      def self.my_try(arguments)
         puts "In my try: #{arguments}"
       end
     end
 
-And use it in the irt file:
+And use it in the .irt file:
 
     #: my_try there is some arguments
 
+=== Configuration
+
+The default ~/.irtrc file contain the following:
+
+    require 'rubygems'
+    require 'irt'
+
+If you want to add your preferred features, try to load your '~/.irbrc' file at the top: if it is not
+playing well with IRT, then copy and paste just part of it.
+
+You can also pass a few configuration variables in the ~/.irtrc file:
+
+    IRT.conf.color = false
+    IRT.conf.open_irb_on_failure = false
+    IRT.conf.file_lines_on_failure = 10
+
+=== Upgrade
+
+Upgrading from version 0.1.0 to the 0.2.0 requires that you manually delete the ~/.irtrc file.
+
 == Notes
 
-IRT is a very small library (>100 lines) that configures irb and patches just one of its methods.
-I am exploring the possibility to patch just another method in order to make it work with
-other syntaxes like markdown, rdoc, etc... so then it will be really useful.
+IRT is a very small gem that configures and patches irb in order to use ruby files with
+built-in or user definable directives embedded in comments. I am exploring the possibility
+to make it work with other syntaxes like markdown, rdoc, etc... so then it will be really useful.
 
 Right now it is useful if you are lazy and don't want to write too much code for testing.
 Just copy and paste from your irb or rails console session and you will be able to write
 tests in just a few lines.
 
-And it could be really useful if you use rails, because the .irt files are evaluated line
+And it might be really useful if you use rails, because the .irt files are evaluated line
 by line by the rails console itself, so you have the environment loaded and all the goodies
-like 'reload!' and friends also available in your .irt files withut adding a single line of code.
+(like 'reload!' and friends) also available in your .irt files, without adding a single line of code.
 
 === About rubydoctest
 
 IRT has been totally inspired by rubydoctest, which does a lot more, but unfortunately does not do
-what I wanted most: running test like typing in the rails console. I tried to add to it the features
-that I wanted, but I didn't find it as easy as writing a simple irb patch with a few more lines, so
-my apologies for reinventing the wheel... anyway, it's a very little wheel :-)
+what I wanted most: running the tests like typing in the rails console. I tried to add to it the
+features that I wanted, but I didn't find it as easy as writing a simple irb patch with a few more
+lines, so my apologies for reinventing the wheel... anyway, it's a very little wheel :-)
 
 == To Do
 
 * writing tests
 * add examples
-* add an auto-open-irb-on-failure option
 * patch the irb parser to make it work with other syntaxes
 
 == Copyright

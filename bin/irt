@@ -50,6 +50,11 @@ if ARGV.empty? || ARGV.first =~ /^(-h|--help)$/
   exit
 end
 
+if ARGV.first =~ /^(-v|--version)$/
+  puts IRT::VERSION
+  exit
+end
+
 path = ARGV.shift
 files = File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')): [path]
 if files.empty?
@@ -59,7 +64,7 @@ end
 
 irtrc = File.join ENV['HOME'], '.irtrc'
 File.open(irtrc, 'w') do |f|
-  f.puts "require 'rubygems'\nrequire 'irt'\nIRT.init"
+  f.puts "require 'rubygems'\nrequire 'irt'"
 end unless File.exists?(irtrc)
 
 command = 'irb'

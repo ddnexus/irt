@@ -1,90 +1,45 @@
+require 'ostruct'
+require 'irt/irb'
+require 'irt/directives'
 module IRT
 
-  VERSION = '0.1.0'
-  Color = { true =>  { :green => %{\e[32m%s\e[0m}, :red =>  %{\e[31m%s\e[0m} },
-            false => { :green => '%s', :red => '%s' } }
+  VERSION = '0.2.0'
+   @session_lines = []
 
-    def IRT.init(colors=true)
-      @colors = colors
-      @test_no = 0
-      @passed_no = 0
-      @failed_no = 0
-      IRB.conf[:PROMPT_MODE] = :SIMPLE
-      IRB.conf[:ECHO] = false
-      IRB.conf[:VERBOSE] = false
-      IRB.conf[:AT_EXIT] = [proc{IRT.test_summary}]
+  class << self
 
-      IRB::Context.class_eval do
-        alias :evaluate_without_directives  :evaluate
+    attr_accessor :irb_session, :lines, :line_no, :session_lines
 
-        def evaluate(line, line_no)
-          ln = line_no
-          line.split($/).each do |l|
-            if l =~ /^\s*#:\s*([\S]+)(?:\s+(.*))*/
-              action = IRT::Directives::Map[$1] || $1
-              arguments = $2 && $2.strip
-              begin
-                IRT.send action.to_sym, self, arguments, ln
-              rescue NoMethodError
-                puts "NoMethodError: Undefined directive :#{action}\n        from #{irb_path}:#{line_no}"
-              end
-            end
-            ln += 1
-          end
-          evaluate_without_directives(line, line_no)
-        end
+    Colors = {:red => 31, :green => 32, :yellow => 33, :cyan => 36}
 
-      end
-      extend Directives
+    def conf
+      @conf ||= OpenStruct.new :color => true,
+                               :open_irb_on_failure => true,
+                               :file_lines_on_failure => 5,
+                               :directive_map => { '"' => :desc,
+                                                   '=>' => :test,
+                                                   '>>' => :open_irb }
     end
 
-    def IRT.test_summary
-      if @failed_no > 0
-        puts Color[@colors][:red] % "#{@test_no} tests: #{@passed_no} passed, #{@failed_no} failed."
-      else
-        puts Color[@colors][:green] % "All #{@test_no} tests passed."
-      end
+    def directives
+      IRT::Directives
     end
 
-  module Directives
-    Map = { '"' => :desc, '=>' => :test, '>>' => :start_irb }
-
-    # #: "
-    def desc(context, arguments, line_no)
-      @last_desc = arguments
+    def colorize(color, text)
+      return text unless conf.color
+      sprintf "\e[%dm%s\e[0m", Colors[color], text
     end
 
-    # #: =>
-    def test(context, arguments, line_no)
-      tn = '%3d' % @test_no += 1
-      d = @last_desc || 'Test'
-      @last_desc = nil
-      begin
-        exp = eval(arguments)
-      rescue Exception => e
-        puts %(#{e.class.name}: #{e.message}\n        from #{context.irb_path}:#{line_no})
+    def print_last_lines(q=IRT.conf.file_lines_on_failure)
+      return unless q > 0
+      start = line_no - q + 1
+      start = 1 if start < 0
+      self.lines[start..line_no].each_with_index do |l,i|
+        ln = '%3d' % (i + start)
+        puts colorize(:cyan, "#{ln}  #{l.strip}")
       end
-      if exp == context.last_value
-        @passed_no += 1
-        puts Color[@colors][:green] % "#{tn}. OK! #{d}"
-      else
-        @failed_no += 1
-        puts Color[@colors][:red] % %(#{tn}. FAILED! #{d}
-     > expected: #{exp.inspect}
-     < got: #{context.last_value.inspect}
-     from #{context.irb_path}:#{line_no} )
-      end
-    end
-
-    # #: >>
-    def start_irb(context, arguments, line_no)
-      IRB.conf[:ECHO] = true
-      irb = IRB::Irb.new(context.workspace)
-      catch(:IRB_EXIT) do
-        irb.eval_input
-      end
+      nil
     end
 
   end
-
 end
