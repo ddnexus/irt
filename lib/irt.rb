@@ -1,4 +1,3 @@
-require 'ostruct'
 require 'irt/irb'
 require 'irt/history'
 require 'irt/differ'

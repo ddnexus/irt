@@ -1,6 +1,6 @@
 require 'irb'
 require 'irb/context'
-require 'irt/irb/extensions'
+
 module IRB #:nodoc:
 
   class Context
