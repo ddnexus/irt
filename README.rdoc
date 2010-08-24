@@ -38,9 +38,9 @@ When some test fails IRT shows you the tail of the running file, so you have an 
 It also opens an interactive session at that point with all the variables loaded, so you can imediately
 and interactively find and fix what went wrong.
 
-IRT can compare complex objects and shows the diffs. If you install the 'differ' gem, when a test
-fails IRT will also show you a very readable yaml dump with the differences between the expected and
-actual values, so you can immediately find even a little problem inside a very complex object.
+IRT can compare complex objects and shows the diffs. When a test fails IRT will also show you a very
+readable yaml dump with the differences between the expected and actual values, so you can immediately
+find even a little problem inside a very complex object.
 
 == Mini Tutorial
 
@@ -79,11 +79,19 @@ Remember to use 'x' or 'exit' to exit from any interactive session an keep runni
 
 == Configuration
 
+=== irtrc file
+
 The default ~/.irtrc file contain the following:
 
     require 'rubygems'
     require 'irt'
     require 'irt/init'
+
+==== Upgrade
+
+Upgrading from one version to another requires that you manually delete the ~/.irtrc file.
+
+=== Features
 
 If you want to add your preferred features, try to load your '~/.irbrc' file at the top: if it is not
 playing well with IRT, then copy and paste just part of it.
@@ -95,11 +103,13 @@ You can also pass a few configuration variables in the ~/.irtrc file:
     IRT.show_tail_on_open_session = true
     IRT.history.tail_size = 10
     IRT.history.ignored_commands << %w[any ignored command you want to add]
+    IRT.differ.classic = true # if you don't like diff reports
 
-== Optionals
+=== Rails 3
 
-Install 'Differ' to have nice formatted failure report, showing the differences between the expected and
-actual values.
+You must add the gem to your Gemfile, to make the bundler happy:
+
+    gem 'irt'
 
 === Note about diff colors
 
@@ -110,10 +120,6 @@ and so are the tests in IRT. For this reason the green lines are what you would 
 The problem is that in a failed test the lines that should be ok are gone and the wrong one are in their
 place so the - are always green and the + are always red. Remember it when you see a change with a green
 - line and a red + line: that means that the ok line has gone and the wrong line has come in its place.
-
-== Upgrade
-
-Upgrading from one version to another requires that you manually delete the ~/.irtrc file.
 
 == Credit
 

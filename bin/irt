@@ -61,7 +61,7 @@ if File.exists?('./config/environment.rb')
   elsif File.exists?('./script/console')
     command = 'ruby script/console'
   end
-  ARGV << 'development' if command != 'irb' && ARGV.last =~ /^-/
+  ARGV << 'development' if command != 'irb' && (ARGV.last.nil? || ARGV.last =~ /^-/)
 end
 
 puts banner

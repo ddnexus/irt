@@ -1,17 +1,12 @@
+require 'differ'
 module IRT
   class Differ
-
-    begin
-      require 'differ'
-    rescue LoadError
-      ENABLED = false
-      puts IRT.colorize(:red, 'Please, install the "differ" gem, to have a better output')
-    else
-      ENABLED = true
+    class << self
+      attr_accessor :classic
     end
 
     def initialize(expected, current, kind)
-      if ENABLED
+      if classic?
         if kind == :value
           expected = IRT.yaml_dump expected
           current = IRT.yaml_dump current
@@ -25,8 +20,12 @@ module IRT
       end
     end
 
+    def classic?
+      self.class.classic
+    end
+
     def output
-      ENABLED ? differ_block : expected_current_block
+      classic? ? differ_block : expected_current_block
     end
 
   private
