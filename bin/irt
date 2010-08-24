@@ -2,51 +2,26 @@
 
 require 'rubygems'
 require 'irt'
+require 'fileutils'
 
-puts "irt #{IRT::VERSION} (c) 2010 Domizio Demichelis"
+banner = "irt #{IRT::VERSION} (c) 2010 Domizio Demichelis"
 
-banner = %(
-Usage:
-    irt PATH [options] [rails_env]
-
+usage = %(
 Description:
     Ruby Interactive Testing - Use irb or rails console for testing.
 
-    IRT deals with regular ruby files suffixed with '.irt', containing
-    built-in or user definable directives embedded in comments.
-    When fired from a rails root it uses the rails console.
+Usage:
+    irt [-n|--new] PATH [options] [rails_env]
 
+    [-n|--new]    creates the new file at PATH if the file does not exist
     PATH          path to a single file or dir (<dir>/**/*.irt files)
     [options]     all the options supported by irb or rails console
     [rails_env]   the optional rails environment to load (must be the last arg)
 
-Example:
-    $ cat -n try.irt
-     1  # next comment contains the 'desc' or '"' directive
-     2  #: desc Testing sum
-     3  a = 5
-     4  b = 6
-     5  a + b
-     6  # next comment contains the 'test' or '=>' directive
-     7  #: => 11
-     8
-     9  #:" Will fail
-    10  b
-    11  #: => 100
-
-    $ irt try.irt
-    === Running file try.irt ===
-      1. OK! Testing sum
-      2. FAILED! Will fail
-         > expected: 100
-         < got: 6
-         from try.irt:11
-    2 tests: 1 passed, 1 failed.
-
 )
 
 if ARGV.empty? || ARGV.first =~ /^(-h|--help)$/
-  puts banner
+  puts banner + usage
   exit
 end
 
@@ -55,7 +30,19 @@ if ARGV.first =~ /^(-v|--version)$/
   exit
 end
 
-path = ARGV.shift
+if ARGV.first =~ /^(-n|--new)$/
+  ARGV.shift
+  path = ARGV.shift
+  unless File.exists?(path)
+    dirname = File.dirname(path)
+    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+    File.open(path, 'w') do |f|
+      f.puts 'open_session'
+    end
+  end
+end
+
+path ||= ARGV.shift
 files = File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')): [path]
 if files.empty?
   puts "No *.irt file to run in #{path}"
@@ -64,7 +51,7 @@ end
 
 irtrc = File.join ENV['HOME'], '.irtrc'
 File.open(irtrc, 'w') do |f|
-  f.puts "require 'rubygems'\nrequire 'irt'"
+  f.puts "require 'rubygems'\nrequire 'irt'\nrequire 'irt/init"
 end unless File.exists?(irtrc)
 
 command = 'irb'
@@ -77,7 +64,12 @@ if File.exists?('./config/environment.rb')
   ARGV << 'development' if command != 'irb' && ARGV.last =~ /^-/
 end
 
+puts banner
+
 files.each do |file|
   puts "=== Running file #{file} ==="
-  system "env IRBRC=#{irtrc} #{command} #{file} #{ARGV * ' '}"
+  ENV["IRT_FILE"] = file
+  ENV["IRT_COMMAND"] = "#{command} #{file} #{ARGV * ' '}".strip
+  ENV["IRBRC"] = irtrc
+  system ENV["IRT_COMMAND"]
 end

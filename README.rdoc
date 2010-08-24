@@ -4,129 +4,120 @@ Ruby Interactive Testing - Use irb or rails console for testing.
 
 == Usage
 
-    irt PATH [options] [rails_env]
+    irt [-n|--new] PATH [options] [rails_env]
 
+    [-n|--new]    creates the new file at PATH
     PATH          path to a single file or dir (<dir>/**/*.irt files)
     [options]     all the options supported by irb or rails console
     [rails_env]   the optional rails environment to load (must be the last arg)
 
-== Description
+    >> help
 
-IRT deals with regular ruby files suffixed with '.irt', containing
-built-in or user definable directives embedded in comments.
-When fired from a rails root it uses the rails console.
+== Features
 
-Write files as you were using the console and add your expected results at any point of the file.
-If a test fails IRT will tell you where and will show you the last few lines of the file, before
-opening an interactive session, so you can explore the environment (type q or x will get you out).
+I like to test my code step by step with irb: it's like playing. But then, when everything
+is working as I want, I know I have to write the tests for future changes, and... that's like working!
+And it's also somehow silly, because you know that everything is ok because you tried it thoroughy,
+but you have to re-write the same steps and pack everything into a test-suite. That's not DRY at all.
+So I wrote IRT.
 
-In the session you have available all the values at that point of the evaluation, besides the prompt
-has been changed to allow you to eventually copy and paste from the console to the irt file.
-There are also the fh and sh commands to print out the file history and the session history (purged
-by the wrong lines eventually typed).
+IRT records all the steps of your interactive testing with irb (or rails console), and can re-run
+them when you need to check if everything is still ok after some change. That's DRY.
 
-== Example
+But IRT tries also to be smart: it ignores all the inspecting commands (p, pp, y, puts, inspect, ...)
+which you might need to use to debug your code. It also ignores all the typos that generate errors,
+and records a clean history that can be copied and pasted into the test file, mostly without the need
+of any cleanup. And best of all, when a command is ignored its result is also ignored, so the last value
+(_) does not change.
 
-    $ cat -n try.irt
-     1  # next comment contains the 'desc' or '"' directive
-     2  #: desc Testing sum
-     3  a = 5
-     4  b = 6
-     5  a + b
-     6  # next comment contains the 'test' or '=>' directive
-     7  #:=> 11
-     8
-     9  #:" Will fail
-    10  b
-    11  #:=> 100
+When you check the result of some critical step, you can add a test to the history by simply using
+'add_test' and eventually add a description, and the testing code will be automatically generated and
+added to the history.
 
-    $ irt try.irt
-    irt 0.2.0 (c) 2010 Domizio Demichelis
-    === Running file try.rb ===
-      1. OK! Testing sum
-      2. FAILED! Will fail
-         < got: 6
-         > expected: 100
-           at try.rb:11
-      7  #:=> 11
-      8
-      9  #:" Will fail
-     10  b
-     11  #:=> 100
+When some test fails IRT shows you the tail of the running file, so you have an instant feedback.
+It also opens an interactive session at that point with all the variables loaded, so you can imediately
+and interactively find and fix what went wrong.
 
-== Directives
+IRT can compare complex objects and shows the diffs. If you install the 'differ' gem, when a test
+fails IRT will also show you a very readable yaml dump with the differences between the expected and
+actual values, so you can immediately find even a little problem inside a very complex object.
 
-Directives are simple comments followed by a ':'.
+== Mini Tutorial
 
-    #: desc This is a description
-    #:=> "this will be evaluated and compared with the current value"
-    # the following opens an irb session in the current context
-    #: >>
+    $ irt -n try.irt
 
-You can add your custom directives by extending the IRT::Directives module in the
-'~/.irtrc' file:
+creates the file 'try.irt' and opens the console
 
-    $ cat ~/.irtrc
+    >> help
 
-    require 'rubygems'
-    require 'irt'
+Shows the available IRT Commands and their descriptions.
 
-    module IRT::Directives
-      def self.my_try(arguments)
-        puts "In my try: #{arguments}"
-      end
-    end
+Now play with the console, creating variables and stuffs and adding a test sometimes:
 
-And use it in the .irt file:
+    >> add_test "this is a description for the test"
 
-    #: my_try there is some arguments
+then type:
 
-=== Configuration
+    >> h
+
+to show the history, or if you played a lot type:
+
+    >> h 0
+
+Notice that the history does not record commands like p, pp, inspect, y, ...
+Now copy the history lines and paste them into the try.irt file, save it and restart IRT with:
+
+    >> r!
+
+Edit the try.irt file, changing some value and rerun with r!. You will see the reports of your failed tests.
+
+Now cd to the irt gem dir and try:
+
+    $ irt examples/objects.irt
+
+Remember to use 'x' or 'exit' to exit from any interactive session an keep running the rest of the file.
+
+== Configuration
 
 The default ~/.irtrc file contain the following:
 
     require 'rubygems'
     require 'irt'
+    require 'irt/init'
 
 If you want to add your preferred features, try to load your '~/.irbrc' file at the top: if it is not
 playing well with IRT, then copy and paste just part of it.
 
 You can also pass a few configuration variables in the ~/.irtrc file:
 
-    IRT.conf.color = false
-    IRT.conf.open_irb_on_failure = false
-    IRT.conf.file_lines_on_failure = 10
+    IRT.color = true
+    IRT.open_session_on_failure = true
+    IRT.show_tail_on_open_session = true
+    IRT.history.tail_size = 10
+    IRT.history.ignored_commands << %w[any ignored command you want to add]
 
-=== Upgrade
+== Optionals
 
-Upgrading from version 0.1.0 to the 0.2.0 requires that you manually delete the ~/.irtrc file.
+Install 'Differ' to have nice formatted failure report, showing the differences between the expected and
+actual values.
 
-== Notes
+=== Note about diff colors
 
-IRT is a very small gem that configures and patches irb in order to use ruby files with
-built-in or user definable directives embedded in comments. I am exploring the possibility
-to make it work with other syntaxes like markdown, rdoc, etc... so then it will be really useful.
+The colors in the diff report might appear unusual: usually the + lines (insertions) are green,
+while the - lines (deletions) are red. But traditionally "OK things" are green and "wrong things" are red,
+and so are the tests in IRT. For this reason the green lines are what you would expect to be OK
+(expected values) while the red lines are what is currently wrong (current values).
+The problem is that in a failed test the lines that should be ok are gone and the wrong one are in their
+place so the - are always green and the + are always red. Remember it when you see a change with a green
+ - line and a red + line: that means that the ok line has gone and the wrong line has come in its place.
 
-Right now it is useful if you are lazy and don't want to write too much code for testing.
-Just copy and paste from your irb or rails console session and you will be able to write
-tests in just a few lines.
+== Upgrade
 
-And it might be really useful if you use rails, because the .irt files are evaluated line
-by line by the rails console itself, so you have the environment loaded and all the goodies
-(like 'reload!' and friends) also available in your .irt files, without adding a single line of code.
+Upgrading from one version to another requires that you manually delete the ~/.irtrc file.
 
-=== About rubydoctest
+== Credit
 
-IRT has been totally inspired by rubydoctest, which does a lot more, but unfortunately does not do
-what I wanted most: running the tests like typing in the rails console. I tried to add to it the
-features that I wanted, but I didn't find it as easy as writing a simple irb patch with a few more
-lines, so my apologies for reinventing the wheel... anyway, it's a very little wheel :-)
-
-== To Do
-
-* writing tests
-* add examples
-* patch the irb parser to make it work with other syntaxes
+IRT has been totally inspired by rubydoctest, although now it is focusing just on easy testing.
 
 == Copyright
 

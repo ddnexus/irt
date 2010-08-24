@@ -1,44 +1,41 @@
 require 'ostruct'
 require 'irt/irb'
+require 'irt/history'
+require 'irt/differ'
 require 'irt/directives'
+
 module IRT
 
   VERSION = '0.2.0'
-   @session_lines = []
+  @history = History.new
+  @differ = IRT::Differ
+  @color = true
+  @open_session_on_failure = true
+  @show_tail_on_open_session = true
+  @run_status = :file
+  @skip_result_output = false
 
   class << self
 
-    attr_accessor :irb_session, :lines, :line_no, :session_lines
+    attr_accessor :color, :open_session_on_failure, :show_tail_on_open_session, :run_status, :skip_result_output
+    attr_reader :history, :file, :differ
 
-    Colors = {:red => 31, :green => 32, :yellow => 33, :cyan => 36}
-
-    def conf
-      @conf ||= OpenStruct.new :color => true,
-                               :open_irb_on_failure => true,
-                               :file_lines_on_failure => 5,
-                               :directive_map => { '"' => :desc,
-                                                   '=>' => :test,
-                                                   '>>' => :open_irb }
-    end
+    Colors = {:red => 31, :green => 32, :yellow => 33, :magenta => 35, :cyan => 36}
 
     def directives
       IRT::Directives
     end
 
     def colorize(color, text)
-      return text unless conf.color
+      return text unless color
       sprintf "\e[%dm%s\e[0m", Colors[color], text
     end
 
-    def print_last_lines(q=IRT.conf.file_lines_on_failure)
-      return unless q > 0
-      start = line_no - q + 1
-      start = 1 if start < 0
-      self.lines[start..line_no].each_with_index do |l,i|
-        ln = '%3d' % (i + start)
-        puts colorize(:cyan, "#{ln}  #{l.strip}")
-      end
-      nil
+    # this fixes a little imperfection of the YAML::dump method
+    # which adds a space at the end of the class
+    def yaml_dump(val)
+      yml = "\n" + YAML::dump(val)
+      yml.gsub(/\s+\n/, "\n")
     end
 
   end

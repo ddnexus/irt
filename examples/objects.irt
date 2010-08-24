@@ -1,0 +1,44 @@
+class Klass
+  def initialize(a,b)
+    @a = a
+    @b = b
+  end
+end
+
+desc "Klass 1 test"
+k1 = Klass.new 10, 20
+test_yaml_eql? %(
+--- !ruby/object:Klass
+a: 10
+b: 20
+)
+
+desc "Klass 2 test"
+k2 = Klass.new 4, 30
+test_yaml_eql? %(
+--- !ruby/object:Klass
+a: 4
+b: 30
+)
+
+# This test will fail
+desc "Klass 3 test"
+k3 = Klass.new k1, k2
+test_yaml_eql? %(
+--- !ruby/object:Klass
+a: !ruby/object:Klass
+  a: 10
+  b: 2000
+b: !ruby/object:Klass
+  a: 5
+  b: 30
+)
+
+
+desc "Klass 4 test"
+k4 = Klass.new k3, 400
+
+# use the following command to open a session
+# and add a test checking the last value
+# you can copy and paste the generated history and rerun the file
+open_session %(add_test "Test generated from open_session")
