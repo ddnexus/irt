@@ -11,13 +11,13 @@ Ruby Interactive Testing - Use irb or rails console for testing.
     [options]     all the options supported by irb or rails console
     [rails_env]   the optional rails environment to load (must be the last arg)
 
-    >> help
+    >> irt_help
 
 == Features
 
 I like to test my code step by step with irb: it's like playing. But then, when everything
 is working as I want, I know I have to write the tests for future changes, and... that's like working!
-And it's also somehow silly, because you know that everything is ok because you tried it thoroughy,
+And it's also somehow silly, because you know that everything is ok because you tried it thoroughly,
 but you have to re-write the same steps and pack everything into a test-suite. That's not DRY at all.
 So I wrote IRT.
 
@@ -48,7 +48,7 @@ actual values, so you can immediately find even a little problem inside a very c
 
 creates the file 'try.irt' and opens the console
 
-    >> help
+    >> irt_help
 
 Shows the available IRT Commands and their descriptions.
 
@@ -109,7 +109,7 @@ and so are the tests in IRT. For this reason the green lines are what you would 
 (expected values) while the red lines are what is currently wrong (current values).
 The problem is that in a failed test the lines that should be ok are gone and the wrong one are in their
 place so the - are always green and the + are always red. Remember it when you see a change with a green
- - line and a red + line: that means that the ok line has gone and the wrong line has come in its place.
+- line and a red + line: that means that the ok line has gone and the wrong line has come in its place.
 
 == Upgrade
 
