@@ -2,6 +2,8 @@ module IRT
   module Directives
     module Core
 
+      # Opens an interactive session at the line it is called
+      # eventually executing command
       def open_session(command=nil)
         IRT.run_status = :session
         IRB.conf[:ECHO] = true
@@ -20,6 +22,25 @@ module IRT
         end
         IRB.conf[:MAIN_CONTEXT] = file_context
         IRT.run_status = :file
+      end
+      alias :irt :open_session
+
+      # restart IRT
+      def r!
+        IRB.irb_at_exit
+        puts IRT.colorize(:yellow, "Restarting IRT: `#{ENV['IRT_COMMAND']}`")
+        puts "=== Running file #{ENV["IRT_FILE"]} ==="
+        exec ENV["IRT_COMMAND"]
+      end
+
+      # Short for quit/exit
+      def x
+        exit
+      end
+      alias :q :x
+
+      def irt_at_exit(&block)
+        IRB.conf[:AT_EXIT] << proc(&block)
       end
 
     end

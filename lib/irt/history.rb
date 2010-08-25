@@ -2,28 +2,33 @@ module IRT
   class History
 
     class Line
-      attr_reader :origin
+      attr_reader :origin, :line
       def initialize(line, line_no = nil)
         @line = line.respond_to?(:chomp) ? line.chomp : line
         @origin = IRT.run_status
         @line_no = line_no
       end
       def content
-        if @origin == :file
+        if from_file?
           lno = IRT.colorize(:yellow, '%3d' % @line_no)
           "#{lno}  #{IRT.colorize(:cyan, @line)}"
         else
          IRT.colorize(:magenta, @line)
         end
       end
+      def from_file?
+        @origin == :file
+      end
     end
 
-    attr_accessor :lines, :ignored_commands, :tails_size
+    attr_accessor :lines, :ignored_commands, :tail_size, :move_desc
 
-    def initialize(tails_size=10)
-      @ignored_commands = %w[ p pp ap y _ puts irt h hrl x q exit desc test_value_eql? test_yaml_eql? irt_help add_test add_desc add_comment]
+    def initialize(tail_size=10)
+      @ignored_commands = %w[ p pp ap y puts irt_help x q ] +
+                          (IRT::Directives.methods - Object.methods)
       @lines = []
-      @tails_size = tails_size
+      @tail_size = tail_size
+      @move_desc = true
     end
 
     def header(message)
@@ -37,43 +42,59 @@ module IRT
     end
 
     def add_history_line(line)
-      IRT.skip_result_output = true
       l = add_line line
       puts l.content
     end
 
-    def print_tail(q=tails_size)
-      IRT.skip_result_output = true
+    def add_empty_line
+      add_line
+      header 'an empty line has been added'
+    end
+
+    def insert_desc_line(desc_line)
+      return add_history_line(desc_line) unless @move_desc
+      rind = 0
+      lines.reverse.each_with_index do |l, i|
+        if l.from_file? || l.line.empty?
+          rind = i
+          break
+        end
+      end
+      l = Line.new(desc_line)
+      lines.insert(lines.size-rind, l)
+      puts l.content
+    end
+
+    def print_tail(q=tail_size)
       if lines.empty?
-        header 'History empty'
+        header 'the history is empty'
       else
         puts
-        header "History tail"
+        header "History Tail"
         puts tail(q) * "\n"
       end
     end
 
-    def tail(q=tails_size)
+    def tail(q=tail_size)
       q = 0 if q > lines.size
       lines[-q..-1].map{|l| l.content }
     end
 
     def clear_lines
-      IRT.skip_result_output = true
-      self.lines = []
-      header 'History Cleared'
+      self.lines = lines.select {|l| l.from_file? }
+      header 'session history cleared'
+      IRB.CurrentContext.set_last_value nil
     end
 
     def remove_last_line
-     # IRT.skip_result_output = true
       l = lines.last
-      if l.origin == :file
+      if l.from_file?
         header 'last line is a file line'
       else
         lines.pop
-        header 'last line removed'
+        header 'last line has been removed'
+        IRB.CurrentContext.set_last_value nil
       end
-      IRB.CurrentContext.set_last_value nil
     end
 
   end

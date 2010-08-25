@@ -31,8 +31,8 @@ of any cleanup. And best of all, when a command is ignored its result is also ig
 (_) does not change.
 
 When you check the result of some critical step, you can add a test to the history by simply using
-'add_test' and eventually add a description, and the testing code will be automatically generated and
-added to the history.
+'add_test' (or 'ad) and eventually add a description, and the testing code will be automatically
+generated and added to the history.
 
 When some test fails IRT shows you the tail of the running file, so you have an instant feedback.
 It also opens an interactive session at that point with all the variables loaded, so you can imediately
@@ -103,13 +103,14 @@ You can also pass a few configuration variables in the ~/.irtrc file:
     IRT.show_tail_on_open_session = true
     IRT.history.tail_size = 10
     IRT.history.ignored_commands << %w[any ignored command you want to add]
-    IRT.differ.classic = true # if you don't like diff reports
+    IRT.history.move_desc = false # don't move the description at the beginning of the block
+    IRT.differ.classic = true # don't use diff reports
 
 === Rails 3
 
 You must add the gem to your Gemfile, to make the bundler happy:
 
-    gem 'irt'
+    gem 'irt', :group => :console
 
 === Note about diff colors
 

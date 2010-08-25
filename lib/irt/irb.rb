@@ -32,8 +32,6 @@ module IRB #:nodoc:
 
     def evaluate_in_session(line, line_no)
       case line
-      when /^\s*_\s*$/
-        evaluate_without_set(line, line_no)
       # skip session history with prepended --
       when /^\s*--\s+(.*)$/
         evaluate_without_set($1, line_no)
