@@ -12,13 +12,22 @@ module IRB #:nodoc:
       if IRT.run_status == :session
         evaluate_in_session(line, line_no)
       else
-        evaluate_with_set(line, line_no)
+        evaluate_in_file(line, line_no)
       end
     end
 
     def evaluate_without_set(line, line_no)
       @line_no = line_no
       @workspace.evaluate(self, line, irb_path, line_no)
+    end
+
+    def evaluate_in_file(line, line_no)
+      if line =~ /^\s*(#{IRT.history.ignored_commands * '|'})\b/
+        IRT.skip_result_output = true
+        evaluate_without_set(line, line_no)
+      else
+        evaluate_with_set(line, line_no)
+      end
     end
 
     def evaluate_in_session(line, line_no)

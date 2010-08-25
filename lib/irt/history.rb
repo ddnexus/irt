@@ -21,7 +21,7 @@ module IRT
     attr_accessor :lines, :ignored_commands, :tails_size
 
     def initialize(tails_size=10)
-      @ignored_commands = %w[ p pp ap y _ puts irt h hrl x q exit irt_help add_test add_desc add_comment]
+      @ignored_commands = %w[ p pp ap y _ puts irt h hrl x q exit desc test_value_eql? test_yaml_eql? irt_help add_test add_desc add_comment]
       @lines = []
       @tails_size = tails_size
     end

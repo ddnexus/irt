@@ -6,7 +6,7 @@ module IRT
     end
 
     def initialize(expected, current, kind)
-      if classic?
+      unless classic?
         if kind == :value
           expected = IRT.yaml_dump expected
           current = IRT.yaml_dump current
@@ -25,7 +25,7 @@ module IRT
     end
 
     def output
-      classic? ? differ_block : expected_current_block
+      classic? ? expected_current_block : differ_block
     end
 
   private
