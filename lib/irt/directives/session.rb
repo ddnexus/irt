@@ -3,7 +3,7 @@ module IRT
     module Session
 
       def add_desc(description)
-        add_history_line %(desc "#{description})
+        add_history_line %(desc "#{description}")
       end
 
       def add_test(description=nil)
