@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "irt"
-    gem.summary = %Q{Ruby Interactive Testing - Use irb or rails console for testing.}
-    gem.description = %Q{IRT deals with regular ruby files suffixed with '.irt', containing built-in or user definable directives embedded in comments.}
+    gem.summary = %Q{Interactive Ruby Testing - Use irb or rails console for testing.}
+    gem.description = %Q{IRT records and rerun the steps of your interactive irb or rails console session, ignoring the inspecting commands and reporting test diffs. }
     gem.email = "dd.nexus@gmail.com"
     gem.homepage = "http://github.com/ddnexus/irt"
     gem.authors = ["Domizio Demichelis"]

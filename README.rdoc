@@ -1,6 +1,6 @@
 = irt
 
-Ruby Interactive Testing - Use irb or rails console for testing.
+Interactive Ruby Testing - Use irb or rails console for testing.
 
 == Usage
 
@@ -31,7 +31,7 @@ of any cleanup. And best of all, when a command is ignored its result is also ig
 (_) does not change.
 
 When you check the result of some critical step, you can add a test to the history by simply using
-'add_test' (or 'ad) and eventually add a description, and the testing code will be automatically
+'add_test' (or 'ad') and eventually add a description, and the testing code will be automatically
 generated and added to the history.
 
 When some test fails IRT shows you the tail of the running file, so you have an instant feedback.
@@ -119,8 +119,8 @@ while the - lines (deletions) are red. But traditionally "OK things" are green a
 and so are the tests in IRT. For this reason the green lines are what you would expect to be OK
 (expected values) while the red lines are what is currently wrong (current values).
 The problem is that in a failed test the lines that should be ok are gone and the wrong one are in their
-place so the - are always green and the + are always red. Remember it when you see a change with a green
-- line and a red + line: that means that the ok line has gone and the wrong line has come in its place.
+place so the - are always green and the + are always red. Remember it when you see a change with a green -
+line and a red + line: that means that the ok line has gone and the wrong line has come in its place.
 
 == Credit
 
