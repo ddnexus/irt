@@ -5,8 +5,8 @@ module IRT
       # Opens an interactive session at the line it is called
       # eventually executing command
       def open_session(command=nil)
+        return unless IRT.run_status == :file
         IRT.run_status = :session
-        IRB.conf[:ECHO] = true
         file_context = IRB.CurrentContext
         irb = IRB::Irb.new(file_context.workspace)
         irb.context.set_last_value file_context.last_value
@@ -26,7 +26,9 @@ module IRT
       alias :irt :open_session
 
       # Evaluate a file as it were inserted at that line
-      def insert_file(file)
+      def eval_file(file)
+        old_status = IRT.run_status
+        IRT.run_status = :file
         file_context = IRB.CurrentContext
         old_io = file_context.io
         io = IRB::FileInputMethod.new file
@@ -39,7 +41,9 @@ module IRT
         IRB.conf[:MAIN_CONTEXT] = file_context
         IRB.CurrentContext.io = old_io
         IRT.history.add_header_line old_io.file_name
+        IRT.run_status = old_status
       end
+      alias :insert_file :eval_file
 
       # restart IRT
       def r!

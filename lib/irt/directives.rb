@@ -1,14 +1,10 @@
-require 'irt/directives/core'
-require 'irt/directives/test'
-require 'irt/directives/history'
-require 'irt/directives/system'
 module IRT
   module Directives
 
-    extend Core
-    extend Test
-    extend History
-    extend System
+    %w[ core test history system ].each do |mod|
+      require "irt/directives/#{mod}"
+      eval "extend #{mod.capitalize}"
+    end
 
   end
 end

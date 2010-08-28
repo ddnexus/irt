@@ -5,21 +5,34 @@ require 'irt/directives'
 
 module IRT
 
-  VERSION = '0.6.0'
-  @history = History.new
-  @differ = IRT::Differ
-  @color = true
-  @open_session_on_failure = true
-  @show_tail_on_open_session = true
-  @run_status = :file
-  @skip_result_output = false
+  VERSION = '0.6.1'
 
   class << self
 
-    attr_accessor :color, :open_session_on_failure, :show_tail_on_open_session, :run_status, :skip_result_output
-    attr_reader :history, :file, :differ
+    attr_accessor :color, :open_session_on_failure, :show_tail_on_open_session, :skip_result_output
+    attr_reader :run_status, :history, :file, :differ
 
     Colors = {:red => 31, :green => 32, :yellow => 33, :magenta => 35, :cyan => 36}
+
+    def init
+      @history = History.new
+      @differ = IRT::Differ
+      @color = true
+      @open_session_on_failure = true
+      @show_tail_on_open_session = true
+      self.run_status = :file
+      @skip_result_output = false
+    end
+
+    def run_status=(status)
+      case status
+      when :file
+        IRB.conf[:ECHO] = false
+      when :session
+        IRB.conf[:ECHO] = true
+      end
+      @run_status = status
+    end
 
     def directives
       IRT::Directives
@@ -39,3 +52,4 @@ module IRT
 
   end
 end
+IRT.init
