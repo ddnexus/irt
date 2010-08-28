@@ -52,6 +52,7 @@ module IRT
         puts "=== Running file #{ENV["IRT_FILE"]} ==="
         exec ENV["IRT_COMMAND"]
       end
+      alias :rr :r!
 
       def irt_at_exit(&block)
         IRB.conf[:AT_EXIT] << proc(&block)

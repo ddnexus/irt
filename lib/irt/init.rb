@@ -45,17 +45,17 @@ Session Directives
     history|h n=tail_size        Prints n lines of the history (n=0 prints all lines)
     history_remove_last|hrl      History Remove Last session line (then sets _ to nil)
     history_clear                Clears the session history (then sets _ to nil)
-    x|q                          Shortcut for exit
-    r!                           Restart IRT and rerun the same file
+    x|q                          Shortcuts for exit
+    r!|rr                        Restarts IRT and reruns the same file
 
 Special Session Hints
-    -- command                   will not add command to the history
-    ++ command                   will add command to the history even if it's usually ignored
+    -- command                   Do not add command to the history
+    ++ command                   Add command to the history even if it's usually ignored
 
 File Methods
     (You usually copy theese methods in block from the history and paste into the file)
 
-    desc description             Adds a description used in the test
+    desc description             Adds a description to the test
     test_value_eql? val          Runs a test checking _ == val
     test_yaml_eql? yaml_dump     Runs a test checking y _ == yaml_dump
     open_session|irt [command]   Opens an interactive session at that line
