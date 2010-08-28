@@ -3,17 +3,20 @@ module IRT
 
     class Line
       attr_reader :origin, :line
-      def initialize(line, line_no = nil)
+      def initialize(line, line_no = nil, origin=IRT.run_status)
         @line = line.respond_to?(:chomp) ? line.chomp : line
-        @origin = IRT.run_status
+        @origin = origin
         @line_no = line_no
       end
       def content
-        if from_file?
+        case @origin
+        when :file
           lno = IRT.colorize(:yellow, '%3d' % @line_no)
           "#{lno}  #{IRT.colorize(:cyan, @line)}"
-        else
-         IRT.colorize(:magenta, @line)
+        when :session
+          IRT.colorize(:magenta, @line)
+        when :header
+          IRT.colorize(:yellow, @line)
         end
       end
       def from_file?
@@ -31,7 +34,7 @@ module IRT
       @move_desc = true
     end
 
-    def header(message)
+    def message(message)
       puts IRT.colorize(:yellow, "--- #{message} ---")
     end
 
@@ -41,6 +44,10 @@ module IRT
       l
     end
 
+    def add_header_line(file)
+      self.lines << Line.new("=== #{file} ===", nil, :header)
+    end
+
     def add_history_line(line)
       l = add_line line
       puts l.content
@@ -48,7 +55,7 @@ module IRT
 
     def add_empty_line
       add_line
-      header 'an empty line has been added'
+      message 'an empty line has been added'
     end
 
     def insert_desc_line(desc_line)
@@ -67,32 +74,31 @@ module IRT
 
     def print_tail(q=tail_size)
       if lines.empty?
-        header 'the history is empty'
+        message 'the history is empty'
       else
         puts
-        header "History Tail"
-        puts tail(q) * "\n"
+        q = 0 if q > lines.size
+        tail = lines[-q..-1].map{|l| l.content }
+        rind = lines[0..-q].rindex { |l| l.origin == :header }
+        last_header = lines[rind].content
+        puts last_header unless lines[-q].origin == :header
+        puts tail * "\n"
       end
-    end
-
-    def tail(q=tail_size)
-      q = 0 if q > lines.size
-      lines[-q..-1].map{|l| l.content }
     end
 
     def clear_lines
       self.lines = lines.select {|l| l.from_file? }
-      header 'session history cleared'
+      message 'session history cleared'
       IRB.CurrentContext.set_last_value nil
     end
 
     def remove_last_line
       l = lines.last
       if l.from_file?
-        header 'last line is a file line'
+        message 'last line is a file line'
       else
         lines.pop
-        header 'last line has been removed'
+        message 'last line has been removed'
         IRB.CurrentContext.set_last_value nil
       end
     end

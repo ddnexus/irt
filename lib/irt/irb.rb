@@ -62,6 +62,7 @@ module IRB #:nodoc:
       super
       @line_no = 0
       @io = open(file)
+      IRT.history.add_header_line file
     end
     def gets
       print @prompt
@@ -73,6 +74,7 @@ module IRB #:nodoc:
 
   class IRB::Irb
     alias :do_output_value :output_value
+
     def output_value
       if IRT.skip_result_output
         IRT.skip_result_output = false

@@ -25,6 +25,22 @@ module IRT
       end
       alias :irt :open_session
 
+      # Evaluate a file as it were inserted at that line
+      def insert_file(file)
+        file_context = IRB.CurrentContext
+        old_io = file_context.io
+        io = IRB::FileInputMethod.new file
+        irb = IRB::Irb.new(file_context.workspace, io)
+        irb.context.set_last_value file_context.last_value
+        IRB.conf[:MAIN_CONTEXT] = irb.context
+        catch(:IRB_EXIT) do
+          irb.eval_input
+        end
+        IRB.conf[:MAIN_CONTEXT] = file_context
+        IRB.CurrentContext.io = old_io
+        IRT.history.add_header_line old_io.file_name
+      end
+
       # restart IRT
       def r!
         IRB.irb_at_exit
@@ -32,12 +48,6 @@ module IRT
         puts "=== Running file #{ENV["IRT_FILE"]} ==="
         exec ENV["IRT_COMMAND"]
       end
-
-      # Short for quit/exit
-      def x
-        exit
-      end
-      alias :q :x
 
       def irt_at_exit(&block)
         IRB.conf[:AT_EXIT] << proc(&block)

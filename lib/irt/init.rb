@@ -61,5 +61,6 @@ File Methods
     open_session|irt [command] Opens an interactive session at that line
                                eventually executing command on opening
     irt_at_exit block          Ensure execution of block at exit (useful for cleanup test env)
+    insert_file file           Evaluate file as it were inserted at that line
 )
 end

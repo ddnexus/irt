@@ -5,7 +5,7 @@ require 'irt/directives'
 
 module IRT
 
-  VERSION = '0.5.0'
+  VERSION = '0.6.0'
   @history = History.new
   @differ = IRT::Differ
   @color = true
