@@ -42,7 +42,7 @@ module IRB #:nodoc:
       # add to history ignored commands
       when /^\s*\+\+\s+(.*)$/
         evaluate_with_set($1, line_no)
-        IRT.history.add_history_line $1
+        IRT.history.add_session_line $1
       # regular lines
       else
         begin # skip wrong lines from entering in history
@@ -50,7 +50,7 @@ module IRB #:nodoc:
         rescue Exception => e
           raise e
         else
-         IRT.history.add_line line
+         IRT.history.add_session_line line, false
         end
       end
     end
@@ -67,7 +67,7 @@ module IRB #:nodoc:
     def gets
       print @prompt
       l = @io.gets
-      IRT.history.add_line l, (@line_no += 1)
+      IRT.history.add_file_line l, (@line_no += 1)
       l
     end
   end

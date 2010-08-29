@@ -31,16 +31,16 @@ module IRT
         end
         # the eval of the last_value.inspect == the last_value
         if evaled == context.last_value
-          IRT.history.add_history_line "test_value_eql? #{last_value.inspect}"
+          IRT.history.add_session_line "test_value_eql? #{last_value.inspect}"
         else # need YAML
-          IRT.history.add_history_line "test_yaml_eql? %(#{IRT.yaml_dump(last_value)})"
+          IRT.history.add_session_line "test_yaml_eql? %(#{IRT.yaml_dump(last_value)})"
         end
-        IRT.history.add_line  # add an empty line for readability
+        IRT.history.lines << IRT::History::EmptyLine.new  # add an empty line for readability
       end
       alias :at :add_test
 
       def add_comment(comment)
-        IRT.history.add_history_line "# #{comment}"
+        IRT.history.add_session_line "# #{comment}"
       end
       alias :ac :add_comment
 
