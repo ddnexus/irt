@@ -22,6 +22,7 @@ module IRT
         end
         IRB.conf[:MAIN_CONTEXT] = file_context
         IRT.run_status = :file
+        IRT.history.add_header_line file_context.io.file_name
       end
       alias :irt :open_session
 
@@ -48,8 +49,10 @@ module IRT
       # restart IRT
       def r!
         IRB.irb_at_exit
-        puts IRT.colorize(:yellow, "Restarting IRT: `#{ENV['IRT_COMMAND']}`")
-        puts "=== Running file #{ENV["IRT_FILE"]} ==="
+        puts
+        puts " Restarting IRT: `#{ENV['IRT_COMMAND']}` ".restart
+        puts
+        IRT.puts_running ENV["IRT_FILE"]
         exec ENV["IRT_COMMAND"]
       end
       alias :rr :r!

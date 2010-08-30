@@ -1,12 +1,3 @@
-require 'irb/completion'
-require 'pp'
-require 'irt/extensions'
-
-begin
-  require 'ap'
-rescue LoadError
-end
-
 module IRB #:nodoc:
   conf[:PROMPT][:IRT] = { :PROMPT_I => ">> ",
                           :PROMPT_S => '"> ',

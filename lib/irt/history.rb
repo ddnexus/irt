@@ -15,25 +15,27 @@ module IRT
     end
 
     class FileLine < Line
-      def initialize(content, line_no)
+      attr_reader :file_name
+      def initialize(content, line_no, file_name)
         super content
         @line_no = line_no
+        @file_name = file_name
       end
       def render
-        lno = IRT.colorize(:yellow, '%3d' % @line_no)
-        "#{lno}  #{IRT.colorize(:cyan, @content)}"
+        lno = ('%3d ' % @line_no).header
+        "#{lno} #{@content.file_line}"
       end
     end
 
     class SessionLine < Line
       def render
-        IRT.colorize(:magenta, @content)
+        @content.session_line
       end
     end
 
     class HeaderLine < Line
       def render
-        IRT.colorize(:yellow, "=== #{@content} ===")
+        " === #{@content} === ".header
       end
     end
 
@@ -48,15 +50,17 @@ module IRT
     end
 
     def message(message)
-      puts IRT.colorize(:yellow, "--- #{message} ---")
+      puts "--- #{message} ---".message
     end
 
-    def add_file_line(line, line_no)
-      self.lines << FileLine.new(line, line_no)
+    def add_file_line(*args)
+      self.lines << FileLine.new(*args)
     end
 
-    def add_header_line(file)
-      self.lines << HeaderLine.new(file)
+    def add_header_line(file_name)
+      ll = lines.last
+      return if ll.is_a?(FileLine) && ll.file_name == file_name
+      self.lines << HeaderLine.new(file_name)
     end
 
     def add_session_line(line, output=true)

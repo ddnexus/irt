@@ -67,7 +67,7 @@ module IRB #:nodoc:
     def gets
       print @prompt
       l = @io.gets
-      IRT.history.add_file_line l, (@line_no += 1)
+      IRT.history.add_file_line l, (@line_no += 1), file_name
       l
     end
   end

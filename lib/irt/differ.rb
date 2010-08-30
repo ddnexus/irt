@@ -31,12 +31,13 @@ module IRT
   private
 
     def expected_current_block
-      "expected: #{@expected}\ncurrent: #{@current}\n\n"
+      "expected: #{@expected}\n".expected +
+      "current: #{@current}\n\n".current
     end
 
     def differ_block
-      x = IRT.colorize(:green, "-expected")
-      g = IRT.colorize(:red, "+current")
+      x = "-expected".expected
+      g = "+current".current
       out = "diff: #{x} #{g}\n"
       out << @diff.format_as(IRT::Differ::Format) + "\n"
       out << "  | "
@@ -54,11 +55,11 @@ module IRT
 
         private
         def as_insert(change)
-          IRT.colorize(:red, change.insert.gsub(/^(.)/,"+"))
+          change.insert.gsub(/^(.)/,"+").current
         end
 
         def as_delete(change)
-          IRT.colorize(:green, change.delete.gsub(/^(.)/,"-"))
+          change.delete.gsub(/^(.)/,"-").expected
         end
 
         def as_change(change)
