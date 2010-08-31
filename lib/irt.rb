@@ -14,7 +14,7 @@ require 'irt/directives'
 
 module IRT
 
-  VERSION = '0.7.0'
+  VERSION = '0.7.1'
 
   class << self
 
@@ -29,7 +29,9 @@ module IRT
       @show_tail_on_open_session = true
       self.run_status = :file
       @skip_result_output = false
-      Colorer.define_styles :failed => [ :red ],
+      Colorer.define_styles :bold => [:bold],
+                            :reversed => [:reversed],
+                            :failed => [ :red ],
                             :ok => [ :green],
                             :error => [:yellow ],
                             :ok_text => [ :green ],
