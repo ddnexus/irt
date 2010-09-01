@@ -37,6 +37,7 @@ Session Directives
     history_remove_last|hrl      History Remove Last session line (then sets _ to nil)
     history_clear                Clears the session history (then sets _ to nil)
     x|q                          Shortcuts for exit
+    x!|q!                        Full exit (doesn't open other sessions)
     r!|rr                        Restarts IRT and reruns the same file
 
 Special Session Hints
