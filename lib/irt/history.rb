@@ -42,8 +42,7 @@ module IRT
     attr_accessor :lines, :ignored_commands, :tail_size, :move_desc
 
     def initialize(tail_size=10)
-      @ignored_commands = %w[ p pp ap y puts irt_help x q ] +
-                          (IRT::Directives.methods - Object.methods)
+      @ignored_commands = IRT::Directives.object_methods + %w[ p pp ap y puts irt_help x q ]
       @lines = []
       @tail_size = tail_size
       @move_desc = true

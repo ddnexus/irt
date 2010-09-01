@@ -54,6 +54,7 @@ module IRT
             open_session if IRT.open_session_on_failure
           end
         rescue Exception => e
+          exit if IRT.run_status == :full_exit
           @@error_no += 1
           puts "#{tno}. ERROR!".error.bold %( #{d}
      #{e.class}: #{e.message}
