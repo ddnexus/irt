@@ -14,7 +14,7 @@ require 'irt/directives'
 
 module IRT
 
-  VERSION = '0.7.2'
+  VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
 
   class << self
 

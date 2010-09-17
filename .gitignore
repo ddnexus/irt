@@ -23,5 +23,3 @@ pkg
 ## Eclipse
 .loadpath
 .project
-
-*.gemspec

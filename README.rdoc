@@ -31,7 +31,7 @@ of any cleanup. And best of all, when a command is ignored its result is also ig
 (_) does not change.
 
 When you check the result of some critical step, you can add a test to the history by simply using
-'add_test' (or 'ad') and eventually add a description, and the testing code will be automatically
+'add_test' (or 'at') and eventually add a description, and the testing code will be automatically
 generated and added to the history.
 
 When some test fails IRT shows you the tail of the running file, so you have an instant feedback.
