@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{irt}
-  s.version = "0.7.3"
+  s.version = "0.7.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Domizio Demichelis"]
-  s.date = %q{2010-09-17}
+  s.date = %q{2010-09-20}
   s.default_executable = %q{irt}
   s.description = %q{IRT records and rerun the steps of your interactive irb or rails console session, ignoring the inspecting commands and reporting test diffs. }
   s.email = %q{dd.nexus@gmail.com}
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "bin/irt",
      "examples/objects.irt",
+     "irt.gemspec",
      "lib/irt.rb",
      "lib/irt/differ.rb",
      "lib/irt/directives.rb",

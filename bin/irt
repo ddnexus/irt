@@ -71,5 +71,5 @@ files.each do |file|
   ENV["IRT_FILE"] = file
   ENV["IRT_COMMAND"] = "#{command} #{file} #{ARGV * ' '}".strip
   ENV["IRBRC"] = irtrc
-  system ENV["IRT_COMMAND"]
+  exit(1) unless system(ENV["IRT_COMMAND"])
 end
