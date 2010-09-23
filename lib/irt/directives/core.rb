@@ -28,12 +28,14 @@ module IRT
       alias :irt :open_session
 
       # Evaluate a file as it were inserted at that line
-      def eval_file(file)
+      # a relative file_path is considered to be relative to the including file
+      # i.e. '../file_in_the_same_dir.irt'
+      def eval_file(file_path)
         old_status = IRT.run_status
         IRT.run_status = :file
         file_context = IRB.CurrentContext
         old_io = file_context.io
-        io = IRB::FileInputMethod.new file
+        io = IRB::FileInputMethod.new File.expand_path(file_path, old_io.io.path)
         irb = IRB::Irb.new(file_context.workspace, io)
         irb.context.set_last_value file_context.last_value
         IRB.conf[:MAIN_CONTEXT] = irb.context

@@ -58,6 +58,7 @@ module IRB #:nodoc:
   end
 
   class FileInputMethod
+    attr_reader :io
     def initialize(file)
       super
       @line_no = 0
