@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'IRT records and rerun the steps of your interactive irb or rails console session, ignoring the inspecting commands and reporting test diffs.'
 
   s.add_runtime_dependency('differ', [">= 0.1.1"])
-  s.add_runtime_dependency('colorer', [">= 0.2.0"])
+  s.add_runtime_dependency('colorer', [">= 0.5.0"])
 
   s.executables = ["irt"]
   s.files = `git ls-files -z`.split("\0")

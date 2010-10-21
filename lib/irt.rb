@@ -29,20 +29,20 @@ module IRT
       @show_tail_on_open_session = true
       self.run_status = :file
       @skip_result_output = false
-      Colorer.define_styles :bold => [:bold],
-                            :reversed => [:reversed],
-                            :failed => [ :red ],
-                            :ok => [ :green],
-                            :error => [:yellow ],
-                            :ok_text => [ :green ],
-                            :expected => [ :green ],
-                            :current => [ :red ],
-                            :header => [ :black, :oncyan ],
-                            :message => [ :yellow ],
-                            :session_line => [ :magenta ],
-                            :file_line => [ :cyan ],
-                            :running_file => [ :bold, :reversed ],
-                            :restart => [ :bold, :yellow, :reversed ]
+      Colorer.def_custom_styles :bold         => :bold,
+                                :reversed     => :reversed,
+                                :failed       => :red,
+                                :ok           => :green,
+                                :error        => :yellow,
+                                :ok_text      => :green,
+                                :expected     => :green,
+                                :current      => :red,
+                                :header       => [ :black, :oncyan ],
+                                :message      => :yellow,
+                                :session_line => :magenta,
+                                :file_line    => :cyan ,
+                                :running_file => [ :bold, :reversed ],
+                                :restart      => [ :bold, :yellow, :reversed ]
     end
 
     def run_status=(status)
