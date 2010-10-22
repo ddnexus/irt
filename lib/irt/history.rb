@@ -3,6 +3,7 @@ module IRT
 
     class Line
       def initialize(content)
+        content ||= ""
         @content = content.respond_to?(:chomp) ? content.chomp : content
       end
       def render
