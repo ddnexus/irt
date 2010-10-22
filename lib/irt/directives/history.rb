@@ -7,6 +7,11 @@ module IRT
       end
       alias :h :history
 
+      def h0
+        history 0
+      end
+      alias :hh :h0
+
       def history_remove_last
         IRT.history.remove_last_line
       end

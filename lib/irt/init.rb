@@ -34,6 +34,7 @@ Session Directives
     add_comment|ac comment       Adds a comment to the history (same as # comment <enter> command)
     add_empty_line|ael           Adds an empty line for formatting convenience
     history|h n=tail_size        Prints n lines of the history (n=0 prints all lines)
+    h0|hh                        Same as `h 0`: prints all lines
     history_remove_last|hrl      History Remove Last session line (then sets _ to nil)
     history_clear                Clears the session history (then sets _ to nil)
     x|q                          Shortcuts for exit
