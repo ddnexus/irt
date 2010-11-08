@@ -20,7 +20,6 @@ module IRT
         catch(:IRB_EXIT) do
           irb.eval_input
         end
-        exit if IRT.run_status == :full_exit
         IRB.conf[:MAIN_CONTEXT] = file_context
         IRT.run_status = :file
         IRT.history.add_header_line file_context.io.file_name
@@ -42,7 +41,6 @@ module IRT
         catch(:IRB_EXIT) do
           irb.eval_input
         end
-        exit if IRT.run_status == :full_exit
         IRB.conf[:MAIN_CONTEXT] = file_context
         IRB.CurrentContext.io = old_io
         IRT.run_status = old_status
@@ -67,7 +65,7 @@ module IRT
 
       def x!
         IRT.run_status = :full_exit
-       exit
+        exit(1)
       end
       alias :q! :x!
 
