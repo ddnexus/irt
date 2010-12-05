@@ -36,7 +36,7 @@ module IRT
         end
         # the eval of the last_value.inspect == the last_value
         if evaled == context.last_value
-          IRT.history.add_session_line "test_value_eql? #{last_value.inspect}"
+          IRT.history.add_session_line "test_value_eql?( #{last_value.inspect} )"
         else # need YAML
           IRT.history.add_session_line "test_yaml_eql? %(#{IRT.yaml_dump(last_value)})"
         end
