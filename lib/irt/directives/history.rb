@@ -35,11 +35,17 @@ module IRT
         rescue Exception
         end
         # the eval of the last_value.inspect == the last_value
-        if evaled == context.last_value
-          IRT.history.add_session_line "test_value_eql?( #{last_value.inspect} )"
-        else # need YAML
-          IRT.history.add_session_line "test_yaml_eql? %(#{IRT.yaml_dump(last_value)})"
-        end
+        test_str = if evaled == context.last_value
+                     # same as last_value_eql? but easier to read for multiline strings without escaping chars
+                     if last_value.is_a?(String) && last_value.match(/\n$/) && !last_value.match(/\e/)
+                       "last_string_eql? <<EOS\n#{last_value}EOS"
+                     else
+                       "last_value_eql?( #{last_value.inspect} )"
+                     end
+                   else # need YAML
+                     "last_yaml_eql? %(#{IRT.yaml_dump(last_value)})"
+                   end
+        IRT.history.add_session_line test_str
         IRT.history.lines << IRT::History::EmptyLine.new  # add an empty line for readability
       end
       alias :at :add_test

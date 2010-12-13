@@ -12,15 +12,18 @@ module IRT
         @@last_desc = arguments
       end
 
-      def test_value_eql?(expected)
+      def last_value_eql?(expected)
         got = IRB.CurrentContext.last_value
         run_test(expected, got, :value)
       end
+      alias_method :last_string_eql?, :last_value_eql?
+      alias_method :test_value_eql?, :last_value_eql?
 
-      def test_yaml_eql?(expected)
+      def last_yaml_eql?(expected)
         got = IRT.yaml_dump(IRB.CurrentContext.last_value)
         run_test(expected, got, :yaml)
       end
+      alias_method :test_yaml_eql?, :last_yaml_eql?
 
       def test_summary #:nodoc:
         return unless @@test_no > 0

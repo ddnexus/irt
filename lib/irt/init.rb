@@ -24,9 +24,9 @@ def irt_help
   puts %(
 Session Directives
     add_desc|ad description      Adds a description for the test in the history
-    add_test|at [descritpion]    Adds a test in the history, checking the current value (_)
-                                 by automatically choosing the 'test_value_eql?' or 'test_yaml_eql?'
-                                 method, depending on the type of the current value (_)
+    add_test|at [descritpion]    Adds a test in the history, checking the last value (_)
+                                 by automatically choosing the :last_value_eql?, :last_string_eql? or
+                                 :last_yaml_eql? method, depending on the type of the current value (_)
     add_comment|ac comment       Adds a comment to the history (same as # comment <enter> command)
     add_empty_line|ael           Adds an empty line for formatting convenience
     history|h n=tail_size        Prints n lines of the history (n=0 prints all lines)
@@ -45,8 +45,9 @@ File Methods
     (You usually copy theese methods in block from the history and paste into the file)
 
     desc description             Adds a description to the test
-    test_value_eql? val          Runs a test checking _ == val
-    test_yaml_eql? yaml_dump     Runs a test checking y _ == yaml_dump
+    last_value_eql? val          Runs a test checking _ == val
+    last_string_eql? val         Runs a test checking _ == val (easy readable for multiline strings)
+    last_yaml_eql? yaml_dump     Runs a test checking y _ == yaml_dump
     open_session|irt [command]   Opens an interactive session at that line
                                  eventually executing command on opening
 
