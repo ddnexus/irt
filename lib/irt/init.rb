@@ -11,11 +11,7 @@ module IRB #:nodoc:
 end
 
 def method_missing(method, *args, &block)
-  if IRT::Directives.respond_to?(method)
-    IRT::Directives.send method, *args, &block
-  else
-    raise NameError, "undefined local variable or method '#{method}' for #{self}:#{self.class}"
-  end
+  IRT::Directives.respond_to?(method) ? IRT::Directives.send(method, *args, &block) : super
 end
 
 # Short for quit/exit
