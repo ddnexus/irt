@@ -3,6 +3,7 @@ begin
 rescue LoadError
 end
 
+require 'pathname'
 require 'pp'
 require 'irb/completion'
 require 'irt/extensions'
@@ -16,64 +17,76 @@ module IRT
 
   VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
 
-  class << self
+  extend self
 
-    attr_accessor :open_session_on_failure, :show_tail_on_open_session, :skip_result_output
-    attr_reader :run_status, :history, :file, :differ, :color
+  attr_accessor :open_session_on_failure, :show_tail_on_open_session, :skip_result_output
+  attr_reader :run_status, :history, :file, :differ, :color
 
-    def init
-      @history = History.new
-      @differ = IRT::Differ
-      Colorer.color = true
-      @open_session_on_failure = true
-      @show_tail_on_open_session = true
-      self.run_status = :file
-      @skip_result_output = false
-      Colorer.def_custom_styles :bold         => :bold,
-                                :reversed     => :reversed,
-                                :failed       => :red,
-                                :ok           => :green,
-                                :error        => :yellow,
-                                :ok_text      => :green,
-                                :expected     => :green,
-                                :current      => :red,
-                                :header       => [ :black, :oncyan ],
-                                :message      => :yellow,
-                                :session_line => :magenta,
-                                :file_line    => :cyan ,
-                                :running_file => [ :bold, :reversed ],
-                                :restart      => [ :bold, :yellow, :reversed ]
-    end
-
-    def run_status=(status)
-      case status
-      when :file
-        IRB.conf[:ECHO] = false
-      when :session
-        IRB.conf[:ECHO] = true
-      end
-      @run_status = status
-    end
-
-    def color=(bool)
-      Colorer.color = bool
-    end
-
-    def directives
-      IRT::Directives
-    end
-
-    # this fixes a little imperfection of the YAML::dump method
-    # which adds a space at the end of the class
-    def yaml_dump(val)
-      yml = "\n" + YAML::dump(val)
-      yml.gsub(/\s+\n/, "\n")
-    end
-
-    def puts_running(file)
-      puts " *** Running #{file} *** ".running_file
-    end
-
+  def init
+    @history = History.new
+    @differ = IRT::Differ
+    Colorer.color = true
+    @open_session_on_failure = true
+    @show_tail_on_open_session = true
+    self.run_status = :file
+    @skip_result_output = false
+    Colorer.def_custom_styles :bold         => :bold,
+                              :reversed     => :reversed,
+                              :failed       => :red,
+                              :ok           => :green,
+                              :error        => :yellow,
+                              :ok_text      => :green,
+                              :expected     => :green,
+                              :current      => :red,
+                              :header       => [ :black, :oncyan ],
+                              :message      => :yellow,
+                              :session_line => :magenta,
+                              :file_line    => :cyan ,
+                              :running_file => [ :bold, :reversed ],
+                              :restart      => [ :bold, :yellow, :reversed ]
   end
+
+  def run_status=(status)
+    case status
+    when :file
+      IRB.conf[:ECHO] = false
+    when :session
+      IRB.conf[:ECHO] = true
+    end
+    @run_status = status
+  end
+
+  def color=(bool)
+    Colorer.color = bool
+  end
+
+  def directives
+    IRT::Directives
+  end
+
+  # this fixes a little imperfection of the YAML::dump method
+  # which adds a space at the end of the class
+  def yaml_dump(val)
+    yml = "\n" + YAML::dump(val)
+    yml.gsub(/\s+\n/, "\n")
+  end
+
+  def puts_running(file)
+    puts " *** Running #{file} *** ".running_file
+  end
+
+  def autoload_helper_files
+    irt_file_path = Pathname.new($0).realpath
+    container_path = Pathname.getwd.parent
+    down_path = irt_file_path.relative_path_from container_path
+    down_path.dirname.descend do |p|
+     helper_path = container_path.join(p, 'irt_helper.rb')
+     begin
+       require helper_path
+     rescue LoadError
+     end
+    end
+  end
+
 end
 IRT.init

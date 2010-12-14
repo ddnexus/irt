@@ -51,7 +51,13 @@ end
 
 irtrc = File.join ENV['HOME'], '.irtrc'
 File.open(irtrc, 'w') do |f|
-  f.puts "require 'rubygems'\nrequire 'irt'\nrequire 'irt/init"
+  f.puts <<-EOF
+    require 'rubygems'
+    require 'irt'
+    require 'irt/init
+    IRT.autoload_helper_files
+EOF
+
 end unless File.exists?(irtrc)
 
 command = 'irb'

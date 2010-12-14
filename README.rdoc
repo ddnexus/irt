@@ -86,10 +86,11 @@ The default ~/.irtrc file contain the following:
     require 'rubygems'
     require 'irt'
     require 'irt/init'
+    IRT.autoload_helper_files
 
 ==== Upgrade
 
-Upgrading from one version to another requires that you manually delete the ~/.irtrc file.
+Upgrading from one version to another requires that you manually delete the auto-generated ~/.irtrc file.
 
 === Features
 
@@ -105,6 +106,31 @@ You can also pass a few configuration variables in the ~/.irtrc file:
     IRT.history.ignored_commands << %w[any ignored command you want to add]
     IRT.history.move_desc = false # don't move the description at the beginning of the block
     IRT.differ.classic = true # don't use diff reports
+
+=== Note about IRT.autoload_helper_files
+
+This method is called from the default ~/.irtrc file. It will require all the 'irt_helper.rb' named files in
+the descending path fom the current working dir (which is considered the test-root dir) to the dir containing
+the irt file being executed. That is useful to add special methods or overridig to your test files without
+worring about requiring them from your test files.
+
+For example:
+
+    working_dir
+      irt_helper.rb #1
+      first_level
+        <irt_helper.rb #2
+        testA.irt
+        testB.irt
+        second_level
+          irt_helper.rb #3
+          test1.irt
+          test2.irt
+
+If you are running test1.irt and test2.irt from the working_dir IRT will automatically require the
+irt_helper.rb #1, #2 and #3. If you are running the testA.irt and testB.irt, IRT will automatically
+require the irt_helper.rb #1, #2. But if you run the same from the first_level dir, the irt_helper.rb #1
+will not be loaded, so be carefull to be in the right dir to make it work properly.
 
 === Rails 3
 
