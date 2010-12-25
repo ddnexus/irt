@@ -68,7 +68,7 @@ module IRT
   # which adds a space at the end of the class
   def yaml_dump(val)
     yml = "\n" + YAML::dump(val)
-    yml.gsub(/\s+\n/, "\n")
+    yml.gsub(/ +\n/, "\n")
   end
 
   def puts_running(file)
