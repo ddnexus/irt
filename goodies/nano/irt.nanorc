@@ -1,0 +1,86 @@
+# Ruby syntax file with additional irt keywords - Distributed with the irt gem
+# The regular expressions in this file have been copied
+# and adapted from many sources
+
+# Automatically use for '.rb' and '.irt' files
+syntax "ruby" ".*\.*(rb|irt)$"
+
+# Shebang
+color brightcyan   "^#!.*"
+
+# Operators
+color brightmagenta "\<not\>|\<and\>|\<or\>"
+color brightmagenta "\*\*|!|~|\*|/|%|\+|-|&|<<|>>|\|\^|>|>=|<|<="
+color brightmagenta "<=>|\|\||!=|=~|!~|&&|\+=|-=|=|\.\.|\.\.\."
+
+# Keywords
+color brightmagenta "\<(BEGIN|END|alias|and|begin|break|case)\>"
+color brightmagenta "\<(class|def|defined|do|else|elsif|end)\>"
+color brightmagenta "\<(ensure|for|if|in|module|next|not|or|redo)\>"
+color brightmagenta "\<(rescue|retry|return|self|super|then|undef)\>"
+color brightmagenta "\<(unless|until|when|while|yield)\>"
+
+# Load
+color brightgreen "\<(load|require)\>"
+
+# FILE LINE END and similar markers
+color brightyellow "\<__[A-Z_]+__\>"
+
+# irt Keywords
+color brightmagenta "\<(_eql|_yaml_eql|last_value_eql|last_yaml_eql)\?"
+color brightmagenta "\<(desc|irt|capture|irt_at_exit|eval_file|insert_file)\>"
+
+# Constants
+color brightblue "(\$)?\<[A-Z]+[0-9A-Z_a-z]*\>"
+color brightblue "::[A-Z]"
+
+# Predefined Constants
+color brightred "\<(TRUE|FALSE|NIL|STDIN|STDOUT|STDERR|ENV|ARGF|ARGV|DATA|RUBY_VERSION|RUBY_RELEASE_DATE|RUBY_PLATFORM)\>"
+
+# Predefined Variables
+color brightred "\$[^A-Za-z]" "\$-.\>" "\$std(err|in|out)\>"
+
+# Object Variables
+color green "(@|@@)\<[^:][a-z]+[0-9A-Z_a-z]*\>"
+
+# Symbols
+icolor red "[^:]:\<[0-9A-Z_]+\>"
+
+# false, nil, true
+color yellow "\<(false|nil|true)\>"
+
+# Above must not match 'nil?'
+color red "\<nil\?"
+
+# Iterators
+color brightgreen "\|\w*\|"
+
+# Regular expressions
+# color green "/(\\.|[^\\/])*/[imox]*"
+
+## Regular expressions
+color brightmagenta "/([^/]|(\\/))*/[iomx]*" "%r\{([^}]|(\\}))*\}[iomx]*"
+
+# Shell command expansion is in `backticks` or like %x{this}.
+color cyan "`[^`]*`" "%x\{[^}]*\}"
+
+## Strings, double-quoted
+color brightcyan ""([^"]|(\\"))*"" "%[QW]?\{[^}]*\}" "%[QW]?\([^)]*\)" "%[QW]?<[^>]*>" "%[QW]?\[[^]]*\]" "%[QW]?\$[^$]*\$" "%[QW]?\^[^^]*\^" "%[QW]?![^!]*!"
+
+## Strings, single-quoted
+color cyan "'([^']|(\\'))*'" "%[qw]\{[^}]*\}" "%[qw]\([^)]*\)" "%[qw]<[^>]*>" "%[qw]\[[^]]*\]" "%[qw]\$[^$]*\$" "%[qw]\^[^^]*\^" "%[qw]![^!]*!"
+
+# Escapes
+color red "\\[0-7][0-7][0-7]|\\x[0-9a-fA-F][0-9a-fA-F]"
+color red "\\[abefnrs]"
+color red "(\\c|\\C-|\\M-|\\M-\\C-)."
+
+# Expression substitution
+color green "#\{[^}]*\}"
+
+# Comments
+color cyan "#[^{].*$" "#$"
+color brightcyan "##[^{].*$" "##$"
+
+# Multiline comments
+color cyan start="^=begin" end="^=end"

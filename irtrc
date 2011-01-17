@@ -1,0 +1,48 @@
+# IRT RC file
+
+require 'rubygems'
+require 'irt'
+
+# ITR conf options
+
+# will open an interactie session if a test has diffs
+# IRT.irt_on_diffs = true
+
+# will print the log tail when an interactive session is opened
+# IRT.tail_on_irt = false
+
+# the lines you want to be printed as the tail
+# IRT.log.tail_size = 10
+
+# loads irt_helper.rb files automatically
+# IRT.autoload_helper_files = true
+
+# force true/false regardless the terminal ANSI support
+# IRT.force_color = true
+
+# the command that should set the clipboard to the last lines from STDIN
+# default to 'pbcopy' on mac, 'xclip -selection c' on linux/unix and 'clip' on windoze
+# IRT.copy_to_clipboard_command = 'your command'
+
+# the format to build the command to launch nano
+# IRT.nano_command_format = 'nano +%2$d %1$s'
+
+# the format to build the command to launch vi
+# IRT.vi_command_format ="vi -c 'startinsert' %1$s +%2$d"
+
+# add your command format if you want to use another editor than nano or vi
+# default 'open -t %1$s' on MacOX; 'kde-open %1$s' or 'gnome-open %1$s' un unix/linux; '%1$s' on windoze
+# IRT.edit_command_format ="your_preferred_GUI_editor %1$s +%2$d"
+
+# any log-ignored-echo command you want to add
+# IRT.log.ignored_echo_commands << %w[commandA commandB ...]
+
+# any log-ignored command you want to add (includes all the log-ignored-echo commands)
+# IRT.log.ignored_commands << %w[commandC commandD ...]
+
+# any command that will not set the last value (includes all the log-ignored commands)
+# IRT.log.non_setting_commands << %w[commandE commandF ...]
+
+require 'irt/init'
+
+# add your stuff here

@@ -1,0 +1,6 @@
+In order to syntax-highlight *.irt files as ruby files in nano, you must add the following lines to your .nanorc file:
+
+include "/path/to/irt.nanorc"
+
+(change the "/path/to/irt.nanorc" to the real path where you store the irt.nanorc file included in this dir)
+

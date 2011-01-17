@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'irt'
+require 'fileutils'
+require 'tempfile'
+
+banner = "irt #{IRT::VERSION} (c) 2010-2011 Domizio Demichelis".log_color.bold
+
+usage = %(
+Description:
+    Ruby Interactive Testing - Use irb or rails console for testing.
+
+Usage:
+    irt
+        similar to `irb` (but uses an empty tmp file)
+
+    irt PATH [options] [rails_env]
+        PATH        path to a single file or dir (<dir>/**/*.irt files)
+                    if it doesn't exists, a new file will be created and opened
+        options     all the options supported by irb or rails console
+        rails_env   the optional rails environment to load (must be last arg)
+
+    irt -v|--version
+        shows the version and exits
+
+    irt -h|--help
+        shows the help and exits
+
+)
+
+irtrc = File.expand_path '~/.irtrc'
+FileUtils.cp(File.expand_path('../irtrc', IRT.lib_path), irtrc) unless File.exists?(irtrc)
+
+argv = ARGV.dup
+
+case argv.first
+when NilClass
+   tmp_file = Tempfile.new(%w[tmp- .irt])
+   tmp_file << "irt"
+   tmp_file.flush
+   path = tmp_file.path
+
+when /^(-h|--help)$/
+  puts banner + usage
+  exit
+
+when /^(-v|--version)$/
+  puts IRT::VERSION
+  exit
+
+else
+  path = File.expand_path(argv.shift)
+
+  unless File.exists?(path)
+    input = nil
+    while input.nil? || !input.match(/^(y|yes|n|no)$/i)
+      print %(Do you want to create the file "#{path}"? ).interactive_color + "[<enter>=y|n] ".ok_color
+      input = $stdin.gets.strip.downcase
+      input = 'y' if input.empty?
+    end
+    exit(1) if input == 'n'
+    dirname = File.dirname(path)
+    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+    File.open(path, 'w') {|f| f.puts 'irt' }
+  end
+
+end # end case
+
+files = File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')): [path]
+if files.empty?
+  puts "No *.irt file to run in #{path}"
+  exit
+end
+
+command = 'irb'
+if File.exists?('./config/environment.rb')
+  if File.exists?('./script/rails')
+    command =  'rails c'
+  elsif File.exists?('./script/console')
+    command = 'ruby script/console'
+  end
+  argv << 'development' if command != 'irb' && (argv.last.nil? || argv.last =~ /^-/)
+end
+
+puts banner
+
+files.each do |file|
+  IRT.log.print_running file
+  ENV["IRT_FILE"] = file
+  ENV["IRT_COMMAND"] = "#{command} #{file} #{argv * ' '}".strip
+  ENV["IRBRC"] = irtrc
+  unless system(ENV["IRT_COMMAND"])
+    puts "\e[0m" if Colorer.color
+    exit(1)
+  end
+end

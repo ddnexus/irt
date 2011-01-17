@@ -1,0 +1,5 @@
+In order to syntax-highlight *.irt files as ruby files in vi, you must add the following lines to your .vimrc file:
+
+syntax on
+filetype on
+au BufRead,BufNewFile *.irt set filetype=ruby
