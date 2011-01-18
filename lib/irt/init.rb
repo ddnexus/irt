@@ -15,7 +15,7 @@ module IRB #:nodoc:
 end
 
 def method_missing(method, *args, &block)
-  (IRB.CurrentContext.irt_mode == :file || method == :irt) && IRT::Directives.respond_to?(method) ?
+  (IRB.conf[:MAIN_CONTEXT] && IRB.conf[:MAIN_CONTEXT].irt_mode == :file || method == :irt) && IRT::Directives.respond_to?(method) ?
     IRT::Directives.send(method, *args, &block) :
     super
 end
