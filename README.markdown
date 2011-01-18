@@ -23,6 +23,8 @@ My email address is ddnexus at gmail.com ... waiting for your. Ciao.
 ## What is IRT?
 
 IRT is a very customized irb / rails console that adds a lot of useful features to the standard irb.
+If you use irb, you _should_ use irt instead, even if you don't use it for testing (yet), just for all what you get
+for free. :-)
 
 IRT records all the steps of your interactive session with irb (or rails console), and can re-run
 them as tests, and when something goes wrong, IRT opens an interactive irb (irt) session at the failure

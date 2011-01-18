@@ -20,5 +20,4 @@ def method_missing(method, *args, &block)
     super
 end
 
-IRT.directives.load_helper_files if IRT.autoload_helper_files
-
+IRT.init_files

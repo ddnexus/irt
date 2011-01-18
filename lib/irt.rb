@@ -28,7 +28,7 @@ module IRT
   attr_accessor :irt_on_diffs, :tail_on_irt,
                 :full_exit, :exception_raised, :session_no, :autoload_helper_files,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format
-  attr_reader :log, :file, :differ, :os
+  attr_reader :log, :irt_file, :differ, :os
 
   def directives
     IRT::Directives
@@ -40,8 +40,6 @@ module IRT
 
   def init
     @session_no = 0
-    @log = Log.new
-    @log.status << [File.basename($0), :file]
     @differ = IRT::Differ
     @irt_on_diffs = true
     @tail_on_irt = false
@@ -86,6 +84,13 @@ module IRT
                            end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
+  end
+
+  def init_files
+    @irt_file = ENV['IRT_FILE']
+    @log = Log.new
+    @log.print_running_file
+    directives.load_helper_files if autoload_helper_files
   end
 
   def lib_path

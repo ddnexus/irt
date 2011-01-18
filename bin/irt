@@ -86,7 +86,6 @@ end
 puts banner
 
 files.each do |file|
-  IRT.log.print_running file
   ENV["IRT_FILE"] = file
   ENV["IRT_COMMAND"] = "#{command} #{file} #{argv * ' '}".strip
   ENV["IRBRC"] = irtrc

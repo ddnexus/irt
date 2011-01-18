@@ -46,10 +46,6 @@ module IRT
         puts "#{lno} #{lcontent}"
       end
 
-      def joinable?(other)
-        header == other.header
-      end
-
       def inspect
         %(<#{self.class.name} #{header_name}>)
       end

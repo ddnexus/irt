@@ -3,15 +3,15 @@ module IRT
 
     attr_accessor :ignored_commands, :ignored_echo_commands, :non_setting_commands, :tail_size, :status
 
-    def initialize(tail_size=10)
+    def initialize
       @ignored_echo_commands = FileUtils.own_methods
       @ignored_commands = @ignored_echo_commands +
                           IRB::ExtendCommandBundle.instance_methods +
                           %w[ p pp ap y puts print irt irb ]
       @non_setting_commands = @ignored_commands + IRT::Directives.own_methods
-      @tail_size = tail_size
-      @status = []
-      push FileHunk.new($0) # IRB.CurrentContext.irb_path is nil at this time
+      @tail_size = tail_size || 10
+      self << FileHunk.new(IRT.irt_file)
+      @status = [[File.basename(IRT.irt_file), :file]]
     end
 
     def add_hunk
@@ -30,9 +30,9 @@ module IRT
     def print(limit=nil) # nil prints all
      hist = dup
      hist.delete_if{|h| h.empty? }
-     to_render = hist.reduce(self.class.new) do |his, hunk|
+     to_render = hist.reduce([]) do |his, hunk|
                    hu = hunk.dup
-                   (his.empty? || !his.last.joinable?(hu)) ? (his << hu) : his.last.concat(hu)
+                   (his.empty? || !his.last.header == hu.header) ? (his << hu) : his.last.concat(hu)
                    his
                  end
       to_print = 0
@@ -74,8 +74,8 @@ module IRT
       puts
     end
 
-    def print_running(file)
-      puts " Running: #{file} ".file_color.reversed.bold.or("*** Runing: #{file} ***")
+    def print_running_file
+      puts " Running: #{IRT.irt_file} ".file_color.reversed.bold.or("*** Runing: #{IRT.irt_file} ***")
     end
 
   private
