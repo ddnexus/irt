@@ -293,7 +293,7 @@ and have a nice and easy to check graphical diff report of the yaml dump of the 
 
 You can hijack the output of a block to a variable to inspect and test:
 
-    output = capture { some_statement_that_write_to_stdout }
+    output = capture { some_statement_that_writes_to_stdout }
 
 ### Object#own_methods
 
@@ -303,7 +303,7 @@ Get the list of the methods implemented by the object itself (not inherited).
 
 'pp', 'yaml' (and 'ap' if installed) are loaded, so you can use 'pp', 'ap' and 'y' commands to have
 a better looking inspection of your objects. Besides they are also enhanced a bit: when invoked
-with no arguments, they use the last value (_) as the default (e.g. just type 'y' instead 'y _')
+with no arguments, they use the last value (\_) as the default (e.g. just type 'y' instead 'y \_')
 
 ## General Tools
 
