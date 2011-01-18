@@ -108,7 +108,9 @@ module IRB #:nodoc:
     %w[prompt_i prompt_s prompt_c prompt_n].each do |m|
       define_method(m) do
         pr = instance_variable_get("@#{m}")
-        pr.send "#{irt_mode}_color"
+        col_pr = pr.send "#{irt_mode}_color"
+        # workaround for Readline bug see http://www.ruby-forum.com/topic/213807
+        col_pr.gsub(/^(.*)#{pr}(.*)$/, "\001\\1\002#{pr}\001\\2\002")
       end
     end
 
