@@ -33,6 +33,7 @@ and showing NOTHING about the test code that produced the failure?
 
 When something fails IRT assumes that you don't want just to know that something went wrong,
 but that:
+
 - you want to know exactly what are the resulting diffs
 - you want to look at the code that failed without searching it
 - you want to play with it IMMEDIATELY in an interactive session, right in the context of the failure
