@@ -22,31 +22,31 @@ My email address is ddnexus at gmail.com ... waiting for your. Ciao.
 
 ## What is IRT?
 
-IRT is a very customized irb / rails console that adds a lot of useful features to the standard irb.
-If you use irb, you _should_ use irt instead, even if you don't use it for testing (yet), just for all what you get
-for free. :-)
+IRT is an improved irb / rails console that adds a lot of useful features to the standard irb.
+If you use IRT in place of irb, you will have all the regular irb/rails console features, plus a lot more.
+
+### Testing made easy
 
 IRT records all the steps of your interactive session with irb (or rails console), and can re-run
-them as tests, and when something goes wrong, IRT opens an interactive irb (irt) session at the failure
-line, giving you immediate feedback and in place editing for easy fixing.
+them as tests. In practice, if you use IRT properly, when you are done with your code, you are done with
+your tests.
 
-Don't you feel frustrated when a standard test fails, printing a bunch of stuff difficult to distinguish,
-and showing NOTHING about the test code that produced the failure?
+# Fixing made easy
+
+Don't you feel frustrated when a traditional test fails, printing a bunch of stuff difficult
+to distinguish, and showing NOTHING about the test code that produced the failure?
 
 When something fails IRT assumes that you don't want just to know that something went wrong,
-but that:
+but that you actually want to fix it! IRT assumes that...
 
-- you want to know exactly what are the resulting diffs
-- you want to look at the code that failed without searching it
+- you want to know exactly what the resulting diffs are
+- you want to look at the code that failed without having to search for it
 - you want to play with it IMMEDIATELY in an interactive session, right in the context of the failure
 - you want to eventually edit and possibly fix it, right in the console
-- you want to rerun what went wrong right away, without expecting that the entire suite finishes
+- you want to rerun the fix right away, without expecting that the entire suite finishes
 
 IRT does all that for you automatically, besides, it adds a few commands that you can use to better interact with your
 code and with your testing, plus a few visual aids to your sessions, to make your life a lot easier.
-
-You can have a quick enlightening look by reading the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial")
-first, then if you want more details you can read this documentation.
 
 ## Installation
 
@@ -59,6 +59,11 @@ first, then if you want more details you can read this documentation.
 ### Command/Directives Usage
 
     >> irt_help
+
+## Try the Tutorial first!
+
+You can have a quick enlightening look by reading the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial")
+first, then if you want more details you can read this documentation.
 
 ## Colored and Styled Output
 
@@ -118,8 +123,8 @@ it left, retaining also the variables you eventually changed or added, passing b
 
 ### Inspecting Sessions (black/white)
 
-You can open an inspecting session with the command 'irt <obj>'.
-The 'self' of the new session will be the <obj> itself, so you can inspect it as you would be in its definition class.
+You can open an inspecting session with the command 'irt &lt;obj&gt;'.
+The 'self' of the new session will be the &lt;obj&gt; itself, so you can inspect it as you would be in its definition class.
 
 When you close the session with 'exit' (or 'x' or 'q'), IRT will not pass back anything from the inspecting session.
 
@@ -129,7 +134,7 @@ You can open a binding session from any file being evaluated with the directive 
 The 'self' of the new session will be the 'self' at the line you called it, so you can play with local variables
 and methods as you would do it at that line.
 
-If you use 'nano' or 'vi' in a binding session you will open the file that contains the 'bin_irt binding'
+If you use 'nano' or 'vi' in a binding session you will open the file that contains the 'irt binding'
 call at that line: very handy to edit your code in place.
 
 When you close the session with 'exit' (or 'x' or 'q'), IRT will not pass back anything from the binding session.
@@ -173,7 +178,7 @@ You can also do the same with all the session lines using 'print_all_lines' (or 
 or copy them all 'copy_all_lines' (or 'cll').
 
 That 'pl'-copy or 'cl' plus the 'vi' or 'nano' irt command (or the 'cnn' and 'cvi' commands)
-are a very time saver combination. See the tutorial for details.
+are a very time saver combination. See the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial") for details.
 
 ## Testing
 
@@ -245,7 +250,7 @@ the stdin to the clipboard.
 
 I have never been a big fan of CLI editors like vi or nano, but I really appreciate them
 when combined with IRT. Having the file I need to edit, opened at the right line at the touch of a 2 letter
-command ('nn' or 'vi') is relly fast and powerful.
+command ('nn' or 'vi') is really fast and powerful.
 
 You have just to know a few very basic commands
 like paste, save, quit, and eventually a couple of other, and you will save a lot of time and steps.
@@ -338,7 +343,7 @@ and they will not be logged; if they are part of your testing, use them as usual
 You can split your tests and reuse them in other files as you whould do with 'partials' template files.
 Use "insert_file 'file/path'" to insert a file into another. It will be evaluated by IRT as
 it were written right in the including file itself. Take that into account with variables and last_values.
-Besides, you should NOT suffix them with '.irt', so they will not ignored by the irt executable scanning the dirs.
+Besides, you should NOT suffix them with '.irt', so they will get ignored by the irt executable scanning the dirs.
 
 ### Code completion and irb-history
 
@@ -406,7 +411,7 @@ which should work quite well without any change:
 
 ### Colors
 
-The default color styles of IRT should be OK in most situation, anyway, if you raeally don't like the colors,
+The default color styles of IRT should be OK in most situation, anyway, if you really don't like the colors,
 you can switch off the color completely (IRT.force_color = false) or you can also
 redefine the colors by redefining them in your .irtrc file.
 
@@ -442,7 +447,7 @@ For example:
     working_dir
       irt_helper.rb #1
       first_level
-        <irt_helper.rb #2
+        irt_helper.rb #2
         testA.irt
         testB.irt
         second_level
