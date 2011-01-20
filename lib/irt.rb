@@ -25,7 +25,7 @@ module IRT
   class BindingError < RuntimeError ; end
   extend self
 
-  attr_accessor :irt_on_diffs, :tail_on_irt,
+  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt,
                 :full_exit, :exception_raised, :session_no, :autoload_helper_files,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format
   attr_reader :log, :irt_file, :differ, :os
@@ -43,6 +43,7 @@ module IRT
     @differ = IRT::Differ
     @irt_on_diffs = true
     @tail_on_irt = false
+    @fix_readline_prompt = false
     @autoload_helper_files = true
     Colorer.def_custom_styles :bold              => :bold,
                               :reversed          => :reversed,
@@ -67,9 +68,7 @@ module IRT
                                    'clip'
                                  when :macosx
                                    'pbcopy'
-                                 when :linux
-                                   'xclip -selection c'
-                                 when :unix
+                                 when :linux, :unix
                                    'xclip -selection c'
                                  end
     @edit_command_format = case @os
@@ -77,9 +76,7 @@ module IRT
                              '%1$s'
                            when :macosx
                              'open -t %1$s'
-                           when :linux
-                             get_unix_linux_open_command
-                           when :unix
+                           when :linux, :unix
                              get_unix_linux_open_command
                            end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"

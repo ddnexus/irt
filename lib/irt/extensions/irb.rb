@@ -110,7 +110,11 @@ module IRB #:nodoc:
         pr = instance_variable_get("@#{m}")
         col_pr = pr.send "#{irt_mode}_color"
         # workaround for Readline bug see http://www.ruby-forum.com/topic/213807
-        col_pr.gsub(/^(.*)#{pr}(.*)$/, "\001\\1\002#{pr}\001\\2\002")
+        if IRT.fix_readline_prompt
+          col_pr.gsub(/^(.*)#{pr}(.*)$/, "\001\\1\002#{pr}\001\\2\002")
+        else
+          col_pr
+        end
       end
     end
 

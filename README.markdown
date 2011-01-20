@@ -371,6 +371,9 @@ play well with IRT, then copy and paste just part of it.
 You can also change a few configuration options in the ~/.irtrc file. The following are the defaults
 which should work quite well without any change:
 
+    # set this to true if your prompt get messed up when you use the history
+    # IRT.fix_readline_prompt = false
+
     # will open an interactie session if a test has diffs
     # IRT.irt_on_diffs = true
 
