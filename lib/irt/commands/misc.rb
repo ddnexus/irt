@@ -17,7 +17,6 @@ module IRT
         puts
         puts " #{str} ".error_color.bold.reversed.or("*** #{str} ***")
         puts
-        IRT.log.print_running_file
         exec ENV["IRT_COMMAND"]
       end
       alias_method :rr, :rerun
