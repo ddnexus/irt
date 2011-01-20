@@ -35,12 +35,6 @@ FileUtils.cp(File.expand_path('../irtrc', IRT.lib_path), irtrc) unless File.exis
 argv = ARGV.dup
 
 case argv.first
-when NilClass, /^-/
-   tmp_file = Tempfile.new(%w[tmp- .irt])
-   tmp_file << "irt"
-   tmp_file.flush
-   path = tmp_file.path
-
 when /^(-h|--help)$/
   puts banner + usage
   exit
@@ -48,6 +42,12 @@ when /^(-h|--help)$/
 when /^(-v|--version)$/
   puts IRT::VERSION
   exit
+
+when NilClass, /^-/
+   tmp_file = Tempfile.new(%w[tmp- .irt])
+   tmp_file << "irt"
+   tmp_file.flush
+   path = tmp_file.path
 
 else
   path = File.expand_path(argv.shift)
