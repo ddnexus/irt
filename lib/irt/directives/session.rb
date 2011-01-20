@@ -44,6 +44,7 @@ module IRT
         new_context.parent_context = IRB.CurrentContext
         new_context.set_last_value( IRB.CurrentContext.last_value ) unless (mode == :inspect || mode == :binding)
         new_context.irt_mode = mode
+        new_context.backtrace_map = IRB.CurrentContext.backtrace_map if mode == :interactive
         IRB.conf[:MAIN_CONTEXT] = new_context
         IRT.log.add_hunk
         IRT.log.status << [new_context.irb_name, mode]

@@ -51,7 +51,7 @@ module IRB #:nodoc:
 
   class Context
 
-    attr_accessor :parent_context, :current_line, :binding_file, :binding_line_no
+    attr_accessor :parent_context, :current_line, :binding_file, :binding_line_no, :backtrace_map
     attr_reader :last_line_no
     attr_writer :irt_mode
 
@@ -96,8 +96,9 @@ module IRB #:nodoc:
           self.echo = irt_mode == :file ? false : true
           evaluate_and_set_last_value(line, line_no)
         end
-      rescue Exception
+      rescue Exception => e
         @exception_raised = true
+        process_exception(e)
         print "\e[31m" if Colorer.color?
         raise
       else
@@ -123,6 +124,23 @@ module IRB #:nodoc:
     end
 
 private
+
+    def process_exception(e)
+      reverted_error_colors = 'xxx'.error_color.match(/^(.*)xxx(.*)$/).captures.reverse
+      index_format = sprintf '%s%%s%s', *reverted_error_colors
+      bktr = e.backtrace.map{|l| l.split(':') }
+      bktr.reject! { |l| File.expand_path(l[0]).match(/^#{IRT.lib_path}/) }
+      @backtrace_map = {}
+      mapped_bktr = []
+      bktr.each_with_index do |l, i|
+        unless l[0].match(/^\(.*\)/)
+          @backtrace_map[i] = l[0..1]
+          index = sprintf index_format, " [#{i}]"
+        end
+        mapped_bktr << (l.join(':') << (index||''))
+      end
+      e.set_backtrace mapped_bktr
+    end
 
     def log_file_line(line_no)
       log_lines(@current_line, line_no)

@@ -27,13 +27,17 @@ module IRT
                             last evalued line for in place edit
     vi file[, line_no]      Uses vi to open <file> [at the last evalued line]
                             for in place editing
+    vi n                    Uses vi to open the backtraced file [n]
     nano|nn                 Uses nano to open the current evalued file at the
                             last evalued line for in place editing
     nano|nn file[, line_no] Uses nano to open file [at the last evalued line]
                             for in place edit
+    nano|nn n               Uses nano to open the backtraced file [n]
     edit|ed                 Uses your default GUY editor to open the current
                             evaluated file
     edit|ed file            Uses your default GUY editor to open file
+    edit|ed n               Uses your default GUY editor to open the backtraced
+                            file indicated as [n]
 
 #{" Copy-Edit Commands ".interactive_color.reversed.bold + " (use copy_to_clipboard_command)".interactive_color.bold}
     copy_lines|cl           Copy the last session lines

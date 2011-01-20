@@ -31,7 +31,7 @@ IRT records all the steps of your interactive session with irb (or rails console
 them as tests. In practice, if you use IRT properly, when you are done with your code, you are done with
 your tests.
 
-# Fixing made easy
+### Fixing made easy
 
 Don't you feel frustrated when a traditional test fails, printing a bunch of stuff difficult
 to distinguish, and showing NOTHING about the test code that produced the failure?
@@ -72,13 +72,13 @@ helpful to visually catch what you need in the mess of the terminal input/output
 
 IRT uses colors consistently, so you will have an instant feedback about what a text or a label is referring to.
 
-- cyan        for files, saved values (and object 'a' in a diff)
-- magenta     for interactive sessions
-- black/white for generic stdin/stdout and inspecting sessions (e.g. 'irt my_obj')
-- blue        for the Virtual Log and generic labels
-- yellow      for result echo (not setting last value), for binding sessions and for tests with diffs
-- green       for result echo (setting last value) (and object 'b' in a diff)
-- red         for erros, exceptions and rerun
+- __cyan__        for files, saved values (and object 'a' in a diff)
+- __magenta__     for interactive sessions
+- __black/white__ for generic stdin/stdout and inspecting sessions (e.g. 'irt my_obj')
+- __blue__        for the Virtual Log and generic labels
+- __yellow__      for result echo (not setting last value), for binding sessions and for tests with diffs
+- __green__       for result echo (setting last value) (and object 'b' in a diff)
+- __red__         for erros, exceptions and rerun
 
 Besides IRT is using reversed and bold styles to compose a more readable/graphical output.
 
@@ -312,6 +312,14 @@ Get the list of the methods implemented by the object itself (not inherited).
 'pp', 'yaml' (and 'ap' if installed) are loaded, so you can use 'pp', 'ap' and 'y' commands to have
 a better looking inspection of your objects. Besides they are also enhanced a bit: when invoked
 with no arguments, they use the last value (\_) as the default (e.g. just type 'y' instead 'y \_')
+
+### In place inspecting/editing of backtraced files
+
+When an error occurs, IRT shows you an indexed exception backtrace: each file:line in the backtrace
+has an index number (in brackets) that you can use to open that file at that line with your preferred in-place editor.
+
+You have just to type 'nn <i>' or 'vi <i>' or 'ed <i>', (being <i> the index number shown in the backtrace),
+and you will open it in insert mode. Very handy to inspect and fix in place, any code involved in the error.
 
 ## General Tools
 

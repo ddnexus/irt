@@ -41,15 +41,21 @@ module IRT
     private
 
       def run_editor(cmd, *args)
-        command = if args.empty?
-                    cmd_format = IRT.send("#{cmd}_command_format".to_sym)
-                    raise NotImplementedError unless cmd_format
-                    f, l = IRB.CurrentContext.file_line_pointers
-                    sprintf cmd_format, f, l
+        command = case
+                  when args.empty?
+                    process_cmd cmd, *IRB.CurrentContext.file_line_pointers
+                  when args.first.to_s.match(/^\d+$/)
+                    process_cmd cmd, *IRB.CurrentContext.backtrace_map[args.first]
                   else
                     "#{cmd} #{args * ' '}"
                   end
         system command
+      end
+
+      def process_cmd(cmd, file, line)
+        cmd_format = IRT.send("#{cmd}_command_format".to_sym)
+        raise NotImplementedError unless cmd_format
+        sprintf cmd_format, file, line
       end
 
       def copy_to_clipboard(cmd)
