@@ -12,14 +12,14 @@ Description:
     Ruby Interactive Testing - Use irb or rails console for testing.
 
 Usage:
-    irt
-        similar to `irb` (but uses an empty tmp file)
-
-    irt PATH [options] [rails_env]
+    irt [PATH] [options] [rails_env]
         PATH        path to a single file or dir (<dir>/**/*.irt files)
                     if it doesn't exists, a new file will be created and opened
-        options     all the options supported by irb or rails console
-        rails_env   the optional rails environment to load (must be last arg)
+                    if omitted a tmp file will be used
+        options     almost all the options supported by irb or rails console
+                    (excluding those that irt overrides)
+        rails_env   the optional rails environment to load (it must be the last
+                    argument)
 
     irt -v|--version
         shows the version and exits
@@ -35,7 +35,7 @@ FileUtils.cp(File.expand_path('../irtrc', IRT.lib_path), irtrc) unless File.exis
 argv = ARGV.dup
 
 case argv.first
-when NilClass
+when NilClass, /^-/
    tmp_file = Tempfile.new(%w[tmp- .irt])
    tmp_file << "irt"
    tmp_file.flush
@@ -73,21 +73,25 @@ if files.empty?
   exit
 end
 
-command = 'irb'
-if File.exists?('./config/environment.rb')
-  if File.exists?('./script/rails')
-    command =  'rails c'
-  elsif File.exists?('./script/console')
-    command = 'ruby script/console'
-  end
-  argv << 'development' if command != 'irb' && (argv.last.nil? || argv.last =~ /^-/)
+cmd_format = if File.exists?('./config/environment.rb')
+               if File.exists?('./script/rails')
+                 'rails c %s %s %s'
+               elsif File.exists?('./script/console')
+                 'ruby script/console --irb="irt_rails2"'
+               end
+             else
+               'irb %s %s'
+             end
+
+unless cmd_format.match(/^irb/)
+  ENV['RAILS_ENV'] ||= (argv.last.nil? || argv.last.match(/^-/)) ? 'development' : argv.pop
 end
 
 puts banner
 
 files.each do |file|
+  ENV["IRT_COMMAND"] = sprintf cmd_format, file, argv.join(' '), ENV['RAILS_ENV']
   ENV["IRT_FILE"] = file
-  ENV["IRT_COMMAND"] = "#{command} #{file} #{argv * ' '}".strip
   ENV["IRBRC"] = irtrc
   unless system(ENV["IRT_COMMAND"])
     puts "\e[0m" if Colorer.color
