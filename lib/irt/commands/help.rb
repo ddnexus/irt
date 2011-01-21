@@ -22,22 +22,16 @@ module IRT
                             without numbers (for easy copying)
     print_all_lines|pll     Like print_line but prints all the sessions lines
 
-#{" Editing Commands ".interactive_color.reversed.bold}
-    vi                      Uses vi to open the current evalued file at the
-                            last evalued line for in place edit
-    vi file[, line_no]      Uses vi to open <file> [at the last evalued line]
-                            for in place editing
-    vi n                    Uses vi to open the backtraced file [n]
-    nano|nn                 Uses nano to open the current evalued file at the
-                            last evalued line for in place editing
-    nano|nn file[, line_no] Uses nano to open file [at the last evalued line]
-                            for in place edit
-    nano|nn n               Uses nano to open the backtraced file [n]
-    edit|ed                 Uses your default GUY editor to open the current
-                            evaluated file
-    edit|ed file            Uses your default GUY editor to open file
-    edit|ed n               Uses your default GUY editor to open the backtraced
-                            file indicated as [n]
+#{" In Place Editing Commands ".interactive_color.reversed.bold}
+    (<editor> can be 'vi', 'nano|nn', 'edit|ed')
+    <editor>                Uses <editor> to open the current evalued file at
+                            the current evalued line for in place edit
+    <editor> file[, line]   Uses <editor> to open file [at line] for in place
+                            editing
+    <editor> hash           Uses <editor> to open hash[:file] at the hash[:line]
+    <editor> array          Uses <editor> to open array[0] at the array[1] line
+    <editor> n              Uses <editor> to open the backtraced file [n] at
+                            the backtraced line
 
 #{" Copy-Edit Commands ".interactive_color.reversed.bold + " (use copy_to_clipboard_command)".interactive_color.bold}
     copy_lines|cl           Copy the last session lines
@@ -89,6 +83,11 @@ module IRT
                             captured stdout
     Object#own_methods      Returns the methods implemented by the receiver
                             itself (not inherited)
+    Method#location         When possible, it returns file and line where the
+                            method is defined. It is uitable to be passed to the
+                            in place editing commands.
+    Method#info             Returns useful info about the method. It is suitable
+                            to be passed to the in place editing commands.
 )
       end
       alias_method :hh, :irt_help
