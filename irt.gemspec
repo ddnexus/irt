@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.authors = ["Domizio Demichelis"]
   s.email = 'dd.nexus@gmail.com'
   s.homepage = 'http://github.com/ddnexus/irt'
-  s.summary = 'Interactive Ruby Testing - Use irb or rails console for testing.'
-  s.description = 'IRT records and rerun the steps of your interactive irb or rails console session, ignoring the inspecting commands and reporting test diffs.'
+  s.summary = 'Interactive Ruby Testing - Use an improved irb / rails console for testing.'
+  s.description = 'If you use IRT in place of irb, you will have all the regular irb/rails console features, plus a lot more.'
 
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('colorer', [">= 0.7.0"])

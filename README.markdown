@@ -307,6 +307,24 @@ You can hijack the output of a block to a variable to inspect and test:
 
 Get the list of the methods implemented by the object itself (not inherited).
 
+### Method#location
+
+When possible, it returns an array with file and line where the method is located (defined).
+It is suitable to be passed to any in place editing command to open the file at the line.
+
+    >> context.method(:prompt_i).location
+    => ["./lib/irt/extensions/irb.rb", 111]
+    >> nn _  # will open the file at line 111 with nano
+
+### Method#info
+
+Returns an hash with the info of the method. It is suitable to be passed to any
+in place editing command to to open the file at the line.
+
+    >> context.method(:prompt_i).info
+    => {:file=>"./lib/irt/extensions/irb.rb", :name=>"prompt_i", :line=>111, :arity=>-1, :class_name=>"IRB::Context"}
+    >> nn _  # will open the file at line 111 with nano
+
 ### Inspecting libs
 
 'pp', 'yaml' (and 'ap' if installed) are loaded, so you can use 'pp', 'ap' and 'y' commands to have
