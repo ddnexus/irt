@@ -120,8 +120,9 @@ module IRB #:nodoc:
       end
     end
 
-    def return_format(color=:actual_color)
-      @return_format.send color
+    def return_format(color=:actual_color, ignored=false)
+      ret = ignored ? @return_format.sub(/=/,'#') : @return_format
+      ret.send color
     end
 
 private
@@ -176,9 +177,9 @@ private
 
      def output_ignored_echo_value(value)
        if inspect?
-        printf return_format(:ignored_color), value.inspect
+        printf return_format(:ignored_color,false), value.inspect
       else
-        printf return_format, value
+        printf return_format(:ignored_color,false), value
       end
     end
   end

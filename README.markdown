@@ -372,23 +372,24 @@ Save some typing for common system calls like ls, cat, vi, nano
 ### FileUtils
 
 All the FileUtils methods are included as commands: just call them in the session
-and they will not be logged; if they are part of your testing, use them as usual
+and they will ignored by the log; if they are part of your testing, use them as usual
 
-    >> rm_rf 'dir/to/remove'           # not logged because it's an irt command
+    >> rm_rf 'dir/to/remove'           # ignored because it's an irt command
     >> FileUtils.rm_rf 'dir/to/remove' # logged because it's a regular statement
 
-Notice: The FileUtils commands, unlike the IRT commands, do echo their result, although they don't set the last value (_)
-(like any other IRT command). In order to distinguish that behaviour from a regular setting statement,
-the result is printed in yellow instead than in green.
+Notice: The FileUtils commands (unlike the other IRT commands) do echo their result,
+although they don't set the last value \_ (like any other IRT command). In order to distinguish
+that behaviour from a regular setting statement, their result is printed in yellow instead than in green.
+and the prompt is '#&gt;' instead '=&gt;'. Example:
 
     >> a = 5
     => 5
     >> pwd
-    => "/Users/dd/dev/irt" # yellow non-setting _
+    #> "/Users/dd/dev/irt" # yellow ignored and non setting _
     >> _
     => 5
     >> FileUtils.pwd
-    => "/Users/dd/dev/irt" # green setting _
+    => "/Users/dd/dev/irt" # green logged and setting _
     >> _
     => "/Users/dd/dev/irt"
 
