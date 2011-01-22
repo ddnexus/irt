@@ -30,6 +30,9 @@ module IRT
                             editing
     <editor> hash           Uses <editor> to open hash[:file] at the hash[:line]
     <editor> array          Uses <editor> to open array[0] at the array[1] line
+    <editor> traceline      Uses <editor> to open the file at line in traceline
+                            e.g.: nn "from /path/to/file.rb:34:in 'any_method'"
+                                  nn "a_gem (1.2.3) lib/file.rb:13:in 'a_meth'"
     <editor> n              Uses <editor> to open the backtraced file [n] at
                             the backtraced line
 

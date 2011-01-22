@@ -1,6 +1,6 @@
 # irt
 
-Interactive Ruby Testing - Use irb or rails console for testing.
+Interactive Ruby Testing - Use an improved irb / rails console for testing.
 
 ## Foreword
 
@@ -237,10 +237,10 @@ command from your system. see below.
 
 IRT provides a few commands that will use an external command of your system to copy the
 last lines to the clipboard: 'copy_lines' (or 'cl'), 'cnano', 'cvi', 'cedit' use that command
-aviding you the boring task to select the output from the terminal and copy it.
+avoiding you the boring task to select the output from the terminal and copy it.
 
 It uses 'pbcopy' on MacOS (which should be already installed on any mac),
-'xclip' on linux/unix (wihch you might need to install) and 'clip' on Windoze
+'xclip' on linux/unix (which you might need to install) and 'clip' on Windoze
 (which is not supported on all WinOS flavours).
 
 You can however set the IRT.copy_to_clipboard_command to any command capable of piping
@@ -319,7 +319,7 @@ It is suitable to be passed to any in place editing command to open the file at 
 ### Method#info
 
 Returns an hash with the info of the method. It is suitable to be passed to any
-in place editing command to to open the file at the line.
+in place editing command to open the file at the line.
 
     >> context.method(:prompt_i).info
     => {:file=>"./lib/irt/extensions/irb.rb", :name=>"prompt_i", :line=>111, :arity=>-1, :class_name=>"IRB::Context"}
@@ -337,7 +337,20 @@ When an error occurs, IRT shows you an indexed exception backtrace: each file:li
 has an index number (in brackets) that you can use to open that file at that line with your preferred in-place editor.
 
 You have just to type 'nn &lt;i&gt;' or 'vi &lt;i&gt;' or 'ed &lt;i&gt;', (being &lt;i&gt; the index number shown in the backtrace),
-and you will open it in insert mode. Very handy to inspect and fix in place, any code involved in the error.
+and you will open it in insert mode. Very handy to inspect and fix in place, any code involved in the error. Example:
+
+    # backtraced line: from /Users/dd/dev/hobo3/hobo/lib/hobo/controller/model.rb:57:in `each' [3]
+    >> nn 3
+
+Besides, if you copy a traceline from another source (which obviously does not have backtrace indexes)
+like a user group or a rails application trace, just paste it as the argument of any editor command
+(even if it is splitted over many lines like in the first example below) and IRT will open the file at
+the wanted line. Example:
+
+    >> nn "from /opt/local/lib/ruby/site_r
+    "> uby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'"
+    # or a rails trace line
+    >> nn "activesupport (3.0.3) lib/active_support/dependencies.rb:491:in `load_missing_constant'"
 
 ## General Tools
 
@@ -363,6 +376,21 @@ and they will not be logged; if they are part of your testing, use them as usual
 
     >> rm_rf 'dir/to/remove'           # not logged because it's an irt command
     >> FileUtils.rm_rf 'dir/to/remove' # logged because it's a regular statement
+
+Notice: The FileUtils commands, unlike the IRT commands, do echo their result, although they don't set the last value (_)
+(like any other IRT command). In order to distinguish that behaviour from a regular setting statement,
+the result is printed in yellow instead than in green.
+
+    >> a = 5
+    => 5
+    >> pwd
+    => "/Users/dd/dev/irt" # yellow non-setting _
+    >> _
+    => 5
+    >> FileUtils.pwd
+    => "/Users/dd/dev/irt" # green setting _
+    >> _
+    => "/Users/dd/dev/irt"
 
 ### File insert/eval
 
@@ -494,6 +522,12 @@ will not be loaded, so be careful to be in the right dir to make it work properl
 You must add the gem to your Gemfile, to make the bundler happy:
 
     gem 'irt', :group => :console
+
+## Known Issue
+
+IRT use yaml serialization, and inherits its limits (e.g.: Yaml cannot dump anonymous classes, MatchData, oject that contains binding, etc.)
+so if you stumble upon on one of them, you have just to test the subparts of the object that you cannot dump. For example, instead of testing one whole anonymous
+class, (which is however a bad idea) you can add tests for the values returned by its methods or variables.
 
 ## Copyright
 

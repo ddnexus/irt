@@ -5,7 +5,7 @@ module IRT
       extend self
 
       def irt(bind)
-        raise NotImplementedError, "You must pass binding" unless bind.is_a?(Binding)
+        raise IRT::ArgumentTypeError, "You must pass binding instead of #{bind.class.name} object" unless bind.is_a?(Binding)
         new_session :binding, bind
       end
 

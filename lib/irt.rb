@@ -22,7 +22,11 @@ module IRT
 
   VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
 
-  class BindingError < RuntimeError ; end
+  class IndexError < RuntimeError ; end
+  class SessionModeError < RuntimeError ; end
+  class ArgumentTypeError < RuntimeError ; end
+  class NotImplementedError < RuntimeError ; end
+
   extend self
 
   attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt,
@@ -77,7 +81,12 @@ module IRT
                            when :macosx
                              'open -t %1$s'
                            when :linux, :unix
-                             get_unix_linux_open_command
+                             case ENV['DESKTOP_SESSION']
+                             when /kde/i
+                               'kde-open %1$s'
+                             when /gnome/i
+                               'gnome-open %1$s'
+                             end
                            end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
@@ -102,15 +111,6 @@ module IRT
   end
 
 private
-
-  def get_unix_linux_open_command
-    case ENV['DESKTOP_SESSION']
-    when /kde/i
-      'kde-open %1$s'
-    when /gnome/i
-      'gnome-open %1$s'
-    end
-  end
 
   def get_os
     case RbConfig::CONFIG['host_os']

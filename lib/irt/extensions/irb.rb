@@ -31,8 +31,8 @@ module IRB #:nodoc:
                else
                  :inspect
                end
-        raise NotImplementedError, "You cannot pass binding from here" if mode == :binding
-        raise NotImplementedError, "You cannot open another interactive session" \
+        raise IRT::SessionModeError, "You cannot pass binding in #{mode} mode" if mode == :binding
+        raise IRT::SessionModeError, "You cannot open another interactive session in #{mode} mode" \
           if mode == :interactive && IRB.CurrentContext.irt_mode != :file
         IRT::Directives::Session.send :new_session, mode, obj
       end
@@ -52,7 +52,7 @@ module IRB #:nodoc:
   class Context
 
     attr_accessor :parent_context, :current_line, :binding_file, :binding_line_no, :backtrace_map
-    attr_reader :last_line_no
+    attr_reader :current_line_no, :last_line_no
     attr_writer :irt_mode
 
     def file_line_pointers
@@ -79,6 +79,7 @@ module IRB #:nodoc:
     alias_method :evaluate_and_set_last_value, :evaluate
     def evaluate(line, line_no)
       @current_line = line
+      @current_line_no = line_no + line.chomp.count("\n")
       if @exception_raised
         IRT::Directives::Session.send(:new_session, :interactive) if irt_mode == :file
         @exception_raised = false
@@ -126,20 +127,23 @@ module IRB #:nodoc:
 private
 
     def process_exception(e)
-      reverted_error_colors = 'xxx'.error_color.match(/^(.*)xxx(.*)$/).captures.reverse
-      index_format = sprintf '%s%%s%s', *reverted_error_colors
-      bktr = e.backtrace.map{|l| l.split(':') }
-      bktr.reject! { |l| File.expand_path(l[0]).match(/^#{IRT.lib_path}/) }
+      bktr = e.backtrace.reject {|m| File.expand_path(m).match(/^#{IRT.lib_path}/) }
+      e.set_backtrace( e.class.name.match(/^IRT::/) ? bktr : map_backtrace(bktr) )
+    end
+
+    def map_backtrace(bktr)
       @backtrace_map = {}
       mapped_bktr = []
-      bktr.each_with_index do |l, i|
-        unless l[0].match(/^\(.*\)/)
-          @backtrace_map[i] = l[0..1]
+      reverted_error_colors = 'xxx'.error_color.match(/^(.*)xxx(.*)$/).captures.reverse
+      index_format = sprintf '%s%%s%s', *reverted_error_colors
+      bktr.each_with_index do |m, i|
+        unless i + 1 > back_trace_limit || m.match(/^\(.*\)/) || workspace.filter_backtrace(m).nil?
+          @backtrace_map[i] = m.split(':')[0..1]
           index = sprintf index_format, " [#{i}]"
         end
-        mapped_bktr << (l.join(':') << (index||''))
+        mapped_bktr << "#{m}#{index}"
       end
-      e.set_backtrace mapped_bktr
+      mapped_bktr
     end
 
     def log_file_line(line_no)

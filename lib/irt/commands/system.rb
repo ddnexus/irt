@@ -44,24 +44,41 @@ module IRT
 
       def run_editor(cmd, *args)
         cmd_format = IRT.send("#{cmd}_command_format".to_sym)
-        raise NotImplementedError unless cmd_format
+        raise IRT::NotImplementedError, "#{cmd}_command_format missing" unless cmd_format
+        arg = args.first if args.size == 1
         file, line = case
-                      when args.empty?
-                        IRB.CurrentContext.file_line_pointers
-                      when args.first.to_s.match(/^\d+$/)
-                        IRB.CurrentContext.backtrace_map[args.first]
-                      when args.first.is_a?(Array)
-                        args.first
-                      when args.first.is_a?(Hash)
-                        [args.first[:file], args.first[:line]]
-                      else
-                        args
-                      end
+                     when args.empty?
+                       IRB.CurrentContext.file_line_pointers
+                     when arg.is_a?(Integer)
+                       if IRB.CurrentContext.backtrace_map.key?(arg)
+                         IRB.CurrentContext.backtrace_map[arg]
+                       else
+                         raise IRT::IndexError, "No such backtrace index -- [#{arg}]"
+                         return
+                       end
+                     when arg.is_a?(Array)
+                       arg
+                     when arg.is_a?(Hash)
+                       [arg[:file], arg[:line]]
+                     when arg.is_a?(String) && m = arg.match(/(?:([\w]+) \(([\w.]+)\))? ?([\w\/\n.]+):(\d+)/m)
+                        gem, vers, f, l = m.captures
+                        if gem
+                          Gem.path.each do |p|
+                            gp = File.join(p, 'gems', "#{gem}-#{vers}", f)
+                            break [gp, l] if File.exist?(gp)
+                          end
+                        else
+                          [f.gsub("\n", ''), l]
+                        end
+                     else
+                       args
+                     end
         system sprintf(cmd_format, file, line)
       end
 
       def copy_to_clipboard(cmd)
-        raise NotImplementedError, "No known copy_to_clipboard_command for this system." unless IRT.copy_to_clipboard_command
+        raise IRT::NotImplementedError, "No known copy_to_clipboard_command for this system." \
+          unless IRT.copy_to_clipboard_command
         lines_str = capture { send(cmd) }
         return unless lines_str.match(/\w/m)
         begin
@@ -70,7 +87,7 @@ module IRT
           end
           print lines_str
         rescue Exception
-          raise NotImplementedError, "This system does not appear to support the \`#{IRT.copy_to_clipboard_command}\` command."
+          raise IRT::NotImplementedError, "This system does not appear to support the \`#{IRT.copy_to_clipboard_command}\` command."
         end
       end
 
