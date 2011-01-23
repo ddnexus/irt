@@ -40,6 +40,22 @@ module IRT
       alias_method :cnn, :cnano
       alias_method :ced, :cedit
 
+      def ri(arg)
+        raise IRT::NotImplementedError, "No available ri_command_format for this system. You might want to install the fastri gem." unless IRT.ri_command_format
+        return puts('nil') if arg.nil? || arg.empty?
+        segm = arg.split('.')
+        to_search = segm.pop
+        unless segm.empty?
+          begin
+            meth = eval "#{segm.join('.')}.method(:#{to_search})", IRB.CurrentContext.workspace.binding
+            to_search = "#{meth.owner.name}##{meth.name}"
+          rescue
+            raise NoMethodError, %(undefined method #{to_search} for #{segm.join('.')})
+          end
+        end
+        system sprintf(IRT.ri_command_format, to_search)
+      end
+
     private
 
       def run_editor(cmd, *args)
@@ -60,7 +76,7 @@ module IRT
                        arg
                      when arg.is_a?(Hash)
                        [arg[:file], arg[:line]]
-                     when arg.is_a?(String) && m = arg.match(/(?:([\w]+) \(([\w.]+)\))? ?([\w\/\n.]+):(\d+)/m)
+                     when arg.is_a?(String) && m = arg.match(/(?:([\w]+) \(([\w.]+)\))? ?([\w\/\n.-]+):(\d+)/m)
                         gem, vers, f, l = m.captures
                         if gem
                           Gem.path.each do |p|

@@ -10,6 +10,7 @@ require 'rbconfig'
 require 'pathname'
 require 'irt/extensions/kernel'
 require 'irt/extensions/object'
+require 'irt/extensions/method'
 require 'irt/extensions/irb'
 require 'irb/completion'
 require 'colorer'
@@ -29,9 +30,9 @@ module IRT
 
   extend self
 
-  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt,
+  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
                 :full_exit, :exception_raised, :session_no, :autoload_helper_files,
-                :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format
+                :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :differ, :os
 
   def directives
@@ -90,6 +91,8 @@ module IRT
                            end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
+    @ri_command_format =  "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s" if `qri -v`.match(/^qri /)
+    @debug = false
   end
 
   def init_files

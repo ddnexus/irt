@@ -22,29 +22,34 @@ module IRB #:nodoc:
     alias_method :xx, :abort
     alias_method :qq, :abort
 
-      def irt(obj=nil)
-        mode = case obj
-               when nil
-                 :interactive
-               when Binding
-                 :binding
-               else
-                 :inspect
-               end
-        raise IRT::SessionModeError, "You cannot pass binding in #{mode} mode" if mode == :binding
-        raise IRT::SessionModeError, "You cannot open another interactive session in #{mode} mode" \
-          if mode == :interactive && IRB.CurrentContext.irt_mode != :file
-        IRT::Directives::Session.send :new_session, mode, obj
-      end
-      alias_method :open_session, :irt # legacy method
-      alias_method :irb, :irt
-
+    def irt(obj=nil)
+      mode = case obj
+             when nil
+               :interactive
+             when Binding
+               :binding
+             else
+               :inspect
+             end
+      raise IRT::SessionModeError, "You cannot pass binding in #{mode} mode" if mode == :binding
+      raise IRT::SessionModeError, "You cannot open another interactive session in #{mode} mode" \
+        if mode == :interactive && IRB.CurrentContext.irt_mode != :file
+      IRT::Directives::Session.send :new_session, mode, obj
+    end
+    alias_method :open_session, :irt # legacy method
+    alias_method :irb, :irt
 
     %w[p y pp ap].each do |m|
       define_method(m) do |*args|
         args = [IRB.CurrentContext.last_value] if args.empty?
         super *args
       end
+    end
+
+    def method_missing(method, *args, &block)
+      IRB.conf[:MAIN_CONTEXT] && IRB.conf[:MAIN_CONTEXT].irt_mode == :file && IRT::Directives.respond_to?(method) ?
+        IRT::Directives.send(method, *args, &block) :
+        super
     end
 
   end
@@ -86,6 +91,11 @@ module IRB #:nodoc:
       end
       log_file_line(line_no) if irt_mode == :file
       begin
+        # ri arg to string
+        if m = line.match(/^(\s*ri[ \t]+)(.+)$/)
+          pre, to_search = m.captures
+          line = "#{pre}#{to_search.inspect}" unless to_search.match(/^('|").+\1$/)
+        end
         # skip setting last_value for non_setting_commands
         if line =~ /^\s*(#{IRT.log.non_setting_commands * '|'})\b/
           self.echo = false
@@ -128,6 +138,7 @@ module IRB #:nodoc:
 private
 
     def process_exception(e)
+      return if IRT.debug
       bktr = e.backtrace.reject {|m| File.expand_path(m).match(/^#{IRT.lib_path}/) }
       e.set_backtrace( e.class.name.match(/^IRT::/) ? bktr : map_backtrace(bktr) )
     end

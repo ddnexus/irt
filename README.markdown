@@ -1,29 +1,25 @@
 # irt
 
-Interactive Ruby Testing - Use an improved irb / rails console for testing.
-
-## Foreword
-
-I like to try my code step by step with irb: it's like playing. But then, when everything
-is working as I want, I have to write the tests for future changes, and... that's like working!
-It's also somehow silly, because I know that everything is ok because I have just tried it thoroughly,
-but I have to re-write the same steps and pack everything into a test-suite.
-That's not DRY at all, so I wrote IRT.
-
-After using it for a while I added also quite a lot of other features, not only useful for testing,
-but also for easy inspecting and debugging. I hope it will be useful for you too.
-
-### Feedback!!!
-
-This is feedback-driven software. Just send me a line about you and/or what you think about IRT:
-that will be a wonderful contribution that will help me to keep improving (and documenting) this software.
-
-My email address is ddnexus at gmail.com ... waiting for your. Ciao.
+Interactive Ruby Tools - Improved irb and rails console with a lot of easy and powerful tools.
 
 ## What is IRT?
 
-IRT is an improved irb / rails console that adds a lot of useful features to the standard irb.
-If you use IRT in place of irb, you will have all the regular irb/rails console features, plus a lot more.
+IRT is an improved irb / rails console (for rails 2 and 3) that adds a lot of features to the standard irb.
+If you use IRT in place of irb, you will have all the regular irb/rails console features, plus a lot of tools
+that will make your life a lot easier.
+
+### Powerful and easy
+
+- clean colored output for easy reading
+- 3 types of sessions: interactive, inspecting and binding
+- irb opening from your code as binding session
+- contextual ri doc with completion
+- recording of session steps with filtering
+- easy testing based on recorded steps
+- easy in place opening of backtraced files
+- in place editing with syntax highlight
+- visual comparing tool and navigation aids
+- system and session shortcuts... and much more
 
 ### Testing made easy
 
@@ -43,10 +39,19 @@ but that you actually want to fix it! IRT assumes that...
 - you want to look at the code that failed without having to search for it
 - you want to play with it IMMEDIATELY in an interactive session, right in the context of the failure
 - you want to eventually edit and possibly fix it, right in the console
-- you want to rerun the fix right away, without expecting that the entire suite finishes
+- you want to rerun the fix right away, without waiting for the end of the whole suite
 
-IRT does all that for you automatically, besides, it adds a few commands that you can use to better interact with your
-code and with your testing, plus a few visual aids to your sessions, to make your life a lot easier.
+### Feedback!!!
+
+This is feedback-driven software. Just send me a line about you and/or what you think about IRT:
+that will be a wonderful contribution that will help me to keep improving (and documenting) this software.
+
+My email address is ddnexus at gmail.com ... waiting for your. Ciao.
+
+## Try the Tutorial first!
+
+You can have a quick enlightening look (with a lot of screenshots) by reading the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial")
+first, then if you want more details you can read this documentation.
 
 ## Installation
 
@@ -59,11 +64,6 @@ code and with your testing, plus a few visual aids to your sessions, to make you
 ### Command/Directives Usage
 
     >> irt_help
-
-## Try the Tutorial first!
-
-You can have a quick enlightening look by reading the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial")
-first, then if you want more details you can read this documentation.
 
 ## Colored and Styled Output
 
@@ -148,10 +148,10 @@ you did in an interactive session (inspecting and binding sessions are ignored).
 RELEVANT is anything that is changing something in the code you are executing (plus comments and blank lines
 used for description and formatting).
 
-### Ignored steps
+### Filtered steps
 
 If you are in an interactive session, make a typo and get an error,
-that's not relevant for your code so the typo and the error don't get recorded in the log.
+that's not relevant for your code so the typo and the error doesn't get recorded in the log.
 
 When you just inspect a variable, using p, pp, ap, puts, y, ... or use any irt command...
 that are not relevant steps that you want to rerun the next time, so they don't get recorded in the log.
@@ -354,6 +354,32 @@ the wanted line. Example:
 
 ## General Tools
 
+### Contextual ri doc with autocompletion
+
+IRT offers the 'ri' command, implemented with fastri so you should have it installed.
+It uses 'qri' by default but you can change the IRT.ri_command_format if you prefer to use 'fri'.
+
+In its basic form the 'ri' command can accept a string as the system ri command does (you can even omit the quotes).
+Besides it offers a very useful contextual search, that will find the ri doc of the specific method used by the receiver.
+Example:
+
+    # autocompletion
+    >> ri "any string".eq[TAB]
+    .eql?    .equal?
+
+    >> ri "a string".eql?
+    ------------------------------------------------------------ String#eql?
+         str.eql?(other)   => true or false
+    ------------------------------------------------------------------------
+         Two strings are equal if the have the same length and content.
+
+    >> ri [].eql?
+    ------------------------------------------------------------- Array#eql?
+         array.eql?(other)  -> true or false
+    ------------------------------------------------------------------------
+         Returns true if array and other are the same object, or are both
+         arrays with the same content.
+
 ### IRT Help
 
 The IRT Commands are the methods that you can call from any IRT console session, while the Directives are
@@ -453,6 +479,9 @@ which should work quite well without any change:
 
     # the format to build the command to launch vi
     # IRT.vi_command_format ="vi -c 'startinsert' %1$s +%2$d"
+
+    # the format to build the command to launch the ri tool
+    # IRT.ri_command_format = "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s"
 
     # add your command format if you want to use another editor than nano or vi
     # default 'open -t %1$s' on MacOX; 'kde-open %1$s' or 'gnome-open %1$s' un unix/linux; '%1$s' on windoze

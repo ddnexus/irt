@@ -58,6 +58,12 @@ module IRT
     p, pp, ap, y            When invoked with no arguments print the last_value
                             (e.g. just type 'y' instead 'y _')
 
+#{" Documentation Commands ".interactive_color.reversed.bold}
+    ri to_search            Search the ri doc for to_search (no quotes needed)
+    ri obj.any_method       Search the method.owner ri doc for of any_method
+                            (no quotes needed, and completion available)
+                            e.g.: ri "".eql?  #=> ri doc for String#eql?
+                                  ri [].eql?  #=> ri doc for Array#eql?
 #{" Misc Commands ".interactive_color.reversed.bold}
     x|q                     Aliases for exit (from the current session)
     xx|qq                   Aliases for abort (abort the irt process)
