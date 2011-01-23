@@ -32,7 +32,7 @@ module IRT
      hist.delete_if{|h| h.empty? }
      to_render = hist.reduce([]) do |his, hunk|
                    hu = hunk.dup
-                   (his.empty? || !his.last.header == hu.header) ? (his << hu) : his.last.concat(hu)
+                   (his.empty? || his.last.header != hu.header) ? (his << hu) : his.last.concat(hu)
                    his
                  end
       to_print = 0
