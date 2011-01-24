@@ -70,7 +70,7 @@ module IRT
             puts "#{tno}. DIFFS!".diff_color.bold + %( #{d}\n     ).diff_color +
               %( at #{context.irb_path}: #{context.last_line_no} ).file_color.reversed.bold
             puts IRT.differ.new(saved, actual, kind).output
-            IRT::Directives::Session.send(:new_session, :interactive) if IRT.irt_on_diffs
+            IRT::Session.enter(:interactive) if IRT.irt_on_diffs
           end
         rescue Exception
           @@errors += 1

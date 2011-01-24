@@ -33,7 +33,7 @@ module IRB
       @current_line = line
       @current_line_no = line_no + line.chomp.count("\n")
       if @exception_raised
-        IRT::Directives::Session.send(:new_session, :interactive) if irt_mode == :file
+        IRT::Session.enter(:interactive) if irt_mode == :file
         @exception_raised = false
       end
       log_file_line(line_no) if irt_mode == :file

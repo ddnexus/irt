@@ -18,6 +18,7 @@ require 'irt/log'
 require 'irt/hunks'
 require 'irt/differ'
 require 'irt/directives'
+require 'irt/session'
 
 module IRT
 

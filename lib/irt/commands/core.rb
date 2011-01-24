@@ -16,7 +16,7 @@ module IRT
           if to_mode == :binding && (irt_mode == :binding || caller[0].match(/^\(/))
         raise IRT::SessionModeError, "You cannot open another interactive session in #{irt_mode} mode" \
           if to_mode == :interactive && irt_mode != :file
-        IRT::Directives::Session.send :new_session, to_mode, obj
+        IRT::Session.enter to_mode, obj
       end
       alias_method :open_session, :irt # legacy method
 
