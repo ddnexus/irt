@@ -360,6 +360,27 @@ IRT offers the 'ri' command, implemented with fastri so you should have it insta
 It uses 'qri' by default but you can change the IRT.ri_command_format if you prefer to use 'fri'.
 
 In its basic form the 'ri' command can accept a string as the system ri command does (you can even omit the quotes).
+
+    >> ri reverse
+    ------------------------------------------------------ Multiple choices:
+
+          1  ActiveSupport::Multibyte::Chars#reverse
+          2  Array#reverse
+          3  IPAddr#reverse
+          4  String#reverse
+
+    >> ri 4
+    --------------------------------------------------------- String#reverse
+         str.reverse   => new_str
+    ------------------------------------------------------------------------
+         Returns a new string with the characters from str in reverse order.
+
+            "stressed".reverse   #=> "desserts"
+
+But unlike the system command, when the search results in multiple choices, you can just type the
+index of the choice and get the doc you want with less typing. The shortcuts in the list will work
+until you use another command but 'ri'
+
 Besides it offers a very useful contextual search, that will find the ri doc of the specific method used by the receiver.
 Example:
 
