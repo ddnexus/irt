@@ -5,10 +5,10 @@ module IRT
       extend self
 
       def add_desc(description)
-        mode = IRB.CurrentContext.irt_mode
+        mode = context.irt_mode
         raise IRT::SessionModeError, "You cannot add a test description in #{mode} mode." unless mode == :interactive
         desc_str = %(desc "#{description}")
-        IRB.CurrentContext.current_line = desc_str
+        context.current_line = desc_str
         puts
         puts desc_str.interactive_color
         puts
@@ -16,9 +16,8 @@ module IRT
       alias_method :dd, :add_desc
 
       def add_test(description='')
-        mode = IRB.CurrentContext.irt_mode
+        mode = context.irt_mode
         raise IRT::SessionModeError, "You cannot add a test in #{mode} mode." unless mode == :interactive
-        context = IRB.CurrentContext
         last_value = context.last_value
         begin
           evaled = context.workspace.evaluate(self, last_value.inspect)

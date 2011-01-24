@@ -23,25 +23,27 @@ module IRB #:nodoc:
     alias_method :qq, :abort
 
     def irt(obj=nil)
-      mode = case obj
-             when nil
-               :interactive
-             when Binding
-               :binding
-             else
-               :inspect
-             end
-      raise IRT::SessionModeError, "You cannot pass binding in #{mode} mode" if mode == :binding
-      raise IRT::SessionModeError, "You cannot open another interactive session in #{mode} mode" \
-        if mode == :interactive && IRB.CurrentContext.irt_mode != :file
-      IRT::Directives::Session.send :new_session, mode, obj
+      irt_mode = context.irt_mode
+      to_mode = case obj
+                 when nil
+                   :interactive
+                 when Binding
+                   :binding
+                 else
+                   :inspect
+                 end
+      raise IRT::SessionModeError, "You cannot pass binding in #{irt_mode} mode" \
+        if to_mode == :binding && (irt_mode == :binding || caller[0].match(/^\(/))
+      raise IRT::SessionModeError, "You cannot open another interactive session in #{irt_mode} mode" \
+        if to_mode == :interactive && irt_mode != :file
+      IRT::Directives::Session.send :new_session, to_mode, obj
     end
     alias_method :open_session, :irt # legacy method
     alias_method :irb, :irt
 
     %w[p y pp ap].each do |m|
       define_method(m) do |*args|
-        args = [IRB.CurrentContext.last_value] if args.empty?
+        args = [context.last_value] if args.empty?
         super *args
       end
     end

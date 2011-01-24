@@ -3,7 +3,7 @@ module IRT
     module System
 
       def cat(*args)
-        return system "cat #{IRB.CurrentContext.file_line_pointers.first}" if args.empty?
+        return system "cat #{context.file_line_pointers.first}" if args.empty?
         system "cat #{args * ' '}"
       end
 
@@ -64,10 +64,10 @@ module IRT
         arg = args.first if args.size == 1
         file, line = case
                      when args.empty?
-                       IRB.CurrentContext.file_line_pointers
+                       context.file_line_pointers
                      when arg.is_a?(Integer)
-                       if IRB.CurrentContext.backtrace_map.key?(arg)
-                         IRB.CurrentContext.backtrace_map[arg]
+                       if context.backtrace_map.key?(arg)
+                         context.backtrace_map[arg]
                        else
                          raise IRT::IndexError, "No such backtrace index -- [#{arg}]"
                          return
