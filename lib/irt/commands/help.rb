@@ -64,6 +64,9 @@ module IRT
                             (no quotes needed, and completion available)
                             e.g.: ri "".eql?  #=> ri doc for String#eql?
                                   ri [].eql?  #=> ri doc for Array#eql?
+    ri n                    Search the ri doc for the method n in a multiple
+                            choices list
+
 #{" Misc Commands ".interactive_color.reversed.bold}
     x|q                     Aliases for exit (from the current session)
     xx|qq                   Aliases for abort (abort the irt process)

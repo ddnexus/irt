@@ -7,6 +7,7 @@ require 'irt/commands/test'
 require 'irt/commands/system'
 require 'irt/commands/misc'
 require 'irt/commands/help'
+require 'irt/commands/ri'
 
 module IRB #:nodoc:
 
@@ -17,6 +18,7 @@ module IRB #:nodoc:
     include IRT::Commands::System
     include IRT::Commands::Misc
     include IRT::Commands::Help
+    include IRT::Commands::Ri
     include FileUtils
 
     alias_method :xx, :abort
@@ -97,6 +99,8 @@ module IRB #:nodoc:
         if m = line.match(/^(\s*ri[ \t]+)(.+)$/)
           pre, to_search = m.captures
           line = "#{pre}#{to_search.inspect}" unless to_search.match(/^('|").+\1$/)
+        else
+          IRT::Commands::Ri.reset_choices_map
         end
         # skip setting last_value for non_setting_commands
         if line =~ /^\s*(#{IRT.log.non_setting_commands * '|'})\b/
