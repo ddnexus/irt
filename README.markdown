@@ -458,14 +458,7 @@ a few info about how to use syntax highlight for .irt files in nano and vi, alon
 
 ## Configuration
 
-### Upgrade
-
-In order to preserve your eventual customization to the ~/.irtrc file, upgrading from one version
-to another requires that you manually delete (or rename) the auto-generated ~/.irtrc file, so irt will
-create a new one. Then you can edit it adding your own customization again. If you want to check whether
-something is changed or not, here is the [latest irtrc template](https://github.com/ddnexus/irt/raw/master/irtrc).
-
-### Options
+IRT tries to load a ~/.irtrc file at startup, so you can customize a few options.
 
 If you want to add your custom '~/.irbrc' file, try to load it at the top: if it doesn't
 play well with IRT, then copy and paste just part of it.

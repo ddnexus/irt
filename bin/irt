@@ -29,9 +29,6 @@ Usage:
 
 )
 
-irtrc = File.expand_path '~/.irtrc'
-FileUtils.cp(File.expand_path('../irtrc', IRT.lib_path), irtrc) unless File.exists?(irtrc)
-
 argv = ARGV.dup
 
 case argv.first
@@ -80,10 +77,10 @@ cmd_format = if File.exists?('./config/environment.rb')
                  'ruby script/console --irb="irt_rails2"'
                end
              else
-               'irb %s %s'
+               'irt_irb %s %s'
              end
 
-unless cmd_format.match(/^irb/)
+unless cmd_format.match(/^irt_irb/)
   ENV['RAILS_ENV'] ||= (argv.last.nil? || argv.last.match(/^-/)) ? 'development' : argv.pop
 end
 
@@ -91,8 +88,6 @@ puts banner
 
 files.each do |file|
   ENV["IRT_COMMAND"] = sprintf cmd_format, file, argv.join(' '), ENV['RAILS_ENV']
-  ENV["IRT_FILE"] = file
-  ENV["IRBRC"] = irtrc
   unless system(ENV["IRT_COMMAND"])
     puts "\e[0m" if Colorer.color
     exit(1)

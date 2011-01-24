@@ -7,7 +7,7 @@ require 'irt/commands/ri'
 require 'fileutils'
 
 module IRB
-  module ExtendCommandBundle
+  module ExtendCommandBundle #:nodoc:
 
     include IRT::Commands::Log
     include IRT::Commands::Test

@@ -1,7 +1,7 @@
 require 'irb/context'
 
 module IRB
-  class Context
+  class Context #:nodoc:
 
     attr_accessor :parent_context, :current_line, :binding_file, :binding_line_no, :backtrace_map
     attr_reader :current_line_no, :last_line_no

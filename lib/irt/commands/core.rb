@@ -5,13 +5,13 @@ module IRT
       def irt(obj=nil)
         irt_mode = context.irt_mode
         to_mode = case obj
-                   when nil
-                     :interactive
-                   when Binding
-                     :binding
-                   else
-                     :inspect
-                   end
+                  when nil
+                    :interactive
+                  when Binding
+                    :binding
+                  else
+                    :inspect
+                  end
         raise IRT::SessionModeError, "You cannot pass binding in #{irt_mode} mode" \
           if to_mode == :binding && (irt_mode == :binding || caller[0].match(/^\(/))
         raise IRT::SessionModeError, "You cannot open another interactive session in #{irt_mode} mode" \
@@ -35,7 +35,7 @@ module IRT
       end
       alias_method :vd, :vdiff
 
-      # rerun the same file
+      # rerun the same shell command
       def rerun
         IRB.irb_at_exit
         str = "Rerunning: `#{ENV['IRT_COMMAND']}`"

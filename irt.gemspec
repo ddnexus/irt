@@ -12,8 +12,9 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('colorer', [">= 0.7.0"])
+  s.add_runtime_dependency('fastri', [">= 0.3.1.1"])
 
-  s.executables = ["irt", "irt_rails2"]
+  s.executables = ['irt', 'irt_irb', 'irt_rails2']
   s.files = `git ls-files -z`.split("\0") - %w[irt-tutorial.pdf]
 
   s.name = name

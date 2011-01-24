@@ -41,6 +41,7 @@ module IRT
     end
 
     def load_helper_files
+      return unless IRT.autoload_helper_files
       irt_file_path = Pathname.new($0).realpath
       container_path = Pathname.getwd.parent
       down_path = irt_file_path.relative_path_from container_path

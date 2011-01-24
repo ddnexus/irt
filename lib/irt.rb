@@ -1,4 +1,4 @@
-
+require 'rubygems'
 begin
   require 'ap'
 rescue LoadError
@@ -35,9 +35,23 @@ module IRT
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :differ, :os
 
-  def directives
-    IRT::Directives
-  end
+  Colorer.def_custom_styles :bold              => :bold,
+                            :reversed          => :reversed,
+                            :null              => :clear,
+
+                            :log_color         => :blue,
+                            :file_color        => :cyan,
+                            :interactive_color => :magenta,
+                            :inspect_color     => :clear,
+                            :binding_color     => :yellow,
+                            :actual_color      => :green,
+                            :ignored_color     => :yellow,
+
+                            :error_color       => :red,
+                            :ok_color          => :green,
+                            :diff_color        => :yellow,
+                            :diff_a_color      => :cyan,
+                            :diff_b_color      => :green
 
   def force_color=(bool)
     Colorer.color = bool
@@ -50,23 +64,6 @@ module IRT
     @tail_on_irt = false
     @fix_readline_prompt = false
     @autoload_helper_files = true
-    Colorer.def_custom_styles :bold              => :bold,
-                              :reversed          => :reversed,
-                              :null              => :clear,
-
-                              :log_color         => :blue,
-                              :file_color        => :cyan,
-                              :interactive_color => :magenta,
-                              :inspect_color     => :clear,
-                              :binding_color     => :yellow,
-                              :actual_color      => :green,
-                              :ignored_color     => :yellow,
-
-                              :error_color       => :red,
-                              :ok_color          => :green,
-                              :diff_color        => :yellow,
-                              :diff_a_color      => :cyan,
-                              :diff_b_color      => :green
     @os = get_os
     @copy_to_clipboard_command = case @os
                                  when :windows
@@ -91,15 +88,15 @@ module IRT
                            end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
-    @ri_command_format =  "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s" if `qri -v`.match(/^qri /)
+    @ri_command_format =  "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s"
     @debug = false
   end
 
   def init_files
-    @irt_file = ENV['IRT_FILE']
+    @irt_file = IRB.conf[:SCRIPT]
     @log = Log.new
     @log.print_running_file
-    directives.load_helper_files if autoload_helper_files
+    IRT::Directives.load_helper_files
   end
 
   def lib_path
@@ -131,4 +128,3 @@ private
   end
 
 end
-IRT.init
