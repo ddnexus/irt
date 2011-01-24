@@ -336,8 +336,8 @@ with no arguments, they use the last value (\_) as the default (e.g. just type '
 When an error occurs, IRT shows you an indexed exception backtrace: each file:line in the backtrace
 has an index number (in brackets) that you can use to open that file at that line with your preferred in-place editor.
 
-You have just to type 'nn &lt;i&gt;' or 'vi &lt;i&gt;' or 'ed &lt;i&gt;', (being &lt;i&gt; the index number shown in the backtrace),
-and you will open it in insert mode. Very handy to inspect and fix in place, any code involved in the error. Example:
+You have just to type '&lt;editor&gt; &lt;index&gt;' (&lt;editor&gt; is one of 'vi', 'nano' (or 'nn') 'edit' (or 'ed'),
+and &lt;index&gt; is the index number shown in the backtrace), and you will open it in insert mode. Example:
 
     # backtraced line: from /Users/dd/dev/hobo3/hobo/lib/hobo/controller/model.rb:57:in `each' [3]
     >> nn 3
