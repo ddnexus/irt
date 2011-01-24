@@ -1,6 +1,6 @@
 module IRT
   module Commands
-    module Misc
+    module Core
 
       def irt(obj=nil)
         irt_mode = context.irt_mode

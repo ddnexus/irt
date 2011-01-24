@@ -1,7 +1,7 @@
 require 'irt/commands/log'
 require 'irt/commands/test'
 require 'irt/commands/system'
-require 'irt/commands/misc'
+require 'irt/commands/core'
 require 'irt/commands/help'
 require 'irt/commands/ri'
 require 'fileutils'
@@ -12,7 +12,7 @@ module IRB
     include IRT::Commands::Log
     include IRT::Commands::Test
     include IRT::Commands::System
-    include IRT::Commands::Misc
+    include IRT::Commands::Core
     include IRT::Commands::Help
     include IRT::Commands::Ri
     include FileUtils
