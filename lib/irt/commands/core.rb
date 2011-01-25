@@ -37,6 +37,7 @@ module IRT
 
       # rerun the same shell command
       def rerun
+        ensure_session
         IRB.irb_at_exit
         str = "Rerunning: `#{ENV['IRT_COMMAND']}`"
         puts

@@ -3,6 +3,7 @@ module IRT
     module Help
 
       def irt_help
+        ensure_session
         puts %(
 #{" NOTICE ".log_color.reversed.bold}
 - The #{"Commands".interactive_color.bold} are methods generally available in any IRT session

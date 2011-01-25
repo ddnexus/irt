@@ -9,7 +9,8 @@ module IRT
       end
 
       def ri(arg)
-        raise IRT::NotImplementedError, "No available ri_command_format for this system. You might want to install the fastri gem." unless IRT.ri_command_format
+        ensure_session
+        raise IRT::NotImplementedError, "No available ri_command_format for this system." unless IRT.ri_command_format
         case
         when arg.nil?, arg.empty?
           return puts('nil')

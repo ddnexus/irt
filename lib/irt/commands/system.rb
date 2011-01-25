@@ -3,21 +3,25 @@ module IRT
     module System
 
       def cat(*args)
+        ensure_session
         return system "cat #{context.file_line_pointers.first}" if args.empty?
         system "cat #{args * ' '}"
       end
 
       def ls(*args)
+        ensure_session
         args = %w[.] if args.empty?
         system "ls #{args * ' '}"
       end
 
       def copy_lines
+        ensure_session
         copy_to_clipboard :print_lines
       end
       alias_method :cl, :copy_lines
 
       def copy_all_lines
+        ensure_session
         copy_to_clipboard :print_all_lines
       end
       alias_method :cll, :copy_all_lines
@@ -25,11 +29,13 @@ module IRT
       %w[vi nano edit].each do |n|
         eval <<-EOE, binding, __FILE__, __LINE__+1
           def #{n}(*args)
+            ensure_session
             run_editor(:#{n}, *args)
           end
         EOE
         eval <<-EOE, binding, __FILE__, __LINE__+1
           def c#{n}(*args)
+            ensure_session
             copy_lines
             #{n} *args
           end

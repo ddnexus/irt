@@ -29,5 +29,14 @@ module IRB
         super
     end
 
+  private
+
+    def ensure_session
+      if context.irt_mode == :file
+        m = caller[0].match(/`(\w*)'$/).captures[0]
+        raise IRT::SessionModeError, "You cannot use the :#{m} method in #{context.irt_mode} mode."
+      end
+    end
+
   end
 end

@@ -3,23 +3,27 @@ module IRT
     module Log
 
       def log(limit=nil)
+        ensure_session
         IRT.log.print limit || IRT.log.tail_size
         IRT.log.print_status
       end
       alias_method :l, :log
 
       def full_log
+        ensure_session
         IRT.log.print
         IRT.log.print_status
       end
       alias_method :ll, :full_log
 
       def status
+        ensure_session
         IRT.log.print_status
       end
       alias_method :ss, :status
 
       def print_lines
+        ensure_session
         lines_str = IRT.log.last.lines_str
         return if lines_str.empty?
         puts
@@ -29,6 +33,7 @@ module IRT
       alias_method :pl, :print_lines
 
       def print_all_lines
+        ensure_session
         lines = []
         IRT.log.reject{|h| h.class == IRT::Log::FileHunk }.each do |h|
           ls = h.lines_str
