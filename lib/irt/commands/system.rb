@@ -66,7 +66,7 @@ module IRT
                        arg
                      when arg.is_a?(Hash)
                        [arg[:file], arg[:line]]
-                     when arg.is_a?(String) && m = arg.match(/(?:([\w]+) \(([\w.]+)\))? ?([\w\/\n.-]+):(\d+)/m)
+                     when arg.is_a?(String) && m = arg.match(/(?:([\w]+) \(([\w.]+)\))? ?([+\w\/\n.-]+):(\d+)/m)
                         gem, vers, f, l = m.captures
                         if gem
                           Gem.path.each do |p|

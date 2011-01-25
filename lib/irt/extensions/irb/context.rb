@@ -88,7 +88,7 @@ private
 
     def process_exception(e)
       return if IRT.debug
-      bktr = e.backtrace.reject {|m| File.expand_path(m).match(/^#{IRT.lib_path}/) }
+      bktr = e.backtrace.reject {|m| File.expand_path(m).match(/^#{IRT.lib_path}/) || workspace.filter_backtrace(m).nil? }
       e.set_backtrace( e.class.name.match(/^IRT::/) ? bktr : map_backtrace(bktr) )
     end
 
@@ -98,7 +98,7 @@ private
       reverted_error_colors = 'xxx'.error_color.match(/^(.*)xxx(.*)$/).captures.reverse
       index_format = sprintf '%s%%s%s', *reverted_error_colors
       bktr.each_with_index do |m, i|
-        unless i + 1 > back_trace_limit || m.match(/^\(.*\)/) || workspace.filter_backtrace(m).nil?
+        unless i + 1 > back_trace_limit || m.match(/^\(.*\)/)
           @backtrace_map[i] = m.split(':')[0..1]
           index = sprintf index_format, " [#{i}]"
         end
