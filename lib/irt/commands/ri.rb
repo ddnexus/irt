@@ -28,7 +28,7 @@ module IRT
               meth = eval "#{segm.join('.')}.method(:#{to_search})", IRB.CurrentContext.workspace.binding
               to_search = "#{meth.owner.name}##{meth.name}"
             rescue
-              raise NoMethodError, %(undefined method #{to_search} for #{segm.join('.')})
+              raise NoMethodError, %(undefined method "#{to_search}" for "#{segm.join('.')}")
             end
           end
         end

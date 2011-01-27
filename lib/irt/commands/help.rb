@@ -49,7 +49,8 @@ module IRT
     add_test|tt             Adds a test in the log, checking the last value (_)
                             by automatically choosing the :_eql?, or :_yaml_eql?
                             method, depending on the type of the last value (_)
-    add_test|tt desc        Like add_test but adds a 'desc' directive first
+    add_test|tt desc        Like add_test but adds a 'desc' directive first'
+    save_as|sa path         Saves the current irt file as path and runs it
 
 #{" FileUtils Commands ".interactive_color.reversed.bold}
     All the FileUtils methods are availabe as IRT Commands
@@ -103,6 +104,7 @@ module IRT
                             to be passed to the in place editing commands.
 )
       end
+      alias_method :help, :irt_help
       alias_method :hh, :irt_help
 
     end
