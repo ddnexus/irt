@@ -10,7 +10,7 @@ module IRB
     def file_line_pointers
       file = line = nil
       c = self
-      until file && line
+      until file
         case c.irt_mode
         when :binding
           file = c.binding_file

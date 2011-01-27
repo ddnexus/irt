@@ -106,9 +106,21 @@ module IRT
 
   # this fixes a little imperfection of the YAML::dump method
   # which adds a space at the end of the class
-  def IRT.yaml_dump(val)
+  def yaml_dump(val)
     yml = "\n" + YAML.dump(val)
     yml.gsub(/ +\n/, "\n")
+  end
+
+  def prompter
+    @prompter ||= begin
+                    require 'prompter'
+                    pr = Prompter.new
+                    def pr.say_echo(result, opts={})
+                      opts = {:style => :ignored_color}.merge opts
+                      say '   #> ' + result.inspect, opts
+                    end
+                    pr
+                  end
   end
 
 private

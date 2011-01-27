@@ -4,69 +4,75 @@ require 'rubygems'
 require 'irt'
 require 'fileutils'
 require 'tempfile'
+require 'optparse'
 
-banner = "irt #{IRT::VERSION} (c) 2010-2011 Domizio Demichelis".log_color.bold
 
-usage = %(
-Description:
-    Ruby Interactive Testing - Use irb or rails console for testing.
+copy = "irt #{IRT::VERSION} (c) 2010-2011 Domizio Demichelis".log_color.bold
 
+options = {}
+
+optparse = OptionParser.new do |opts|
+
+  opts.banner = <<EOB
+Interactive Ruby Tools:
+    Improved irb and rails console with lots of easy and powerful tools.
 Usage:
-    irt [PATH] [options] [rails_env]
-        PATH        path to a single file or dir (<dir>/**/*.irt files)
-                    if it doesn't exists, a new file will be created and opened
-                    if omitted a tmp file will be used
-        options     almost all the options supported by irb or rails console
-                    (excluding those that irt overrides)
-        rails_env   the optional rails environment to load (it must be the last
-                    argument)
+    irt [PATH] [options]
+Options:
+EOB
 
-    irt -v|--version
-        shows the version and exits
-
-    irt -h|--help
-        shows the help and exits
-
-)
-
-argv = ARGV.dup
-
-case argv.first
-when /^(-h|--help)$/
-  puts banner + usage
-  exit
-
-when /^(-v|--version)$/
-  puts IRT::VERSION
-  exit
-
-when NilClass, /^-/
-   tmp_file = Tempfile.new(%w[tmp- .irt])
-   tmp_file << "irt"
-   tmp_file.flush
-   path = tmp_file.path
-
-else
-  path = File.expand_path(argv.shift)
-
-  unless File.exists?(path)
-    input = nil
-    while input.nil? || !input.match(/^(y|yes|n|no)$/i)
-      print %(Do you want to create the file "#{path}"? ).interactive_color + "[<enter>=y|n] ".ok_color
-      input = $stdin.gets.strip.downcase
-      input = 'y' if input.empty?
-    end
-    exit(1) if input == 'n'
-    dirname = File.dirname(path)
-    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
-    File.open(path, 'w') {|f| f.puts 'irt' }
+  options[:interactive_eof]
+  opts.on( '-i', '--interactive-eof', 'Opens an interactive session at EOF') do
+    options[:interactive_eof] = true
   end
 
-end # end case
+  options[:irb_options] = nil
+  opts.on( '-b', '--irb-options [OPTIONS]', 'Sets the irb Options' ) do |opt|
+    options[:irb_options] = opt
+  end
 
-files = File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')): [path]
+  options[:rails_env] = 'development'
+  opts.on( '-r', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
+     options[:rails_env] = env
+   end
+
+  opts.on( '-v', '--version', 'Shows the version and exits' ) do
+    puts IRT::VERSION
+    exit
+  end
+
+  opts.on( '-h', '--help', 'Display this screen' ) do
+    puts copy
+    puts opts
+    exit
+  end
+
+end
+
+optparse.parse!
+
+puts copy
+
+paths = if ARGV.empty?
+          options[:interactive_eof] = true
+          [ Tempfile.new(%w[tmp- .irt]).path ]
+        else
+          ARGV.map {|p| File.expand_path(p) }
+        end
+
+files = paths.map do |path|
+          unless File.exists?(path)
+            next if IRT.prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter=y|n]', :default => 'y'
+            options[:interactive_eof] = true
+            dirname = File.dirname(path)
+            FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+            FileUtils.touch(path)
+          end
+          File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')) : path
+        end.flatten
+
 if files.empty?
-  puts "No *.irt file to run in #{path}"
+  puts 'No *.irt files to run'
   exit
 end
 
@@ -80,15 +86,15 @@ cmd_format = if File.exists?('./config/environment.rb')
                'irt_irb %s %s'
              end
 
-unless cmd_format.match(/^irt_irb/)
-  ENV['RAILS_ENV'] ||= (argv.last.nil? || argv.last.match(/^-/)) ? 'development' : argv.pop
+if cmd_format.match(/^ruby script\/console/)
+  ENV['RAILS_ENV'] ||= options[:rails_env]
 end
 
-puts banner
+ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:interactive_eof]
 
 files.each do |file|
-  ENV["IRT_COMMAND"] = sprintf cmd_format, file, argv.join(' '), ENV['RAILS_ENV']
-  unless system(ENV["IRT_COMMAND"])
+  ENV['IRT_COMMAND'] = sprintf cmd_format, file, options[:irb_options], options[:rails_env]
+  unless system(ENV['IRT_COMMAND'])
     puts "\e[0m" if Colorer.color
     exit(1)
   end

@@ -28,37 +28,39 @@ module IRT
     end
 
     def print(limit=nil) # nil prints all
-     hist = dup
-     hist.delete_if{|h| h.empty? }
-     to_render = hist.reduce([]) do |his, hunk|
-                   hu = hunk.dup
-                   (his.empty? || his.last.header != hu.header) ? (his << hu) : his.last.concat(hu)
-                   his
-                 end
-      to_print = 0
-      if limit.nil? || to_render.map(&:size).inject(:+) <= limit
-        to_print = to_render.map(&:size).inject(:+)
-        latest_lines = nil
-        tails_str = ''
+      hist = dup
+      hist.delete_if{|h| h.empty? }
+      to_render = hist.reduce([]) do |his, hunk|
+                    hu = hunk.dup
+                    (his.empty? || his.last.header != hu.header) ? (his << hu) : his.last.concat(hu)
+                    his
+                  end
+      if to_render.empty?
+        print_header '(empty)'
       else
-        rest = limit
-        to_render.reverse.each do |h|
-          to_print += 1
-          if rest > h.size
-            rest = rest - h.size
-            next
-          else
-            latest_lines = rest
-            break
+        to_print = 0
+        if limit.nil? || to_render.map(&:size).inject(:+) <= limit
+          to_print = to_render.map(&:size).inject(:+)
+          latest_lines = nil
+          print_header
+        else
+          rest = limit
+          to_render.reverse.each do |h|
+            to_print += 1
+            if rest > h.size
+              rest = rest - h.size
+              next
+            else
+              latest_lines = rest
+              break
+            end
           end
+          print_header '(tail)'
         end
-        tail_str = ' Tail'
+        to_render = to_render.last(to_print)
+        to_render.shift.render(latest_lines)
+        to_render.each{|h| h.render }
       end
-      to_render = to_render.last(to_print)
-      puts
-      puts "      Virtual Log#{tail_str}      ".log_color.bold.reversed.or('***** IRT Log *****')
-      to_render.shift.render(latest_lines)
-      to_render.each{|h| h.render }
       puts
     end
 
@@ -79,6 +81,11 @@ module IRT
     end
 
   private
+
+    def print_header(tail_str='')
+      puts
+      puts "      Virtual Log#{' '+ tail_str unless tail_str.empty?}      ".log_color.bold.reversed.or('***** IRT Log *****')
+    end
 
     def status_segment(name, mode)
       " #{name} ".send("#{mode}_color".to_sym).bold.reversed.or("[#{name}]")
