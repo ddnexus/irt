@@ -99,14 +99,25 @@ There are 4 irt modes / session types: file, interactive, inspect, binding.
 ### File Mode (cyan)
 
 IRT always start in file mode, which simply means that it will execute the code in a file.
-Indeed you launch irt passing a path argument of an existing file or dir. If the path does not refer
+Indeed you launch irt passing a path argument of one or more existing files or dirs. If any path does not refer
 to any existing file, irt will ask you to confirm that you want to create that file. Eventually
-if you don't pass any path argument, irt will create a temporary file.
+if you don't pass any path argument, irt will create a temporary empty file.
 
 A new or temporary created file contains just one statement: 'irt' which will open an interactive session.
 
 Notice: When you pass a dir as the path, irt will recursively execute all the '.irt' files in it, so suffixing
-with '.irt' the files is not just a convention.
+with '.irt' the files is not just a convention. It allows to skyp any non .irt file, like libraries or files
+used with the 'insert_file' directive.
+
+#### Note about new files
+
+The new created files are implicitly run with the -i (--interative-eol) flag by default.
+That flag instruct irt to open an interactive session at the end of the file, so you will have the possibilty
+to add your statements. As long as you rerun the file (with the 'rr' command) IRT will remember the flag,
+anyway, if the session ends and you have to re-launch it from the command line, you must pass the -e flag
+explicitly or no interactive session will be opened automatically.
+
+You can save any running file as another file with the 'save_as' command.
 
 ### Interactive Sessions (magenta)
 
