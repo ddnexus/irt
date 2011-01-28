@@ -104,7 +104,6 @@ module IRT
                             to be passed to the in place editing commands.
 )
       end
-      alias_method :help, :irt_help
       alias_method :hh, :irt_help
 
     end
