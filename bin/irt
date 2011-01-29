@@ -1,13 +1,17 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require 'irt'
 require 'fileutils'
 require 'tempfile'
 require 'optparse'
+require 'prompter'
+require 'colorer'
 
 
-copy = "irt #{IRT::VERSION} (c) 2010-2011 Domizio Demichelis".log_color.bold
+version = File.read(File.expand_path('../../VERSION', __FILE__)).strip
+
+Colorer.def_custom_styles(:copy_style => [:blue, :bold])
+copy = "irt #{version} (c) 2010-2011 Domizio Demichelis".copy_style
 
 options = {}
 
@@ -37,7 +41,7 @@ EOB
    end
 
   opts.on( '-v', '--version', 'Shows the version and exits' ) do
-    puts IRT::VERSION
+    puts version
     exit
   end
 
@@ -62,7 +66,7 @@ paths = if ARGV.empty?
 
 files = paths.map do |path|
           unless File.exists?(path)
-            next if IRT.prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter=y|n]', :default => 'y'
+            next if Prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter=y|n]', :default => 'y'
             options[:interactive_eof] = true
             dirname = File.dirname(path)
             FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
@@ -72,7 +76,7 @@ files = paths.map do |path|
         end.flatten
 
 if files.empty?
-  puts 'No *.irt files to run'
+  Prompter.say_notice 'No *.irt files to run'
   exit
 end
 
@@ -95,7 +99,7 @@ ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:inter
 files.each do |file|
   ENV['IRT_COMMAND'] = sprintf cmd_format, file, options[:irb_options], options[:rails_env]
   unless system(ENV['IRT_COMMAND'])
-    puts "\e[0m" if Colorer.color
+    puts "\e[0m" if Colorer.color?
     exit(1)
   end
 end
