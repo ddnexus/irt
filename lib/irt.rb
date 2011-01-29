@@ -24,6 +24,19 @@ module IRT
 
   VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
 
+  OS = case RbConfig::CONFIG['host_os']
+       when /mswin|msys|mingw32|windows/i
+         :windows
+       when /darwin|mac os/i
+         :macosx
+       when /linux/i
+         :linux
+       when /(solaris|bsd)/i
+         :unix
+       else
+         :unknown
+       end
+
   class IndexError < RuntimeError ; end
   class SessionModeError < RuntimeError ; end
   class ArgumentTypeError < RuntimeError ; end
@@ -34,7 +47,7 @@ module IRT
   attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
                 :full_exit, :exception_raised, :session_no, :autoload_helper_files,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
-  attr_reader :log, :irt_file, :differ, :os
+  attr_reader :log, :irt_file, :differ
 
   Colorer.def_custom_styles :bold              => :bold,
                             :reversed          => :reversed,
@@ -65,28 +78,22 @@ module IRT
     @tail_on_irt = false
     @fix_readline_prompt = false
     @autoload_helper_files = true
-    @os = get_os
-    @copy_to_clipboard_command = case @os
-                                 when :windows
-                                   'clip'
-                                 when :macosx
-                                   'pbcopy'
-                                 when :linux, :unix
-                                   'xclip -selection c'
-                                 end
-    @edit_command_format = case @os
-                           when :windows
-                             '%1$s'
-                           when :macosx
-                             'open -t %1$s'
-                           when :linux, :unix
-                             case ENV['DESKTOP_SESSION']
+    case OS
+    when :windows
+      @copy_to_clipboard_command = 'clip'
+      @edit_command_format = '%1$s'
+    when :macosx
+      @copy_to_clipboard_command = 'pbcopy'
+      @edit_command_format = 'open -t %1$s'
+    when :linux, :unix
+      @copy_to_clipboard_command = 'xclip -selection c'
+      @edit_command_format = case ENV['DESKTOP_SESSION']
                              when /kde/i
                                'kde-open %1$s'
                              when /gnome/i
                                'gnome-open %1$s'
                              end
-                           end
+    end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
     @ri_command_format =  "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s"
@@ -121,23 +128,6 @@ module IRT
                     end
                     pr
                   end
-  end
-
-private
-
-  def get_os
-    case RbConfig::CONFIG['host_os']
-    when /mswin|msys|mingw32|windows/i
-      :windows
-    when /darwin|mac os/i
-      :macosx
-    when /linux/i
-      :linux
-    when /solaris|bsd/i
-      :unix
-    else
-      :unknown
-    end
   end
 
 end
