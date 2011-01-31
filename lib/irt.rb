@@ -13,7 +13,7 @@ require 'irt/extensions/object'
 require 'irt/extensions/method'
 require 'irt/extensions/irb'
 require 'irb/completion'
-require 'colorer'
+require 'dye'
 require 'irt/log'
 require 'irt/hunks'
 require 'irt/differ'
@@ -45,30 +45,12 @@ module IRT
   extend self
 
   attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
-                :full_exit, :exception_raised, :session_no, :autoload_helper_files,
+                :full_exit, :exception_raised, :session_no, :autoload_helper_files, :dye_styles,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :differ
 
-  Colorer.def_custom_styles :bold              => :bold,
-                            :reversed          => :reversed,
-                            :null              => :clear,
-
-                            :log_color         => :blue,
-                            :file_color        => :cyan,
-                            :interactive_color => :magenta,
-                            :inspect_color     => :clear,
-                            :binding_color     => :yellow,
-                            :actual_color      => :green,
-                            :ignored_color     => :yellow,
-
-                            :error_color       => :red,
-                            :ok_color          => :green,
-                            :diff_color        => :yellow,
-                            :diff_a_color      => :cyan,
-                            :diff_b_color      => :green
-
   def force_color=(bool)
-    Colorer.color = bool
+    Dye.color = bool
   end
 
   def init
@@ -78,6 +60,22 @@ module IRT
     @tail_on_irt = false
     @fix_readline_prompt = false
     @autoload_helper_files = true
+    @dye_styles = { :null              => :clear,
+
+                    :log_color         => :blue,
+                    :file_color        => :cyan,
+                    :interactive_color => :magenta,
+                    :inspect_color     => :clear,
+                    :binding_color     => :yellow,
+                    :actual_color      => :green,
+                    :ignored_color     => :yellow,
+
+                    :error_color       => :red,
+                    :ok_color          => :green,
+                    :diff_color        => :yellow,
+                    :diff_a_color      => :cyan,
+                    :diff_b_color      => :green }
+    define_dye_method @dye_styles
     case OS
     when :windows
       @copy_to_clipboard_command = 'clip'
@@ -96,7 +94,7 @@ module IRT
     end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
-    @ri_command_format =  "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s"
+    @ri_command_format =  "qri -f #{Dye.color? ? 'ansi' : 'plain'} %s"
     @debug = false
   end
 
@@ -123,7 +121,7 @@ module IRT
                     require 'prompter'
                     pr = Prompter.new
                     def pr.say_echo(result, opts={})
-                      opts = {:style => :ignored_color}.merge opts
+                      opts = {:style => IRT.dye_styles[:ignored_color]}.merge opts
                       say '   #> ' + result.inspect, opts
                     end
                     pr

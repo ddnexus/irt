@@ -41,7 +41,7 @@ module IRT
         IRB.irb_at_exit
         str = "Rerunning: `#{ENV['IRT_COMMAND']}`"
         puts
-        puts " #{str} ".error_color.bold.reversed.or("*** #{str} ***")
+        puts IRT.dye(" #{str} ", "*** #{str} ***", :error_color, :bold, :reversed)
         puts
         exec ENV["IRT_COMMAND"]
       end

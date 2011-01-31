@@ -19,11 +19,11 @@ module IRT
 
     def output
       out = "\n"
-      out << " = same ".reversed.bold.or('***** diff ')
-      out << " #{@options[:a_marker]} #{@options[:a_label]} ".diff_a_color.reversed.bold.
-          or(" (#{@options[:a_marker]} #{@options[:a_label]}) ")
-      out << " #{@options[:b_marker]} #{@options[:b_label]} ".diff_b_color.reversed.bold.
-          or(" (#{@options[:b_marker]} #{@options[:b_label]}) ")
+      out << IRT.dye(' = same ', :reversed, :bold)
+      a = "#{@options[:a_marker]} #{@options[:a_label]}"
+      out << IRT.dye(" #{a} ", " (#{a}) ", :diff_a_color, :reversed, :bold)
+      b = "#{@options[:b_marker]} #{@options[:b_label]}"
+      out << IRT.dye(" #{b} ", " (#{b}) ", :diff_b_color, :reversed, :bold)
       out << "\n"
       diff = @diff.format_as(IRT::Differ::Format)
       out << diff.sub(/^\n/,'')
@@ -48,7 +48,7 @@ module IRT
 
       def process(string, mark='=', color=:null, bold=:null)
         string.sub(/^\n/,'').split("\n").map do |s|
-          " #{mark} ".send(color).send(bold).reversed.or(" #{mark} ") + ' ' + s.send(color)
+          IRT.dye(" #{mark} ", " #{mark} |", color, :bold, :reversed) + ' ' + IRT.dye(s, color)
         end.join("\n") + "\n"
       end
 

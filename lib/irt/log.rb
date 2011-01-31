@@ -1,7 +1,8 @@
 module IRT
   class Log < Array
 
-    attr_accessor :ignored_commands, :ignored_echo_commands, :non_setting_commands, :tail_size, :status
+    attr_accessor :ignored_commands, :ignored_echo_commands, :non_setting_commands, :tail_size
+    attr_reader :status
 
     def initialize
       @ignored_echo_commands = FileUtils.own_methods
@@ -24,7 +25,7 @@ module IRT
     end
 
     def self.print_border
-      print ' '.log_color.reversed.or('')
+      print IRT.dye(' ','', :log_color, :reversed)
     end
 
     def print(limit=nil) # nil prints all
@@ -66,29 +67,31 @@ module IRT
 
     def print_status
       segments = status.map {|name,mode| status_segment(name,mode)}
-      puts segments.join(">>".log_color.bold)
+      puts segments.join(IRT.dye(">>", :log_color, :bold))
     end
 
     def pop_status
       name, mode = status.pop
       return if mode == :file
-      puts "   <<".log_color.bold + status_segment(name, mode)
+      puts IRT.dye("   <<", :log_color, :bold) + status_segment(name, mode)
       puts
     end
 
     def print_running_file
-      puts " Running: #{IRT.irt_file} ".file_color.reversed.bold.or("*** Runing: #{IRT.irt_file} ***")
+      run_str = "Running: #{IRT.irt_file}"
+      puts IRT.dye(" #{run_str} ", "*** #{run_str} ***", :file_color, :bold, :reversed)
     end
 
   private
 
     def print_header(tail_str='')
       puts
-      puts "      Virtual Log#{' '+ tail_str unless tail_str.empty?}      ".log_color.bold.reversed.or('***** IRT Log *****')
+      log_head = "Virtual Log#{' '+ tail_str unless tail_str.empty?}"
+      puts IRT.dye("      #{log_head}      ", '***** #{log_head} *****', :log_color, :bold, :reversed)
     end
 
     def status_segment(name, mode)
-      " #{name} ".send("#{mode}_color".to_sym).bold.reversed.or("[#{name}]")
+      IRT.dye(" #{name} ", "[#{name}]", "#{mode}_color".to_sym, :bold, :reversed)
     end
   end
 end

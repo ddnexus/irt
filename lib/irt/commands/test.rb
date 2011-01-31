@@ -10,7 +10,7 @@ module IRT
         desc_str = %(desc "#{description}")
         context.current_line = desc_str
         puts
-        puts desc_str.interactive_color
+        puts IRT.dye(desc_str, :interactive_color)
         puts
       end
       alias_method :dd, :add_desc
@@ -39,7 +39,7 @@ module IRT
         str = desc_str + test_str
         context.current_line = str
         puts
-        puts str.interactive_color
+        puts IRT.dye(str, :interactive_color)
         puts
       end
       alias_method :tt, :add_test

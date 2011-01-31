@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.description = 'If you use IRT in place of irb or rails console, you will have more tools that will make your life a lot easier.'
 
   s.add_runtime_dependency('differ', [">= 0.1.1"])
-  s.add_runtime_dependency('colorer', [">= 0.7.0"])
-  s.add_runtime_dependency('prompter', [">= 0.1.1"])
+  s.add_runtime_dependency('dye', [">= 0.1.1"])
+  s.add_runtime_dependency('prompter', [">= 0.1.2"])
   s.add_runtime_dependency('fastri', [">= 0.3.1.1"])
 
   s.executables = ['irt', 'irt_irb', 'irt_rails2']

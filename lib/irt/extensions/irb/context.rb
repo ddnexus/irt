@@ -59,7 +59,7 @@ module IRB
       rescue Exception => e
         @exception_raised = true
         process_exception(e)
-        print "\e[31m" if Colorer.color?
+        print "\e[31m" if Dye.color?
         raise
       else
         log_session_line(line, line_no) unless irt_mode == :file
@@ -69,7 +69,7 @@ module IRB
     %w[prompt_i prompt_s prompt_c prompt_n].each do |m|
       define_method(m) do
         pr = instance_variable_get("@#{m}")
-        col_pr = pr.send "#{irt_mode}_color"
+        col_pr = IRT.dye pr, "#{irt_mode}_color".to_sym
         # workaround for Readline bug see http://www.ruby-forum.com/topic/213807
         if IRT.fix_readline_prompt
           col_pr.gsub(/^(.*)#{pr}(.*)$/, "\001\\1\002#{pr}\001\\2\002")
@@ -81,7 +81,7 @@ module IRB
 
     def return_format(color=:actual_color, ignored=false)
       ret = ignored ? @return_format.sub(/=/,'#') : @return_format
-      ret.send color
+      IRT.dye ret, color
     end
 
 private
@@ -95,7 +95,7 @@ private
     def map_backtrace(bktr)
       @backtrace_map = {}
       mapped_bktr = []
-      reverted_error_colors = 'xxx'.error_color.match(/^(.*)xxx(.*)$/).captures.reverse
+      reverted_error_colors = IRT.dye('xxx', :error_color).match(/^(.*)xxx(.*)$/).captures.reverse
       index_format = sprintf '%s%%s%s', *reverted_error_colors
       bktr.each_with_index do |m, i|
         unless i + 1 > back_trace_limit || m.match(/^\(.*\)/)

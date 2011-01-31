@@ -31,7 +31,7 @@ module IRB #:nodoc:
     @CONF[:AT_EXIT] ||= []
     @CONF[:AT_EXIT] << proc{ IRT::Session.enter(:interactive) if IRB.CurrentContext.irt_mode == :file } if !!ENV['IRT_INTERACTIVE_EOF']
     @CONF[:AT_EXIT] << proc{ IRT::Directives.test_summary }
-    @CONF[:AT_EXIT] << proc{ print "\e[0m" if Colorer.color? } # reset colors
+    @CONF[:AT_EXIT] << proc{ print "\e[0m" if Dye.color? } # reset colors
     @CONF[:RC_NAME_GENERATOR] = proc {|rc| File.expand_path '~/.irtrc' }
 
     IRT.init

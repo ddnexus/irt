@@ -37,12 +37,12 @@ module IRT
       end
 
       def render_header
-        puts "     #{header_name}     ".send(color).bold.reversed.or("***** #{header_name} *****")
+        puts IRT.dye("     #{header_name}     ",  "***** #{header_name} *****", color, :bold, :reversed)
       end
 
       def render_line(content, line_no)
-        lcontent = content.send(color)
-        lno = ('%3d ' % line_no).send(color).reversed
+        lcontent = IRT.dye content, color
+        lno = IRT.dye(('%3d ' % line_no), color, :reversed)
         puts "#{lno} #{lcontent}"
       end
 

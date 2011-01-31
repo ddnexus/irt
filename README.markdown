@@ -506,7 +506,7 @@ which should work quite well without any change:
     # IRT.vi_command_format ="vi -c 'startinsert' %1$s +%2$d"
 
     # the format to build the command to launch the ri tool
-    # IRT.ri_command_format = "qri -f #{Colorer.color? ? 'ansi' : 'plain'} %s"
+    # IRT.ri_command_format = "qri -f #{Dye.color? ? 'ansi' : 'plain'} %s"
 
     # add your command format if you want to use another editor than nano or vi
     # default 'open -t %1$s' on MacOX; 'kde-open %1$s' or 'gnome-open %1$s' un unix/linux; '%1$s' on windoze
@@ -527,25 +527,23 @@ The default color styles of IRT should be OK in most situation, anyway, if you r
 you can switch off the color completely (IRT.force_color = false) or you can also
 redefine the colors by redefining them in your .irtrc file.
 
-The following are the default Colorer styles, change them at will:
+The following are the default Dye (gem) styles, change them at will:
 
-    Colorer.def_custom_styles({ :bold              => :bold,
-                                :reversed          => :reversed,
-                                :null              => :clear,
+    IRT.dye_styles = { :null              => :clear,
 
-                                :log_color         => :blue,
-                                :file_color        => :cyan,
-                                :interactive_color => :magenta,
-                                :inspect_color     => :clear,
-                                :binding_color     => :yellow,
-                                :actual_color      => :green,
-                                :ignored_color     => :yellow,
+                       :log_color         => :blue,
+                       :file_color        => :cyan,
+                       :interactive_color => :magenta,
+                       :inspect_color     => :clear,
+                       :binding_color     => :yellow,
+                       :actual_color      => :green,
+                       :ignored_color     => :yellow,
 
-                                :error_color       => :red,
-                                :ok_color          => :green,
-                                :diff_color        => :yellow,
-                                :diff_a_color      => :cyan,
-                                :diff_b_color      => :green } , true)
+                       :error_color       => :red,
+                       :ok_color          => :green,
+                       :diff_color        => :yellow,
+                       :diff_a_color      => :cyan,
+                       :diff_b_color      => :green }
 
 ### Note about IRT.autoload_helper_files
 

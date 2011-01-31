@@ -5,13 +5,12 @@ require 'fileutils'
 require 'tempfile'
 require 'optparse'
 require 'prompter'
-require 'colorer'
+require 'dye'
 
 
 version = File.read(File.expand_path('../../VERSION', __FILE__)).strip
 
-Colorer.def_custom_styles(:copy_style => [:blue, :bold])
-copy = "irt #{version} (c) 2010-2011 Domizio Demichelis".copy_style
+copy = Dye.dye "irt #{version} (c) 2010-2011 Domizio Demichelis", :blue, :bold
 
 options = {}
 
@@ -99,7 +98,7 @@ ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:inter
 files.each do |file|
   ENV['IRT_COMMAND'] = sprintf cmd_format, file, options[:irb_options], options[:rails_env]
   unless system(ENV['IRT_COMMAND'])
-    puts "\e[0m" if Colorer.color?
+    puts "\e[0m" if Dye.color?
     exit(1)
   end
 end

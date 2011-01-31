@@ -31,12 +31,12 @@ module IRT
         return unless @@tests > 0
         if @@tests == @@oks
           str = @@tests == 1 ? " The TEST is OK! " : " All #{@@tests} TESTs are OK! "
-          puts str.ok_color.bold
+          puts IRT.dye(str, :ok_color, :bold)
         else
-          puts "#{@@tests} TEST#{'s' unless @@tests == 1}: ".bold +
-               "#{@@oks} OK#{'s' unless @@oks == 1}, ".ok_color.bold +
-               "#{@@diffs} DIFF#{'s' unless @@diffs == 1}, ".diff_color.bold +
-               "#{@@errors} ERROR#{'s' unless @@errors == 1}.".error_color.bold
+          puts IRT.dye("#{@@tests} TEST#{'s' unless @@tests == 1}: ", :bold) +
+               IRT.dye("#{@@oks} OK#{'s' unless @@oks == 1}, ", :ok_color, :bold) +
+               IRT.dye("#{@@diffs} DIFF#{'s' unless @@diffs == 1}, ", :diff_color, :bold) +
+               IRT.dye("#{@@errors} ERROR#{'s' unless @@errors == 1}.", :error_color, :bold)
         end
     end
 
@@ -64,17 +64,17 @@ module IRT
         begin
           if saved == actual
             @@oks += 1
-            puts "#{tno}. OK!".ok_color.bold + " #{d}".ok_color
+            puts IRT.dye("#{tno}. OK!", :ok_color, :bold) + IRT.dye(" #{d}", :ok_color)
           else
             @@diffs += 1
-            puts "#{tno}. DIFFS!".diff_color.bold + %( #{d}\n     ).diff_color +
-              %( at #{context.irb_path}: #{context.last_line_no} ).file_color.reversed.bold
+            puts IRT.dye("#{tno}. DIFFS!", :diff_color, :bold) + IRT.dye(" #{d}\n     ", :diff_color) +
+                 IRT.dye(" at #{context.irb_path}: #{context.last_line_no} ", :file_color, :reversed, :bold)
             puts IRT.differ.new(saved, actual, kind).output
             IRT::Session.enter(:interactive) if IRT.irt_on_diffs
           end
         rescue Exception
           @@errors += 1
-          puts "#{tno}. ERROR! ".error_color.bold + d.error_color
+          puts IRT.dye("#{tno}. ERROR! ", :error_color, :bold) + IRT.dye(d, :error_color)
           raise
         end
       end
