@@ -20,7 +20,7 @@ task :install, :force do |t, args|
     File.open('VERSION', 'w') {|f| f.puts version }
     gem_name = "#{name}-#{version}.gem"
     sh %(gem build #{name}.gemspec)
-    sh %(gem install #{gem_name} --local)
+    sh %(gem install #{gem_name} --local --no-rdoc --no-ri)
     puts <<-EOS.gsub(/^ {6}/, '')
 
       *******************************************************************************
