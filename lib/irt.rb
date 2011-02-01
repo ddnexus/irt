@@ -119,12 +119,12 @@ module IRT
   def prompter
     @prompter ||= begin
                     require 'prompter'
-                    pr = Prompter.new
-                    def pr.say_echo(result, opts={})
-                      opts = {:style => IRT.dye_styles[:ignored_color]}.merge opts
-                      say '   #> ' + result.inspect, opts
+                    Prompter.new do |pr|
+                      def pr.say_echo(result, opts={})
+                        opts = {:style => IRT.dye_styles[:ignored_color]}.merge opts
+                        say '   #> ' + result.inspect, opts
+                      end
                     end
-                    pr
                   end
   end
 
