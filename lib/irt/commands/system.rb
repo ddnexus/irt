@@ -79,7 +79,7 @@ module IRT
                      else
                        args
                      end
-        system sprintf(cmd_format, file, line)
+        system sprintf(cmd_format, file, line||0)
       end
 
       def copy_to_clipboard(cmd)
