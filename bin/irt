@@ -58,7 +58,10 @@ puts copy
 
 paths = if ARGV.empty?
           options[:interactive_eof] = true
-          [ Tempfile.new(%w[tmp- .irt]).path ]
+          tmp_file = Tempfile.new(%w[tmp- .irt])
+          tmp_file << "\n" # one empty line makes irb of 1.9.2 happy
+          tmp_file.flush
+          [ tmp_file.path ]
         else
           ARGV.map {|p| File.expand_path(p) }
         end
@@ -69,7 +72,7 @@ files = paths.map do |path|
             options[:interactive_eof] = true
             dirname = File.dirname(path)
             FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
-            FileUtils.touch(path)
+            File.open(path, 'w') {|f| f.puts "\n" } # one empty line makes irb of 1.9.2 happy
           end
           File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')) : path
         end.flatten
