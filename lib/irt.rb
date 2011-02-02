@@ -122,8 +122,7 @@ module IRT
                     require 'prompter'
                     Prompter.new do |pr|
                       def pr.say_echo(result, opts={})
-                        opts = {:style => IRT.dye_styles[:ignored_color]}.merge opts
-                        say '   #> ' + result.inspect, opts
+                        IRB.CurrentContext.send :output_ignored_echo_value, result
                       end
                     end
                   end

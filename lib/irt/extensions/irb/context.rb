@@ -5,7 +5,7 @@ module IRB
 
     attr_accessor :parent_context, :current_line, :binding_file, :binding_line_no, :backtrace_map
     attr_reader :current_line_no, :last_line_no
-    attr_writer :irt_mode
+    attr_writer :irt_mode, :return_ignored_echo_format
 
     def file_line_pointers
       file = line = nil
@@ -79,9 +79,18 @@ module IRB
       end
     end
 
-    def return_format(color=:actual_color, ignored=false)
-      ret = ignored ? @return_format.sub(/=/,'#') : @return_format
-      IRT.dye ret, color
+    def return_format
+      IRT.dye @return_format, :actual_color
+    end
+
+    def return_ignored_echo_format
+      IRT.dye @return_ignored_echo_format, :ignored_color
+    end
+
+    alias_method :original_prompt_mode, :prompt_mode=
+    def prompt_mode=(mode)
+      original_prompt_mode(mode)
+      @return_ignored_echo_format = IRB.conf[:PROMPT][mode][:RETURN_I] || "   #> %s\n"
     end
 
 private
@@ -138,9 +147,9 @@ private
 
     def output_ignored_echo_value(value)
       if inspect?
-        printf return_format(:ignored_color,false), value.inspect
+        printf return_ignored_echo_format, value.inspect
       else
-        printf return_format(:ignored_color,false), value
+        printf return_ignored_echo_format, value
       end
     end
 

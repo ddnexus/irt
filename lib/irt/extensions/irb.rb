@@ -22,7 +22,8 @@ module IRB #:nodoc:
                              :PROMPT_S => '   "> ',
                              :PROMPT_C => "%02n ?> ",
                              :PROMPT_N => "%02n -> ",
-                             :RETURN   => "   => %s\n" }
+                             :RETURN   => "   => %s\n",
+                             :RETURN_I => "   #> %s\n" }
     @CONF[:PROMPT_MODE] = :IRT
     @CONF[:ECHO] = false
     @CONF[:VERBOSE] = false
