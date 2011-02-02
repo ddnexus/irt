@@ -87,8 +87,9 @@ module IRB
 private
 
     def process_exception(e)
-      return if IRT.debug
-      bktr = e.backtrace.reject {|m| File.expand_path(m).match(/^#{IRT.lib_path}/) || workspace.filter_backtrace(m).nil? }
+      bktr = e.backtrace.reject do |m|
+               workspace.filter_backtrace(m).nil? || !IRT.debug && File.expand_path(m).match(/^#{IRT.lib_path}/)
+             end
       e.set_backtrace( e.class.name.match(/^IRT::/) ? bktr : map_backtrace(bktr) )
     end
 
@@ -135,8 +136,8 @@ private
       end
     end
 
-     def output_ignored_echo_value(value)
-       if inspect?
+    def output_ignored_echo_value(value)
+      if inspect?
         printf return_format(:ignored_color,false), value.inspect
       else
         printf return_format(:ignored_color,false), value
