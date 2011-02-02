@@ -1,6 +1,7 @@
 name = File.basename( __FILE__, '.gemspec' )
 version = File.read(File.expand_path('../VERSION', __FILE__)).strip
 require 'date'
+require File.expand_path('../lib/irt/ruby_version.rb', __FILE__)
 
 Gem::Specification.new do |s|
 
@@ -13,7 +14,11 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('dye', [">= 0.1.1"])
   s.add_runtime_dependency('prompter', [">= 0.1.2"])
-  s.add_runtime_dependency('fastri', [">= 0.3.1.1"])
+  if IRT::RubyVersion >= '1.9.2'
+    s.add_runtime_dependency('bri', [">= 0.1.4"])
+  else
+    s.add_runtime_dependency('fastri', [">= 0.3.1.1"])
+  end
 
   s.executables = ['irt', 'irt_irb', 'irt_rails2']
   s.files = `git ls-files -z`.split("\0") - %w[irt-tutorial.pdf]

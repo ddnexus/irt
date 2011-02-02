@@ -19,6 +19,7 @@ require 'irt/hunks'
 require 'irt/differ'
 require 'irt/directives'
 require 'irt/session'
+require 'irt/ruby_version'
 
 module IRT
 
@@ -94,7 +95,7 @@ module IRT
     end
     @vi_command_format = "vi -c 'startinsert' %1$s +%2$d"
     @nano_command_format = 'nano +%2$d %1$s'
-    @ri_command_format =  "qri -f #{Dye.color? ? 'ansi' : 'plain'} %s"
+    @ri_command_format =  IRT::RubyVersion.is_new_version? ? "bri %s" : "qri -f #{Dye.color? ? 'ansi' : 'plain'} %s"
     @debug = false
   end
 

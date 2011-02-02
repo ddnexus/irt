@@ -506,7 +506,9 @@ which should work quite well without any change:
     # IRT.vi_command_format ="vi -c 'startinsert' %1$s +%2$d"
 
     # the format to build the command to launch the ri tool
+    # if RUBY_VERSION > 1.9.2 uses qri (from fastri) else bri
     # IRT.ri_command_format = "qri -f #{Dye.color? ? 'ansi' : 'plain'} %s"
+    # IRT.ri_command_format = "bri %s"
 
     # add your command format if you want to use another editor than nano or vi
     # default 'open -t %1$s' on MacOX; 'kde-open %1$s' or 'gnome-open %1$s' un unix/linux; '%1$s' on windoze
