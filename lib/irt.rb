@@ -1,8 +1,4 @@
 require 'rubygems'
-begin
-  require 'ap'
-rescue LoadError
-end
 
 require 'pp'
 require 'yaml'
