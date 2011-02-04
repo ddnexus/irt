@@ -86,7 +86,7 @@ cmd_format = if File.exists?('./config/environment.rb')
                if File.exists?('./script/rails')
                  'rails c %s %s %s'
                elsif File.exists?('./script/console')
-                 'ruby script/console --irb="irt_rails2"'
+                 'ruby script/console --irb="irt_rails2 %s"'
                end
              else
                'irt_irb %s %s'

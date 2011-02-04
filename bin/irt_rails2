@@ -2,5 +2,4 @@
 
 argv = ARGV.dup
 argv.pop
-argv << ENV['IRT_FILE']
 exec "irt_irb #{argv.join(' ')}"
