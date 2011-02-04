@@ -58,7 +58,7 @@ puts copy
 
 paths = if ARGV.empty?
           options[:interactive_eof] = true
-          tmp_file = Tempfile.new(%w[tmp- .irt])
+          tmp_file = Tempfile.new(['', '.irt'])
           tmp_file << "\n" # one empty line makes irb of 1.9.2 happy
           tmp_file.flush
           [ tmp_file.path ]
