@@ -576,7 +576,9 @@ will not be loaded, so be careful to be in the right dir to make it work properl
 
 You must add the gem to your Gemfile, to make the bundler happy:
 
-    gem 'irt', :group => :console
+    gem 'irt'
+
+eventually adding it only to the group you prefer
 
 ## Known Issue
 
