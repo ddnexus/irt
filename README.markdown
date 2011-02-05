@@ -1,4 +1,4 @@
-# irt
+# IRT
 
 Interactive Ruby Tools - Improved irb and rails console with a lot of easy and powerful tools.
 
@@ -76,7 +76,7 @@ IRT uses colors consistently, so you will have an instant feedback about what a 
 - __cyan__        for files, saved values (and object 'a' in a diff)
 - __magenta__     for interactive sessions
 - __black/white__ for generic stdin/stdout and inspecting sessions (e.g. 'irt my_obj')
-- __blue__        for the Virtual Log and generic labels
+- __blue__        for the Virtual Log, Rails Log and generic labels
 - __yellow__      for result echo (not setting last value), for binding sessions and for tests with diffs
 - __green__       for result echo (setting last value) (and object 'b' in a diff)
 - __red__         for erros, exceptions and rerun
@@ -102,23 +102,21 @@ There are 4 irt modes / session types: file, interactive, inspect, binding.
 IRT always start in file mode, which simply means that it will execute the code in a file.
 Indeed you launch irt passing a path argument of one or more existing files or dirs. If any path does not refer
 to any existing file, irt will ask you to confirm that you want to create that file. Eventually
-if you don't pass any path argument, irt will create a temporary empty file.
-
-A new or temporary created file contains just one statement: 'irt' which will open an interactive session.
+if you don't pass any path argument, irt will create a temporary one-empty-line file.
 
 Notice: When you pass a dir as the path, irt will recursively execute all the '.irt' files in it, so suffixing
 with '.irt' the files is not just a convention. It allows to skyp any non .irt file, like libraries or files
-used with the 'insert_file' directive.
+used with the 'insert\_file' directive.
 
 #### Note about new files
 
 The new created files are implicitly run with the -i (--interative-eol) flag by default.
 That flag instruct irt to open an interactive session at the end of the file, so you will have the possibilty
 to add your statements. As long as you rerun the file (with the 'rr' command) IRT will remember the flag,
-anyway, if the session ends and you have to re-launch it from the command line, you must pass the -e flag
+anyway, if the session ends and you have to re-launch it from the command line, you must pass the -i flag
 explicitly or no interactive session will be opened automatically.
 
-You can save any running file as another file with the 'save_as' command.
+You can save any running file as another file with the 'save\_as' command.
 
 ### Interactive Sessions (magenta)
 
@@ -397,7 +395,7 @@ Besides it offers a very useful contextual search, that will find the ri doc of 
 Example:
 
     # autocompletion
-    >> ri "any string".eq[TAB]
+    >> ri "any string".eq[TAB][TAB]
     .eql?    .equal?
 
     >> ri "a string".eql?
@@ -426,11 +424,13 @@ You can also print it with 'status' (or 'ss') at any time.
 
 ### Quasi-shell
 
-Save some typing for system calls. You can use the '$' as an alias of 'system' with the difference that you don't need to use quotes
-(although quotes will work anyway), and the command will not be logged. Example:
+Save some typing for system calls and avoid to open a shell.
+You can use the '$' as an alias of 'system' with the difference that you don't need to use quotes
+(although quotes will work anyway), and the command will not be logged. Examples:
 
     >> $ ls -F
     >> $ tail /some/path
+    >> $ git rebase -i HEAD~5
     >> $ cat #{file_path}
 
 ### FileUtils
