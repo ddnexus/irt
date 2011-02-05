@@ -84,6 +84,15 @@ end
 
 cmd_format = if File.exists?('./config/environment.rb')
                if File.exists?('./script/rails')
+                 gemfile = File.read('Gemfile')
+                 unless gemfile.match(/\bgem\b.+\birt\b/)
+                   Prompter.say_warning %(The Gemfile doesn't look to include any 'gem "irt"' statement.\nIRT will probably not work until you add it!)
+                   Prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[enter=y|n]', :default => 'y') do
+                     File.open('Gemfile', 'a') do |f|
+                       f.puts %(gem "irt")
+                     end
+                   end
+                 end
                  'rails c %s %s %s'
                elsif File.exists?('./script/console')
                  'ruby script/console --irb="irt_rails2 %s"'
