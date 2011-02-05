@@ -41,7 +41,7 @@ module IRT
 
   extend self
 
-  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
+  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug, :rails_log, :dye_rails_log,
                 :full_exit, :exception_raised, :session_no, :autoload_helper_files, :dye_styles,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :differ
@@ -56,6 +56,8 @@ module IRT
     @irt_on_diffs = true
     @tail_on_irt = false
     @fix_readline_prompt = false
+    @rails_log = true
+    @dye_rails_log = true
     @autoload_helper_files = true
     @dye_styles = { :null              => :clear,
 
@@ -99,6 +101,7 @@ module IRT
     @irt_file = IRB.conf[:SCRIPT]
     @log = Log.new
     @log.print_running_file
+    require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
     IRT::Directives.load_helper_files
   end
 

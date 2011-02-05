@@ -12,7 +12,8 @@ that will make your life a lot easier.
 
 - clean colored output for easy reading
 - 3 types of sessions: interactive, inspecting and binding
-- irb opening from your code as binding session
+- irb opening from your code (or erb templates) as binding session
+- optional colored rails log in the console
 - contextual ri doc with completion
 - recording of session steps with filtering
 - easy testing based on recorded steps
@@ -474,7 +475,7 @@ IRT tries to load a ~/.irtrc file at startup, so you can customize a few options
 If you want to add your custom '~/.irbrc' file, try to load it at the top: if it doesn't
 play well with IRT, then copy and paste just part of it.
 
-You can also change a few configuration options in the ~/.irtrc file. The following are the defaults
+You can also change the configuration options in the ~/.irtrc file. The following are the defaults
 which should work quite well without any change:
 
     # set this to true if your prompt get messed up when you use the history
@@ -522,6 +523,12 @@ which should work quite well without any change:
 
     # any command that will not set the last value (includes all the log-ignored commands)
     # IRT.log.non_setting_commands << %w[commandE commandF ...]
+
+    # shows the rails log in console
+    # IRT.rails_log = true
+
+    # colors with :log_color (default blue) the rails log for easy reading
+    # IRT.dye_rails_log = true
 
 ### Colors
 
@@ -572,13 +579,22 @@ irt_helper.rb #1, #2 and #3. If you are running the testA.irt and testB.irt, IRT
 require the irt_helper.rb #1, #2. But if you run the same from the first_level dir, the irt_helper.rb #1
 will not be loaded, so be careful to be in the right dir to make it work properly.
 
-### Rails 3
+### Rails
+
+You can use irt instead of the standard Rails console, by just calling the irt executable from
+any Rails application dir. By default IRT will output the rails log (colored in blue) right in the console.
+
+You can switch the rails log ON or OFF by using the 'rails\_log\_on' and 'rails\_log\_off' commands in any session,
+besides you can set the option true or false in the ~/.irtrc file.
+
+#### Rails 3
 
 You must add the gem to your Gemfile, to make the bundler happy:
 
     gem 'irt'
 
-eventually adding it only to the group you prefer
+eventually adding it only to the group that you prefer.
+
 
 ## Known Issue
 

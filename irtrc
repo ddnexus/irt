@@ -47,4 +47,8 @@
 # any command that will not set the last value (includes all the log-ignored commands)
 # IRT.log.non_setting_commands << %w[commandE commandF ...]
 
-# add your stuff here
+# shows the rails log in console
+# IRT.rails_log = true
+
+# colors with :log_color (default blue) the rails log for easy reading
+# IRT.dye_rails_log = true
