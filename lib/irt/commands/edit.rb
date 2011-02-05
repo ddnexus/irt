@@ -1,18 +1,6 @@
 module IRT
   module Commands
-    module System
-
-      def cat(*args)
-        ensure_session
-        return system "cat #{context.file_line_pointers.first}" if args.empty?
-        system "cat #{args * ' '}"
-      end
-
-      def ls(*args)
-        ensure_session
-        args = %w[.] if args.empty?
-        system "ls #{args * ' '}"
-      end
+    module Edit
 
       def copy_lines
         ensure_session

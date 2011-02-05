@@ -38,18 +38,18 @@ module IRB
       end
       log_file_line(line_no) if irt_mode == :file
       begin
-        # ri arg to string
-        if m = line.match(/^(\s*ri[ \t]+)(.+)$/)
-          pre, to_search = m.captures
-          line = "#{pre}#{to_search.inspect}" unless to_search.match(/^('|").+\1$/)
-        else
-          IRT::Commands::Ri.reset_choices_map
-        end
         # skip setting last_value for non_setting_commands
-        if line =~ /^\s*(#{IRT.log.non_setting_commands * '|'})\b/
+        if line =~ /^\s*(#{quoted_option_string(IRT.log.non_setting_commands)})(?:[ \t]+|\b)(.+)*/
+          command, args = $1, $2
+          if command =~ /^(\$|ri)$/ && irt_mode != :file
+            cmd = command == '$' ? 'system' : command
+            args = "%(#{args})" unless args.match(/^('|").+\1$/)
+            line = "#{cmd} #{args}"
+          end
+          IRT::Commands::Ri.reset_choices_map unless command == 'ri'
           self.echo = false
           res = @workspace.evaluate(self, line, irb_path, line_no)
-          if line =~ /^\s*(#{IRT.log.ignored_echo_commands * '|'})\b/
+          if command =~ /^(#{IRT.log.ignored_echo_commands * '|'})$/
             output_ignored_echo_value(res)
           end
         else
@@ -59,14 +59,14 @@ module IRB
       rescue Exception => e
         @exception_raised = true
         process_exception(e)
-        print "\e[31m" if Dye.color?
+        print Dye.sgr(IRT.dye_styles[:error_color]) if Dye.color?
         raise
       else
         log_session_line(line, line_no) unless irt_mode == :file
       end
     end
 
-    %w[prompt_i prompt_s prompt_c prompt_n].each do |m|
+    [:prompt_i, :prompt_s, :prompt_c, :prompt_n].each do |m|
       define_method(m) do
         pr = instance_variable_get("@#{m}")
         col_pr = IRT.dye pr, "#{irt_mode}_color".to_sym
@@ -94,6 +94,10 @@ module IRB
     end
 
 private
+
+    def quoted_option_string(arr)
+      arr.map{|c|Regexp.quote(c.to_s)} * '|'
+    end
 
     def process_exception(e)
       bktr = e.backtrace.reject do |m|
@@ -141,7 +145,9 @@ private
       i = -1
       str.each_line do |l|
         @last_line_no = line_no + i+=1
-        IRT.log.add_line l, @last_line_no
+        unless l =~ /^\s*(#{quoted_option_string(IRT.log.ignored_commands)})/
+          IRT.log.add_line l, @last_line_no
+        end
       end
     end
 

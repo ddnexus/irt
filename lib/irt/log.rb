@@ -5,12 +5,15 @@ module IRT
     attr_reader :status
 
     def initialize
-      @ignored_echo_commands = FileUtils.own_methods
+      @ignored_echo_commands = FileUtils.own_methods + [:_]
       @ignored_echo_commands += IRT::Commands::Rails.own_methods if defined?(IRT::Commands::Rails)
+      @ignored_echo_commands = @ignored_echo_commands.map(&:to_sym)
       @ignored_commands = @ignored_echo_commands +
                           IRB::ExtendCommandBundle.instance_methods +
-                          %w[ p pp ap y puts print irt irb ]
+                          [ :p, :pp, :ap, :y, :puts, :print, :irt, :irb, :'$']
+      @ignored_commands = @ignored_commands.map(&:to_sym)
       @non_setting_commands = @ignored_commands + IRT::Directives.own_methods
+      @non_setting_commands = @non_setting_commands.map(&:to_sym)
       @tail_size = tail_size || 10
       self << FileHunk.new(IRT.irt_file)
       @status = [[File.basename(IRT.irt_file), :file]]

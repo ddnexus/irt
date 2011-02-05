@@ -74,12 +74,6 @@ module IRT
         @header = IRB.CurrentContext.irb_name
       end
 
-      def add_line(content, line_no)
-        ignored = IRT.log.ignored_commands + %w[_]
-        return if content.match(/^\s*(#{ignored * '|'})\b/)
-        super
-      end
-
     end
 
 

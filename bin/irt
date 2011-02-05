@@ -101,7 +101,7 @@ ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:inter
 files.each do |file|
   ENV['IRT_COMMAND'] = sprintf cmd_format, file, options[:irb_options], options[:rails_env]
   unless system(ENV['IRT_COMMAND'])
-    puts "\e[0m" if Dye.color?
+    puts Dye.sgr(:clear) if Dye.color?
     exit(1)
   end
 end

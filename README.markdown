@@ -424,9 +424,14 @@ The status line shows the nesting status of your sessions: each time you open a 
 session or exit from the current session it is automatically printed.
 You can also print it with 'status' (or 'ss') at any time.
 
-### System Shortcuts
+### Quasi-shell
 
-Save some typing for common system calls like ls, cat, vi, nano
+Save some typing for system calls. You can use the '$' as an alias of 'system' with the difference that you don't need to use quotes
+(although quotes will work anyway), and the command will not be logged. Example:
+
+    >> $ ls -F
+    >> $ tail /some/path
+    >> $ cat #{file_path}
 
 ### FileUtils
 
