@@ -69,6 +69,10 @@ module IRT
     ri n                    Search the ri doc for the method n in a multiple
                             choices list
 
+#{label(" Rails Commands ", :interactive_color) + IRT.dye(" (only available for Rails Apps)", :interactive_color, :bold)}
+    rails_log_on            Turn the rails log-in-console ON
+    rails_log_off           Turn the rails log-in-console OFF
+
 #{label " Misc Commands ", :interactive_color}
     x|q                     Aliases for exit (from the current session)
     xx|qq                   Aliases for abort (abort the irt process)

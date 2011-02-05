@@ -6,6 +6,7 @@ module IRT
 
     def initialize
       @ignored_echo_commands = FileUtils.own_methods
+      @ignored_echo_commands += IRT::Commands::Rails.own_methods if defined?(IRT::Commands::Rails)
       @ignored_commands = @ignored_echo_commands +
                           IRB::ExtendCommandBundle.instance_methods +
                           %w[ p pp ap y puts print irt irb ]

@@ -16,16 +16,22 @@ class ActiveSupport::BufferedLogger
 
 end
 
-module IRB
-  module ExtendCommandBundle #:nodoc:
+module IRT
+  module Commands
+    module Rails
 
-    def rails_log_on
-      IRT.rails_log = true
+      extend self
+
+      def rails_log_on
+        IRT.rails_log = true
+      end
+
+      def rails_log_off
+        IRT.rails_log = false
+      end
+
     end
-
-    def rails_log_off
-      IRT.rails_log = false
-    end
-
   end
 end
+
+IRB::ExtendCommandBundle.send :include, IRT::Commands::Rails

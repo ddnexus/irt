@@ -99,9 +99,9 @@ module IRT
 
   def init_files
     @irt_file = IRB.conf[:SCRIPT]
+    require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
     @log = Log.new
     @log.print_running_file
-    require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
     IRT::Directives.load_helper_files
   end
 
