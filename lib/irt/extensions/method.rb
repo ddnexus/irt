@@ -26,11 +26,11 @@ class Method
 
   def info
     file, line = location
-    { :name       => name,
-      :class_name => owner.name,
-      :file       => file,
-      :line       => line,
-      :arity      => arity }
+    { :name  => name,
+      :owner => owner.name,
+      :file  => file,
+      :line  => line,
+      :arity => arity }
   end
 
 end
