@@ -71,7 +71,9 @@ module IRT
 
 #{label(" Rails Commands ", :interactive_color) + IRT.dye(" (only available for Rails Apps)", :interactive_color, :bold)}
     rails_log_on            Turn the rails log-in-console ON
+    rlon|rlo                Aliases for rails_log_on
     rails_log_off           Turn the rails log-in-console OFF
+    rloff|rlf               Aliases for rails_log_off
 
 #{label " Misc Commands ", :interactive_color}
     x|q                     Aliases for exit (from the current session)

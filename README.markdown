@@ -589,8 +589,8 @@ will not be loaded, so be careful to be in the right dir to make it work properl
 You can use irt instead of the standard Rails console, by just calling the irt executable from
 any Rails application dir. By default IRT will output the rails log (colored in blue) right in the console.
 
-You can switch the rails log ON or OFF by using the 'rails\_log\_on' and 'rails\_log\_off' commands in any session,
-besides you can set the option true or false in the ~/.irtrc file.
+You can switch the rails log ON or OFF by using the 'rails\_log\_on' (or 'rlo') and 'rails\_log\_off' (or 'rlf')
+commands in any session, besides you can set the option IRT.rails_log to true or false in the ~/.irtrc file.
 
 #### Rails 3
 
