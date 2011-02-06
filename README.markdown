@@ -36,7 +36,7 @@ to distinguish, and showing NOTHING about the test code that produced the failur
 When something fails IRT assumes that you don't want just to know that something went wrong,
 but that you actually want to fix it! IRT assumes that...
 
-- you want to know exactly what the resulting diffs are
+- you want to know exactly what are the resulting diffs
 - you want to look at the code that failed without having to search for it
 - you want to play with it IMMEDIATELY in an interactive session, right in the context of the failure
 - you want to eventually edit and possibly fix it, right in the console
@@ -366,8 +366,8 @@ the wanted line. Example:
 
 ### Contextual ri doc with autocompletion
 
-IRT offers the 'ri' command, implemented with fastri so you should have it installed.
-It uses 'qri' by default but you can change the IRT.ri_command_format if you prefer to use 'fri'.
+IRT offers the 'ri' command, (implemented with fastri for RUBY_VERSION < 1.9.2, or 'bri' for RUBY_VERSION >= 1.9.2)
+See also the IRT.ri_command_format option if you want to change it.
 
 In its basic form the 'ri' command can accept a string as the system ri command does (you can even omit the quotes).
 
@@ -426,7 +426,7 @@ You can also print it with 'status' (or 'ss') at any time.
 
 Save some typing for system calls and avoid to open a shell.
 You can use the '$' as an alias of 'system' with the difference that you don't need to use quotes
-(although quotes will work anyway), and the command will not be logged. Examples:
+(although the quotes work anyway), and the command will not be logged. Examples:
 
     >> $ ls -F
     >> $ tail /some/path
@@ -436,7 +436,7 @@ You can use the '$' as an alias of 'system' with the difference that you don't n
 ### FileUtils
 
 All the FileUtils methods are included as commands: just call them in the session
-and they will ignored by the log; if they are part of your testing, use them as usual
+and they will ignored by the log; if they are part of your testing, use them as usual:
 
     >> rm_rf 'dir/to/remove'           # ignored because it's an irt command
     >> FileUtils.rm_rf 'dir/to/remove' # logged because it's a regular statement
@@ -512,7 +512,7 @@ which should work quite well without any change:
     # IRT.vi_command_format = %(vi -c "startinsert" "%1$s" +%2$d)
 
     # the format to build the command to launch the ri tool
-    # if RUBY_VERSION > 1.9.2 uses qri (from fastri) else bri
+    # if RUBY_VERSION < 1.9.2 uses qri (from fastri) else bri
     # IRT.ri_command_format = %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
     # IRT.ri_command_format = %(bri "%s")
 
@@ -521,13 +521,13 @@ which should work quite well without any change:
     # IRT.edit_command_format = "your_preferred_GUI_editor %1$s +%2$d"
 
     # any log-ignored-echo command you want to add
-    # IRT.log.ignored_echo_commands << %w[commandA commandB ...]
+    # IRT.log.ignored_echo_commands << [:commandA, :commandB ...]
 
     # any log-ignored command you want to add (includes all the log-ignored-echo commands)
-    # IRT.log.ignored_commands << %w[commandC commandD ...]
+    # IRT.log.ignored_commands << [:commandC, :commandD ...]
 
     # any command that will not set the last value (includes all the log-ignored commands)
-    # IRT.log.non_setting_commands << %w[commandE commandF ...]
+    # IRT.log.non_setting_commands << [:commandE, :commandF ...]
 
     # shows the rails log in console
     # IRT.rails_log = true
@@ -598,8 +598,8 @@ You must add the gem to your Gemfile, to make the bundler happy:
 
     gem 'irt'
 
-eventually adding it only to the group that you prefer.
-
+eventually adding it only to the group that you prefer. Anyway, if the irt executable detects that you don't have it set,
+it will ask and eventually add it for you.
 
 ## Known Issue
 

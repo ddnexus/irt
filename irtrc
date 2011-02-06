@@ -30,7 +30,7 @@
 # IRT.vi_command_format = %(vi -c "startinsert" "%1$s" +%2$d)
 
 # the format to build the command to launch the ri tool
-# if RUBY_VERSION > 1.9.2 uses qri (from fastri) else bri
+# if RUBY_VERSION < 1.9.2 uses qri (from fastri) else bri
 # IRT.ri_command_format = %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
 # IRT.ri_command_format = %(bri "%s")
 
@@ -39,13 +39,13 @@
 # IRT.edit_command_format = "your_preferred_GUI_editor %1$s +%2$d"
 
 # any log-ignored-echo command you want to add
-# IRT.log.ignored_echo_commands << %w[commandA commandB ...]
+# IRT.log.ignored_echo_commands << [:commandA, :commandB ...]
 
 # any log-ignored command you want to add (includes all the log-ignored-echo commands)
-# IRT.log.ignored_commands << %w[commandC commandD ...]
+# IRT.log.ignored_commands << [:commandC, :commandD ...]
 
 # any command that will not set the last value (includes all the log-ignored commands)
-# IRT.log.non_setting_commands << %w[commandE commandF ...]
+# IRT.log.non_setting_commands << [:commandE, :commandF ...]
 
 # shows the rails log in console
 # IRT.rails_log = true
