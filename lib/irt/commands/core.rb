@@ -20,7 +20,7 @@ module IRT
       end
       alias_method :open_session, :irt # legacy method
 
-      %w[p y pp ap].each do |m|
+      [:p, :y, :pp, :ap].each do |m|
         define_method(m) do |*args|
           args = [context.last_value] if args.empty?
           super *args
