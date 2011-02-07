@@ -425,13 +425,13 @@ You can also print it with 'status' (or 'ss') at any time.
 ### Quasi-shell
 
 Save some typing for system calls and avoid to open a shell.
-You can use the '$' as an alias of 'system' with the difference that you don't need to use quotes
+You can use the 'sh' as an alias of 'system' with the difference that you don't need to use quotes
 (although the quotes work anyway), and the command will not be logged. Examples:
 
-    >> $ ls -F
-    >> $ tail /some/path
-    >> $ git rebase -i HEAD~5
-    >> $ cat #{file_path}
+    >> sh ls -F
+    >> sh tail /some/path
+    >> sh git rebase -i HEAD~5
+    >> sh cat #{file_path}
 
 ### FileUtils
 

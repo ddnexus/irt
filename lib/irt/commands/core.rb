@@ -47,6 +47,10 @@ module IRT
       end
       alias_method :rr, :rerun
 
+      def sh(*args)
+        system *args
+      end
+
     end
   end
 end

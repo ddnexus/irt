@@ -39,12 +39,12 @@ module IRB
       log_file_line(line_no) if irt_mode == :file
       begin
         # skip setting last_value for non_setting_commands
-        if line =~ /^\s*(#{quoted_option_string(IRT.log.non_setting_commands)})(?:[ \t]+|\b)(.+)*/
+        if line =~ /^\s*(#{quoted_option_string(IRT.log.non_setting_commands)})\b(.*)$/
           command, args = $1, $2
-          if command =~ /^(\$|ri)$/ && irt_mode != :file
-            cmd = command == '$' ? 'system' : command
-            args = "%(#{args})" unless args.match(/^('|").+\1$/)
-            line = "#{cmd} #{args}"
+          if command =~ /^(sh|ri)$/ && irt_mode != :file
+            args = args.strip if args
+            args = "%(#{args})" unless args.empty? || args.match(/^('|").+\1$/)
+            line = "#{command} #{args}"
           end
           IRT::Commands::Ri.reset_choices_map unless command == 'ri'
           self.echo = false
@@ -145,7 +145,7 @@ private
       i = -1
       str.each_line do |l|
         @last_line_no = line_no + i+=1
-        unless l =~ /^\s*(#{quoted_option_string(IRT.log.ignored_commands)})/
+        unless l =~ /^\s*(#{quoted_option_string(IRT.log.ignored_commands)})\b/
           IRT.log.add_line l, @last_line_no
         end
       end

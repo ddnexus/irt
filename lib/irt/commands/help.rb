@@ -81,7 +81,7 @@ module IRT
     status|ss               Prints the session status line
     rerun|rr                Reruns the same file
     irt_help|hh             Shows this screen
-    $ shell_command         Alias for system("shell_command") (no quotes needed)
+    sh command              Alias for system("command") (no quotes needed)
 
 #{label " Session Directives ", :file_color}
     irt                     Opens an interactive session which retains the

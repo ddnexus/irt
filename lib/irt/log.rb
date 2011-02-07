@@ -10,7 +10,7 @@ module IRT
       @ignored_echo_commands = @ignored_echo_commands.map(&:to_sym)
       @ignored_commands = @ignored_echo_commands +
                           IRB::ExtendCommandBundle.instance_methods +
-                          [ :p, :pp, :ap, :y, :puts, :print, :irt, :irb, :'$']
+                          [ :p, :pp, :ap, :y, :puts, :print, :irt, :irb ]
       @ignored_commands = @ignored_commands.map(&:to_sym)
       @non_setting_commands = @ignored_commands + IRT::Directives.own_methods
       @non_setting_commands = @non_setting_commands.map(&:to_sym)
