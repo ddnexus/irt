@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-argv = ARGV.dup
-argv.pop               # remove --simple-prompt
-argv.push argv.shift   # move the irt file to the end
-exec "irt_irb #{argv.join(' ')}"
+ARGV.pop               # remove --simple-prompt
+ARGV.push ARGV.shift   # move the irt file to the end
+exec "irt_irb #{ARGV.join(' ')}"
