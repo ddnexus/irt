@@ -35,7 +35,7 @@ EOB
   end
 
   options[:rails_env] = 'development'
-  opts.on( '-r', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
+  opts.on( '-e', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
      options[:rails_env] = env
    end
 
