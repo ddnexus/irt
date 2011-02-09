@@ -584,15 +584,17 @@ irt_helper.rb #1, #2 and #3. If you are running the testA.irt and testB.irt, IRT
 require the irt_helper.rb #1, #2. But if you run the same from the first_level dir, the irt_helper.rb #1
 will not be loaded, so be careful to be in the right dir to make it work properly.
 
-### Rails
+## Rails
 
 You can use irt instead of the standard Rails console, by just calling the irt executable from
-any Rails application dir. By default IRT will output the rails log (colored in blue) right in the console.
+any Rails application dir. If you want to skip the autoloading of the Rails app even from that
+dir, you must pass the -n option (--no-rails).
 
+By default IRT will output the rails log (colored in blue) right in the console.
 You can switch the rails log ON or OFF by using the 'rails\_log\_on' (or 'rlo') and 'rails\_log\_off' (or 'rlf')
 commands in any session, besides you can set the option IRT.rails_log to true or false in the ~/.irtrc file.
 
-#### Rails 3
+### Rails 3
 
 You must add the gem to your Gemfile, to make the bundler happy:
 

@@ -24,7 +24,7 @@ Usage:
 Options:
 EOB
 
-  options[:interactive_eof]
+  options[:interactive_eof] = false
   opts.on( '-i', '--interactive-eof', 'Opens an interactive session at EOF') do
     options[:interactive_eof] = true
   end
@@ -37,6 +37,11 @@ EOB
   options[:rails_env] = 'development'
   opts.on( '-e', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
      options[:rails_env] = env
+   end
+
+  options[:no_rails] = false
+  opts.on( '-n', '--no-rails', 'Does not autoload the Rails Environment' ) do
+     options[:no_rails] = true
    end
 
   opts.on( '-v', '--version', 'Shows the version and exits' ) do
@@ -82,7 +87,7 @@ if files.empty?
   exit
 end
 
-cmd_format = if File.exists?('./config/environment.rb')
+cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                if File.exists?('./script/rails')
                  gemfile = File.read('Gemfile')
                  unless gemfile.match(/\bgem\b.+\birt\b/)
