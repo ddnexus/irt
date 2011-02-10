@@ -45,15 +45,8 @@ module IRT
       alias_method :tt, :add_test
 
       def save_as(path)
-        path = File.expand_path(path)
-        if File.exists?(path)
-          return if IRT.prompter.no? %(Do you want to overwrite "#{path}"?), :hint => '[y|<enter=n]', :default => 'n'
-        end
-        dirname = File.dirname(path)
-        FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
-        cp IRT.irt_file, path
-        ENV['IRT_COMMAND'] = ENV['IRT_COMMAND'].sub(/#{Regexp.quote(IRT.irt_file)}/, path)
-        rerun
+        require 'irt/utils'
+        IRT::Utils.save_as(IRT.irt_file, path, IRT.prompter){ rerun }
       end
       alias_method :sa, :save_as
 
