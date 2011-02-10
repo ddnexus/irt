@@ -64,7 +64,7 @@ first, then if you want more details you can read this documentation.
 
 ### Command/Directives Usage
 
-    >> irt_help
+    >> irt_help         # in an irt session
 
 ## Colored and Styled Output
 
@@ -304,7 +304,7 @@ to play with your variables and methods during execution (see Binding Sessions)
 
 ### Object diff
 
-IRT can compare complex objects and shows the diffs. You can run 'vdiff obj_a, obj_b'
+IRT can compare complex objects and shows the diffs. You can run 'vdiff obj_a, obj_b' (or 'vd obj_a, obj_b')
 and have a nice and easy to check graphical diff report of the yaml dump of the 2 objects
 
 ### Kernel#capture
@@ -568,13 +568,13 @@ worring about requiring them from your test files.
 
 For example:
 
-    working_dir
+    working_dir/
       irt_helper.rb #1
-      first_level
+      first_level/
         irt_helper.rb #2
         testA.irt
         testB.irt
-        second_level
+        second_level/
           irt_helper.rb #3
           test1.irt
           test2.irt
