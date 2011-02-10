@@ -79,7 +79,7 @@ IRT uses colors consistently, so you will have an instant feedback about what a 
 - __blue__        for the Virtual Log, Rails Log and generic labels
 - __yellow__      for result echo (not setting last value), for binding sessions and for tests with diffs
 - __green__       for result echo (setting last value) (and object 'b' in a diff)
-- __red__         for erros, exceptions and rerun
+- __red__         for errors, exceptions and rerun
 
 Besides IRT is using reversed and bold styles to compose a more readable/graphical output.
 
@@ -105,7 +105,7 @@ to any existing file, irt will ask you to confirm that you want to create that f
 if you don't pass any path argument, irt will create a temporary one-empty-line file.
 
 Notice: When you pass a dir as the path, irt will recursively execute all the '.irt' files in it, so suffixing
-with '.irt' the files is not just a convention. It allows to skyp any non .irt file, like libraries or files
+with '.irt' the files is not just a convention. It allows to skip any non .irt file, like libraries or files
 used with the 'insert\_file' directive.
 
 #### Note about new files
@@ -166,8 +166,8 @@ that's not relevant for your code so the typo and the error doesn't get recorded
 When you just inspect a variable, using p, pp, ap, puts, y, ... or use any irt command...
 that are not relevant steps that you want to rerun the next time, so they don't get recorded in the log.
 
-Also , if you are in an inspecting or binding session,
-that stesps are not relevant for your tests, so they don't get recorded in the log.
+Also, if you are in an inspecting or binding session,
+that steps are not relevant for your tests, so they don't get recorded in the log.
 
 ### Log Management
 
@@ -201,7 +201,7 @@ When you type 'tt' irt serializes the current (last) value returned by the last 
 and adds one test statement to your log. If you paste the log in the irt file,
 you will have it executed the next time you will run the file.
 
-Your tipical testing cycle with IRT is:
+Your typical testing cycle with IRT is:
 
 - write/change some code in your IDE
 - run it with irt and check some value from your code
@@ -216,7 +216,7 @@ a very complex object.
 Besides, when a test fails IRT can show you the tail of the running file, (use 'l' or configure
 IRT.tail_on_irt = true for automatic tail) so you have an instant feedback about where the
 failure comes from. It also opens an interactive session at that point with all
-the variables loaded, so you can imediately and interactively try and fix what went wrong.
+the variables loaded, so you can immediately and interactively try and fix what went wrong.
 
 If you want to edit the running file, just type 'nano' or  'vi' without any argument and you will open
 the file at the current line. Edit, save and exit from the editor, and you will continue your session
@@ -459,7 +459,7 @@ and the prompt is '#&gt;' instead '=&gt;'. Example:
 
 ### File insert/eval
 
-You can split your tests and reuse them in other files as you whould do with 'partials' template files.
+You can split your tests and reuse them in other files as you would do with 'partials' template files.
 Use "insert_file 'file/path'" to insert a file into another. It will be evaluated by IRT as
 it were written right in the including file itself. Take that into account with variables and last_values.
 Besides, you should NOT suffix them with '.irt', so they will get ignored by the irt executable scanning the dirs.
@@ -605,7 +605,7 @@ it will ask and eventually add it for you.
 
 ## Known Issue
 
-IRT use yaml serialization, and inherits its limits (e.g.: Yaml cannot dump anonymous classes, MatchData, oject that contains binding, etc.)
+IRT uses yaml serialization, and inherits its limits (e.g.: Yaml cannot dump anonymous classes, MatchData, object that contains binding, etc.)
 so if you stumble upon on one of them, you have just to test the subparts of the object that you cannot dump. For example, instead of testing one whole anonymous
 class, (which is however a bad idea) you can add tests for the values returned by its methods or variables.
 
