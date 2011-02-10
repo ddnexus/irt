@@ -38,9 +38,4 @@ module IRB #:nodoc:
     IRT.init
   end
 
-  def IRB.irb_exit(irb, ret)
-    IRT::Session.exit
-    throw :IRB_EXIT, ret
-  end
-
 end

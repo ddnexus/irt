@@ -27,6 +27,8 @@ module IRT
       IRT.log.status << [new_context.irb_name, mode]
       IRT.log.print_status unless mode == :file
       catch(:IRB_EXIT) { new_context.irb.eval_input }
+    ensure
+      IRT::Session.exit
     end
 
     def exit
