@@ -12,7 +12,7 @@ class Method
         end
     arr = Array.new(n)
     set_trace_func proc{ |event, file, line, meth_name, binding, classname|
-      if event.eql?('call') && name.match(meth_name.to_s)
+      if event.eql?('call') && name.to_s.match(meth_name.to_s)
         f = file
         l = line
         set_trace_func nil
