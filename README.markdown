@@ -337,9 +337,9 @@ in place editing command to open the file at the line.
 
 ### Inspecting libs
 
-'pp', 'yaml' (and 'ap' if installed) are loaded, so you can use 'pp', 'ap' and 'y' commands to have
-a better looking inspection of your objects. Besides they are also enhanced a bit: when invoked
-with no arguments, they use the last value (\_) as the default (e.g. just type 'y' instead 'y \_')
+'pp' and 'yaml' are loaded, so you can use 'pp' and 'y' commands to have
+a better looking inspection of your objects. Besides 'p', 'pp', 'y' and 'ap' (if you require it in the .irtrc file)
+are also enhanced a bit: when invoked with no arguments, they use the last value (\_) as the default (e.g. just type 'y' instead 'y \_')
 
 ### In place inspecting/editing of backtraced files
 
@@ -482,6 +482,9 @@ play well with IRT, then copy and paste just part of it.
 
 You can also change the configuration options in the ~/.irtrc file. The following are the defaults
 which should work quite well without any change:
+
+    # uncomment if you want to use the awesome_print gem
+    # require 'ap'
 
     # set this to true if your prompt get messed up when you use the history
     # IRT.fix_readline_prompt = false

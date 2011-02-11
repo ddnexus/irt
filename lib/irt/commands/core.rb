@@ -20,13 +20,6 @@ module IRT
       end
       alias_method :open_session, :irt # legacy method
 
-      [:p, :y, :pp, :ap].each do |m|
-        define_method(m) do |*args|
-          args = [context.last_value] if args.empty?
-          super *args
-        end
-      end
-
       def vdiff(a,b)
         puts IRT::Differ.new(a,b, :value, {:a_marker => 'a',
                                            :b_marker => 'b',

@@ -50,7 +50,7 @@ module IRT
     Dye.color = bool
   end
 
-  def init
+  def init_config
     @session_no = 0
     @differ = IRT::Differ
     @irt_on_diffs = true
@@ -97,12 +97,24 @@ module IRT
     @debug = false
   end
 
-  def init_files
+  def before_run
     @irt_file = IRB.conf[:SCRIPT]
     require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
     @log = Log.new
     @log.print_running_file
     IRT::Directives.load_helper_files
+    IRB::ExtendCommandBundle.class_eval do
+      [:p, :y, :pp, :ap].each do |m|
+        next unless begin
+                      method(m)
+                    rescue NameError
+                    end
+        define_method(m) do |*args|
+          args = [context.last_value] if args.empty?
+          super *args
+        end
+      end
+    end
   end
 
   def lib_path

@@ -1,3 +1,6 @@
+# uncomment if you want to use the awesome_print gem
+# require 'ap'
+
 # IRT RC file
 # ITR conf options
 

@@ -11,7 +11,7 @@ module IRB #:nodoc:
 
   def IRB.setup(ap_path=nil)
     irb_setup(ap_path)
-    IRT.init_files
+    IRT.before_run
   end
 
   def IRB.init_config(ap_path)
@@ -35,7 +35,7 @@ module IRB #:nodoc:
     @CONF[:AT_EXIT] << proc{ print "\e[0m" if Dye.color? } # reset colors
     @CONF[:RC_NAME_GENERATOR] = proc {|rc| File.expand_path '~/.irtrc' }
 
-    IRT.init
+    IRT.init_config
   end
 
 end
