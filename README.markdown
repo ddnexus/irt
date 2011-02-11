@@ -512,7 +512,7 @@ which should work quite well without any change:
     # IRT.nano_command_format = %(nano +%2$d "%1$s")
 
     # the format to build the command to launch vi
-    # IRT.vi_command_format = %(vi -c "startinsert" "%1$s" +%2$d)
+    # IRT.vi_command_format = %(vi "%1$s" +%2$d)
 
     # the format to build the command to launch the ri tool
     # if RUBY_VERSION < 1.9.2 uses qri (from fastri) else bri

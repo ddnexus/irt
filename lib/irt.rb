@@ -91,7 +91,7 @@ module IRT
                                'gnome-open %1$s'
                              end
     end
-    @vi_command_format = %(vi -c "startinsert" "%1$s" +%2$d)
+    @vi_command_format = %(vi "%1$s" +%2$d)
     @nano_command_format = %(nano +%2$d "%1$s")
     @ri_command_format =  IRT::RubyVersion >= '1.9.2' ? %(bri "%s") : %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
     @debug = false
