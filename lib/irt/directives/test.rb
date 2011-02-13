@@ -69,7 +69,7 @@ module IRT
             @@diffs += 1
             puts IRT.dye("#{tno}. DIFFS!", :diff_color, :bold) + IRT.dye(" #{d}\n     ", :diff_color) +
                  IRT.dye(" at #{context.irb_path}: #{context.last_line_no} ", :file_color, :reversed, :bold)
-            puts IRT.differ.new(saved, actual, kind).output
+            puts IRT::Differ.new(saved, actual, kind).output
             IRT::Session.enter(:interactive) if IRT.irt_on_diffs
           end
         rescue Exception

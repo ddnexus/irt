@@ -45,7 +45,7 @@ module IRT
       alias_method :tt, :add_test
 
       def save_as(path)
-        require 'irt/utils'
+        ensure_cli
         IRT::Utils.save_as(IRT.irt_file, path, IRT.prompter){ rerun }
       end
       alias_method :sa, :save_as

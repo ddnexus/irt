@@ -103,7 +103,7 @@ private
       bktr = e.backtrace.reject do |m|
                workspace.filter_backtrace(m).nil? || !IRT.debug && File.expand_path(m).match(/^#{IRT.lib_path}/)
              end
-      e.set_backtrace( e.class.name.match(/^IRT::/) ? bktr : map_backtrace(bktr) )
+      e.set_backtrace map_backtrace(bktr)
     end
 
     def map_backtrace(bktr)
@@ -117,7 +117,9 @@ private
           index = sprintf index_format, " [#{i}]"
         end
         mapped_bktr << "#{m}#{index}"
+        break if m.match /^\(irt\#\d+\)/
       end
+      # mapped_bktr.last << "\n" if mapped_bktr.last && !mapped_bktr.last.match(/\n$/)
       mapped_bktr
     end
 

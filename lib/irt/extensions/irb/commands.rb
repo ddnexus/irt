@@ -38,5 +38,12 @@ module IRB
       end
     end
 
+    def ensure_cli
+      unless IRT.cli?
+        m = caller[0].match(/`(\w*)'$/).captures[0]
+        raise IRT::SessionModeError, ":#{m} command not available. IRT didn't start with the CLI"
+      end
+    end
+
   end
 end

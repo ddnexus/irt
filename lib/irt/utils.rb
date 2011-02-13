@@ -18,5 +18,18 @@ module IRT
       true
     end
 
+    # this will create a tmp file and start IRB
+    # but it will be left in file mode at EOF (sort of irt-standby)
+    def load_irt
+      return if IRT.started
+      ARGV.clear
+      require 'tempfile'
+      tmp_file = Tempfile.new(['', '.irt'])
+      tmp_file << "\n" # one empty line makes irb of 1.9.2 happy
+      tmp_file.flush
+      ARGV.push tmp_file.path
+      IRB.start
+    end
+
   end
 end

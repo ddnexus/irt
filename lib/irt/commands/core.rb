@@ -21,6 +21,7 @@ module IRT
       alias_method :open_session, :irt # legacy method
 
       def vdiff(a,b)
+        ensure_session
         puts IRT::Differ.new(a,b, :value, {:a_marker => 'a',
                                            :b_marker => 'b',
                                            :a_label => '',
@@ -31,6 +32,7 @@ module IRT
       # rerun the same shell command
       def rerun
         ensure_session
+        ensure_cli
         IRB.irb_at_exit
         str = "Rerunning: `#{ENV['IRT_COMMAND']}`"
         puts

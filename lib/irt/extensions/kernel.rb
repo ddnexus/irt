@@ -12,7 +12,8 @@ module Kernel
 
   def irt(bind)
     raise IRT::ArgumentTypeError, "You must pass binding instead of #{bind.class.name} object" unless bind.is_a?(Binding)
-    IRT::Session.enter :binding, bind
+    IRT::Utils.load_irt
+    IRT.rails_sigint_wrap{  IRT::Session.enter :binding, bind }
   end
 
 end

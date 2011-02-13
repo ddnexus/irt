@@ -4,14 +4,12 @@ module IRT
 
       def copy_lines
         ensure_session
-        ensure_cli
         copy_to_clipboard :print_lines
       end
       alias_method :cl, :copy_lines
 
       def copy_all_lines
         ensure_session
-        ensure_cli
         copy_to_clipboard :print_all_lines
       end
       alias_method :cll, :copy_all_lines

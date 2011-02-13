@@ -16,6 +16,8 @@ require 'irt/differ'
 require 'irt/directives'
 require 'irt/session'
 require 'irt/ruby_version'
+require 'irt/utils'
+require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
 
 module IRT
 
@@ -41,10 +43,14 @@ module IRT
 
   extend self
 
-  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug, :rails_log, :dye_rails_log,
+  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug, :rails_log, :dye_rails_log, :rails_server,
                 :full_exit, :exception_raised, :session_no, :autoload_helper_files, :dye_styles,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
-  attr_reader :log, :irt_file, :differ
+  attr_reader :log, :irt_file, :started
+
+  def cli?
+    !!ENV['IRT_COMMAND']
+  end
 
   def force_color=(bool)
     Dye.color = bool
@@ -52,7 +58,6 @@ module IRT
 
   def init_config
     @session_no = 0
-    @differ = IRT::Differ
     @irt_on_diffs = true
     @tail_on_irt = false
     @fix_readline_prompt = false
@@ -99,10 +104,11 @@ module IRT
 
   def before_run
     @irt_file = IRB.conf[:SCRIPT]
-    require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
     @log = Log.new
-    @log.print_running_file
-    IRT::Directives.load_helper_files
+    if cli?
+      @log.print_running_file
+      IRT::Directives.load_helper_files
+    end
     IRB::ExtendCommandBundle.class_eval do
       [:p, :y, :pp, :ap].each do |m|
         next unless begin
@@ -115,6 +121,7 @@ module IRT
         end
       end
     end
+    @started = true
   end
 
   def lib_path

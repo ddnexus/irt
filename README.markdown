@@ -140,7 +140,10 @@ When you close the session with 'exit' (or 'x' or 'q'), IRT will not pass back a
 
 ### Binding Sessions (yellow)
 
-You can open a binding session from any file being evaluated with the directive 'irt binding'.
+You can open a binding session from any file with the directive 'irt binding': you don't even need to use the IRT executable.
+It works also from the rails code, while the server is running. (See Rails)
+
+
 The 'self' of the new session will be the 'self' at the line you called it, so you can play with local variables
 and methods as you would do it at that line.
 
@@ -596,6 +599,22 @@ dir, you must pass the -n option (--no-rails).
 By default IRT will output the rails log (colored in blue) right in the console.
 You can switch the rails log ON or OFF by using the 'rails\_log\_on' (or 'rlo') and 'rails\_log\_off' (or 'rlf')
 commands in any session, besides you can set the option IRT.rails_log to true or false in the ~/.irtrc file.
+
+### Rails Server Sessions
+
+Sometimes, you just want to open a session from your Rails code or from a template while the server is running.
+In that case you don't have to use the IRT executable: you can just add an 'irt binding' statement where you want
+(even in a erb template), load the page in the browser and IRT will open a Binding Session right in the server's console.
+
+Sometimes, you just want to open an Interactive Session right in the server console: you have just to type Ctrl-C and
+you will be asked if you want to shutdown the server or open an IRT session.
+
+The server sessions are just a quick way to interact with your application while your server is running,
+without the need to launch a separate rails console: they are convenient but they still lack of a few commands
+that need to be implemented in the rails server context (e.g. rerun and editing of irt file that I hope to implement soon).
+
+Notice that the execution of the web response is halted until you exit from the session.
+When you exit, the response process will be resumed, and the server will return to its normal behaviour.
 
 ### Rails 3
 
