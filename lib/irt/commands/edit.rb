@@ -4,30 +4,32 @@ module IRT
 
       def copy_lines
         ensure_session
+        ensure_cli
         copy_to_clipboard :print_lines
       end
       alias_method :cl, :copy_lines
 
       def copy_all_lines
         ensure_session
+        ensure_cli
         copy_to_clipboard :print_all_lines
       end
       alias_method :cll, :copy_all_lines
 
-      %w[vi nano edit].each do |n|
-        eval <<-EOE, binding, __FILE__, __LINE__+1
-          def #{n}(*args)
-            ensure_session
-            run_editor(:#{n}, *args)
-          end
-        EOE
-        eval <<-EOE, binding, __FILE__, __LINE__+1
-          def c#{n}(*args)
-            ensure_session
-            copy_lines
-            #{n} *args
-          end
-        EOE
+      [:vi, :nano, :edit].each do |n|
+
+        define_method(n) do |*args|
+          ensure_session
+          run_editor(n, *args)
+        end
+
+        define_method(:"c#{n}") do |*args|
+          ensure_session
+          ensure_cli
+          copy_lines
+          send n, *args
+        end
+
       end
       alias_method :nn, :nano
       alias_method :ed, :edit
