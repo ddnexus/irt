@@ -12,16 +12,22 @@ class Method
         end
     arr = Array.new(n)
     set_trace_func proc{ |event, file, line, meth_name, binding, classname|
-      if event.eql?('call') && name.to_s.match(meth_name.to_s)
-        f = file
-        l = line
-        set_trace_func nil
-        throw :method_located
+      if name == meth_name
+        case event
+        when 'call'
+          f = file
+          l = line
+          throw :method_located
+       when 'c-call'
+          f = "(c-func)"
+          throw :method_located
+        end
       end
     }
     catch(:method_located) { call *arr }
-    set_trace_func nil
     [f,l]
+  ensure
+    set_trace_func nil
   end
 
   def info
