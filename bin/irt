@@ -105,6 +105,7 @@ if files.empty?
 end
 
 cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
+               ENV['RAILS_ENV'] = options[:rails_env]
                if File.exists?('./script/rails')
                  gemfile = File.read('Gemfile')
                  unless gemfile.match(/\bgem\b.+\birt\b/)
@@ -122,10 +123,6 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
              else
                'irt_irb %s %s'
              end
-
-if cmd_format.match(/^ruby script\/console/)
-  ENV['RAILS_ENV'] ||= options[:rails_env]
-end
 
 ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:interactive_eof]
 
