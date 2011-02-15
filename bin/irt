@@ -4,15 +4,9 @@ require 'rubygems'
 require 'fileutils'
 require 'tempfile'
 require 'optparse'
-require 'prompter'
-require 'dye'
+require 'irt/prompter'
 
-prompter = Prompter.new do |pr|
-             def pr.say_echo(result, opts={})
-               out = sprintf "   #> %s", result
-               say out, :style => :yellow
-             end
-           end
+prompter = IRT::Prompter.new
 
 version = File.read(File.expand_path('../../VERSION', __FILE__)).strip
 
@@ -100,7 +94,7 @@ files = paths.map do |path|
             File.open(path, 'w') {|f| f.puts "\n" } # one empty line makes irb of 1.9.2 happy
           end
           File.directory?(path) ? Dir.glob(File.join(path, '**/*.irt')) : path
-        end.flatten
+        end.flatten.compact
 
 if files.empty?
   prompter.say_notice 'No *.irt files to run'

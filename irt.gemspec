@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('dye', [">= 0.1.1"])
-  s.add_runtime_dependency('prompter', [">= 0.1.3"])
+  s.add_runtime_dependency('prompter', [">= 0.1.4"])
   if IRT::RubyVersion >= '1.9.2'
     s.add_runtime_dependency('bri', [">= 0.1.5"])
   else

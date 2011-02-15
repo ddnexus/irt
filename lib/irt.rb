@@ -142,12 +142,8 @@ module IRT
 
   def prompter
     @prompter ||= begin
-                    require 'prompter'
-                    Prompter.new do |pr|
-                      def pr.say_echo(result, opts={})
-                        IRB.CurrentContext.send :output_ignored_echo_value, result
-                      end
-                    end
+                    require 'irt/prompter'
+                    IRT::Prompter.new
                   end
   end
 
