@@ -145,7 +145,7 @@ private
       i = -1
       str.each_line do |l|
         @last_line_no = line_no + i+=1
-        unless l =~ /^\s*(#{quoted_option_string(IRT.log.ignored_commands)})\b/
+        if irt_mode == :file || l !~ /^\s*(#{quoted_option_string(IRT.log.ignored_commands)})\b/
           IRT.log.add_line l, @last_line_no
         end
       end
