@@ -17,7 +17,7 @@ module IRT
       @tail_size = tail_size || 10
       self << FileHunk.new(IRT.irt_file)
       @status = []
-      @status << [File.basename(IRT.irt_file), :file] if IRT.cli?
+      @status << [File.basename(IRT.irt_file), :file] #if IRT.cli?
     end
 
     def add_hunk

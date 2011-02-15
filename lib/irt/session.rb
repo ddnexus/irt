@@ -2,6 +2,8 @@ module IRT
   module Session
     extend self
 
+    @@exit_all = false
+
     def enter(mode, obj=nil)
       IRT.log.print if IRT.tail_on_irt
       ws = obj ? IRB::WorkSpace.new(obj) : IRB.CurrentContext.workspace
@@ -38,10 +40,30 @@ module IRT
       resuming_context.set_last_value( exiting_context.last_value ) \
         unless (exiting_mode == :inspect || exiting_mode == :binding)
       IRT.log.pop_status
-      IRT.log.print_status unless resuming_context.irt_mode == :file
       IRB.conf[:MAIN_CONTEXT] = resuming_context
+      throw(:IRB_EXIT) if @@exit_all
+      IRT.log.print_status unless resuming_context.irt_mode == :file
       IRT.log.add_hunk
     end
+
+    def start_file(file_path=IRT.irt_file)
+      openfile = proc do
+        @@exit_all = false
+        IRB.conf[:AT_EXIT].pop
+        IRT.start_setup(file_path)
+        irb = IRB::Irb.new(nil, IRT.irt_file)
+        irb.context.irt_mode = :file
+        begin
+          catch(:IRB_EXIT) { irb.eval_input }
+        ensure
+          IRB.irb_at_exit
+        end
+      end
+      IRB.conf[:AT_EXIT].push(openfile)
+      @@exit_all = true
+      throw(:IRB_EXIT)
+    end
+
 
   private
 

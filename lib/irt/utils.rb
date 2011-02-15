@@ -21,7 +21,7 @@ module IRT
     # this will create a tmp file and start IRB
     # but it will be left in file mode at EOF (sort of irt-standby)
     def load_irt
-      return if IRT.started
+      return if IRT.initialized
       ARGV.clear
       require 'tempfile'
       tmp_file = Tempfile.new(['', '.irt'])
