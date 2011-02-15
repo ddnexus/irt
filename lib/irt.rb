@@ -120,7 +120,8 @@ module IRT
 
   def start_setup(file = nil)
     @session_no = 0
-    @irt_file = file.nil? ? IRB.conf[:SCRIPT] : (IRB.conf[:SCRIPT] = file)
+    irt_file = file.nil? ? IRB.conf[:SCRIPT] : (IRB.conf[:SCRIPT] = file)
+    @irt_file = Pathname.new(irt_file).realpath
     @log = Log.new
     if cli?
       @log.print_running_file

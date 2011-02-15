@@ -42,9 +42,8 @@ module IRT
 
     def load_helper_files
       return unless IRT.autoload_helper_files
-      irt_file_path = Pathname.new($0).realpath
       container_path = Pathname.getwd.parent
-      down_path = irt_file_path.relative_path_from container_path
+      down_path = IRT.irt_file.relative_path_from container_path
       down_path.dirname.descend do |p|
        helper_path = container_path.join(p, 'irt_helper.rb')
        begin

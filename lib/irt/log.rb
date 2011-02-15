@@ -16,8 +16,7 @@ module IRT
       @non_setting_commands = @non_setting_commands.map(&:to_sym)
       @tail_size = tail_size || 10
       self << FileHunk.new(IRT.irt_file)
-      @status = []
-      @status << [File.basename(IRT.irt_file), :file] #if IRT.cli?
+      @status = [[IRT.irt_file.basename, :file]]
     end
 
     def add_hunk

@@ -51,7 +51,7 @@ module IRT
         @@exit_all = false
         IRB.conf[:AT_EXIT].pop
         IRT.start_setup(file_path)
-        irb = IRB::Irb.new(nil, IRT.irt_file)
+        irb = IRB::Irb.new(nil, IRT.irt_file.to_s)
         irb.context.irt_mode = :file
         begin
           catch(:IRB_EXIT) { irb.eval_input }
