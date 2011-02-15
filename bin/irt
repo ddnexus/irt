@@ -78,7 +78,10 @@ paths = if ARGV.empty?
             if File.read(tmp_path).length > 1
               prompter.yes? %(The template file has been modified, do you want to save it?) do
                 prompter.choose %(Enter the file path to save:), /[\w0-9_]/ do |as_file|
-                  IRT::Utils.save_as(tmp_path, as_file, prompter){ system(ENV['IRT_COMMAND']) }
+                  IRT::Utils.save_as(tmp_path, as_file, prompter) {
+                    ENV['IRT_COMMAND'] = ENV['IRT_COMMAND'].sub(/#{Regexp.quote(tmp_path)}/, as_file)
+                    system(ENV['IRT_COMMAND'])
+                  }
                 end
               end
             end

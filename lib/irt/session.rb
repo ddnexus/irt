@@ -3,6 +3,12 @@ module IRT
     extend self
 
     @@exit_all = false
+    def exit_all?
+      @@exit_all
+    end
+    def exit_all=(bool)
+      @@exit_all = bool
+    end
 
     def enter(mode, obj=nil)
       IRT.log.print if IRT.tail_on_irt
@@ -39,20 +45,25 @@ module IRT
       exiting_mode = exiting_context.irt_mode
       resuming_context.set_last_value( exiting_context.last_value ) \
         unless (exiting_mode == :inspect || exiting_mode == :binding)
-      IRT.log.pop_status
       IRB.conf[:MAIN_CONTEXT] = resuming_context
-      throw(:IRB_EXIT) if @@exit_all
+      # on exit_all throw and return anyway
+      begin throw(:IRB_EXIT); rescue ArgumentError; return; end if @@exit_all
+      IRT.log.pop_status
       IRT.log.print_status unless resuming_context.irt_mode == :file
       IRT.log.add_hunk
     end
 
     def start_file(file_path=IRT.irt_file)
+      raise Errno::ENOENT, "No such file or directory - #{file_path}" unless File.exist?(file_path)
       openfile = proc do
         @@exit_all = false
         IRB.conf[:AT_EXIT].pop
         IRT.start_setup(file_path)
         irb = IRB::Irb.new(nil, IRT.irt_file.to_s)
         irb.context.irt_mode = :file
+        irb.context.irb_path = IRT.irt_file.to_s
+        irb.context.irb_name = IRT.irt_file.basename
+        IRB.conf[:MAIN_CONTEXT] = irb.context
         begin
           catch(:IRB_EXIT) { irb.eval_input }
         ensure

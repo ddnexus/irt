@@ -19,9 +19,15 @@ module IRB
 
     alias_method :x, :irb_exit
     alias_method :q, :irb_exit
+    alias_method :irb, :irt
+
+    alias_method :original_abort, :abort
+    def abort
+      IRT::Session.exit_all = true
+      original_abort
+    end
     alias_method :xx, :abort
     alias_method :qq, :abort
-    alias_method :irb, :irt
 
     def method_missing(method, *args, &block)
       IRB.conf[:MAIN_CONTEXT] && IRB.conf[:MAIN_CONTEXT].irt_mode == :file && IRT::Directives.respond_to?(method) ?

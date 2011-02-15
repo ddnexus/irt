@@ -79,7 +79,11 @@ module IRT
     x|q                     Aliases for exit (from the current session)
     xx|qq                   Aliases for abort (abort the irt process)
     status|ss               Prints the session status line
-    rerun|rr                Reruns the same file
+    run file                Run an irt file (exiting from the current sessions)
+    rerun|rr                Reruns the current irt file (exiting from the
+                            current sessions)
+    restart|r!              Restart the executable, reload IRT (and Rails) and
+                            rerun the current file
     irt_help|hh             Shows this screen
     sh command              Alias for system("command") (no quotes needed)
 

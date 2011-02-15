@@ -30,17 +30,28 @@ module IRT
       alias_method :vd, :vdiff
 
       # rerun the same shell command
-      def rerun
+      def restart
         ensure_session
         ensure_cli
         IRB.irb_at_exit
-        str = "Rerunning: `#{ENV['IRT_COMMAND']}`"
+        str = "Restarting: `#{ENV['IRT_COMMAND']}`"
         puts
         puts IRT.dye(" #{str} ", "*** #{str} ***", :error_color, :bold, :reversed)
         puts
         exec ENV["IRT_COMMAND"]
       end
+      alias_method :r!, :restart
+
+      def rerun
+        ensure_session
+        IRT::Session.start_file
+      end
       alias_method :rr, :rerun
+
+      def run(file_path)
+        ensure_session
+        IRT::Session.start_file file_path
+      end
 
       def sh(*args)
         system *args

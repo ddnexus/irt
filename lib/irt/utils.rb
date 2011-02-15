@@ -12,7 +12,6 @@ module IRT
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
       FileUtils.cp file, as_file
       if prompter.yes? %(Do you want to run the file "#{as_file_local}" now?)
-        ENV['IRT_COMMAND'] = ENV['IRT_COMMAND'].sub(/#{Regexp.quote(file)}/, as_file)
         yield
       end
       true
