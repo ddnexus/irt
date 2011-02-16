@@ -4,7 +4,8 @@ class ActiveSupport::BufferedLogger
 
   def add(*args)
     message = original_add(*args)
-    return message if IRT.rails_server # no inline log when irt in rails server
+    # no inline log when in rails server and not interactive mode
+    return message if IRB.CurrentContext.nil? || IRT.rails_server && IRB.CurrentContext.irt_mode != :interactive
     if IRT.rails_log
       if IRT.dye_rails_log
         plain_message = Dye.strip_ansi(message).chomp
@@ -17,17 +18,24 @@ class ActiveSupport::BufferedLogger
 
 end
 
+module Kernel
+
+  alias_method :original_irt, :irt
+  def irt(bind)
+    IRT.send(:rails_server_notice_wrap) { original_irt(bind) }
+  end
+
+end
+
 require 'rack/server'
 module Rack
   class Server
     alias_method :original_server, :server
     def server
       # override the SIGINT trap in the Rack::Server.start method allowing multiple choices
-      # since #server is also alled after the Rack::Server.start trap
-      trap('SIGINT') do
-        IRT::Utils.load_irt
-        IRT.rails_signal_handle
-      end
+      # since #server is also called after the Rack::Server.start trap
+      IRT::Utils.load_irt
+      IRT.rails_server_sigint_trap = trap('SIGINT') { IRT.rails_signal_handle }
       IRT.rails_server = original_server
     end
   end
@@ -36,34 +44,55 @@ end
 module IRT
 
   def rails_signal_handle
-    trap('SIGINT'){}
-    i = prompter.choose(" [s]hutdown, [i]rt or [c]ancel?", /^(s|i|c)$/i,
-                        :hint => '[<enter>=s|i|c]', :default => 's', :echo => false)
-    case i
-    when 's'
-      if rails_server.respond_to?(:shutdown)
-        rails_server.shutdown
-      else
-        exit
+    puts
+    rails_server_notice_wrap do
+      trap('SIGINT'){}
+      input = prompter.choose " [s]hutdown, [i]rt or [c]ancel?", /^(s|i|c)$/i,
+                              :hint => '[<enter>=s|i|c]', :default => 's'
+      trap('SIGINT') { rails_signal_handle  }
+      case input
+      when 's'
+        IRT.rails_server_sigint_trap.call
+      when 'i'
+        Session.enter :interactive
       end
-    when 'i'
-      rails_sigint_wrap{ Session.enter :interactive }
-    when 'c'
-      trap('SIGINT') { rails_signal_handle }
     end
   end
 
-  def rails_sigint_wrap
+private
+
+  def rails_server_notice_wrap
     return yield unless rails_server
-    trap('SIGINT') { IRB.CurrentContext.irb.signal_handle }
+    IRT.prompter.say_notice "Server suspended"
     yield
-    trap('SIGINT') { rails_signal_handle  }
+    IRT.prompter.say_notice "Server resumed"
+  end
+
+
+  module Session
+
+    alias_method :original_start_file, :start_file
+    def start_file(*args)
+      original_start_file *args
+    ensure
+      if IRT.rails_server
+        IRB.irb_at_exit
+        enter :interactive
+      end
+    end
+
   end
 
   module Commands
     module Rails
 
-      extend self
+      def included(mod)
+        mod.module_eval do
+          alias_method :abort, :irb_exit
+          alias_method :xx, :irb_exit
+          alias_method :qq, :irb_exit
+        end
+      end
 
       def rails_log_on
         IRT.rails_log = true

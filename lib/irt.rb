@@ -17,7 +17,6 @@ require 'irt/directives'
 require 'irt/session'
 require 'irt/ruby_version'
 require 'irt/utils'
-require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
 
 module IRT
 
@@ -43,8 +42,9 @@ module IRT
 
   extend self
 
-  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug, :rails_log, :dye_rails_log, :rails_server,
-                :full_exit, :exception_raised, :session_no, :autoload_helper_files, :dye_styles,
+  attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
+                :rails_log, :dye_rails_log, :rails_server, :rails_server_sigint_trap,
+                :full_exit, :session_no, :autoload_helper_files, :dye_styles,
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :initialized
 
@@ -148,3 +148,4 @@ module IRT
   end
 
 end
+require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)

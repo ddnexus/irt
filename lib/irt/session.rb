@@ -34,20 +34,23 @@ module IRT
       IRT.log.add_hunk
       IRT.log.status << [new_context.irb_name, mode]
       IRT.log.print_status unless mode == :file
+      old_trap = trap('SIGINT'){new_context.irb.signal_handle}
       catch(:IRB_EXIT) { new_context.irb.eval_input }
     ensure
       IRT::Session.exit
+      trap 'SIGINT', old_trap if old_trap
     end
 
     def exit
       exiting_context = IRB.conf[:MAIN_CONTEXT]
       resuming_context = exiting_context.parent_context
+      return unless resuming_context
       exiting_mode = exiting_context.irt_mode
       resuming_context.set_last_value( exiting_context.last_value ) \
         unless (exiting_mode == :inspect || exiting_mode == :binding)
       IRB.conf[:MAIN_CONTEXT] = resuming_context
       # on exit_all throw and return anyway
-      begin throw(:IRB_EXIT); rescue ArgumentError; return; end if @@exit_all
+      throw(:IRB_EXIT) if @@exit_all
       IRT.log.pop_status
       IRT.log.print_status unless resuming_context.irt_mode == :file
       IRT.log.add_hunk
