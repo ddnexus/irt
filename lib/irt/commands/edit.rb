@@ -23,7 +23,6 @@ module IRT
 
         define_method(:"c#{n}") do |*args|
           ensure_session
-          ensure_cli
           copy_lines
           send n, *args
         end

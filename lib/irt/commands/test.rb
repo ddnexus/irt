@@ -45,7 +45,6 @@ module IRT
       alias_method :tt, :add_test
 
       def save_as(path)
-        ensure_cli
         IRT::Utils.save_as(IRT.irt_file.to_s, path, IRT.prompter){
           IRT::Session.start_file path
         }
