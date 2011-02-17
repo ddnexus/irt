@@ -90,16 +90,18 @@ private
   module Commands
     module Rails
 
+      extend self # ignored_echo_commands
+
       def rails_log_on
         IRT.rails_log = true
-        "Rails Log ON"
+        IRT::Prompter.say_notice "Rails Log ON"
       end
       alias_method :rlon, :rails_log_on
       alias_method :rlo, :rails_log_on
 
       def rails_log_off
         IRT.rails_log = false
-        "Rails Log OFF"
+        IRT::Prompter.say_notice "Rails Log OFF"
       end
       alias_method :rloff, :rails_log_off
       alias_method :rlf, :rails_log_off
