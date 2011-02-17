@@ -23,6 +23,7 @@ module IRB
 
     alias_method :original_abort, :abort
     def abort
+      ensure_cli
       IRT::Session.exit_all = true
       original_abort
     end

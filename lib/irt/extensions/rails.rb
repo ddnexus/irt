@@ -90,14 +90,6 @@ private
   module Commands
     module Rails
 
-      def included(mod)
-        mod.module_eval do
-          alias_method :abort, :irb_exit
-          alias_method :xx, :irb_exit
-          alias_method :qq, :irb_exit
-        end
-      end
-
       def rails_log_on
         IRT.rails_log = true
         "Rails Log ON"
