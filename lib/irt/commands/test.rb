@@ -46,7 +46,7 @@ module IRT
 
       def save_as(path)
         IRT::Utils.save_as(path) do
-          IRT::Session.start_file path
+          IRT::Session.run_file path
         end
       end
       alias_method :sa, :save_as

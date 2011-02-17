@@ -11,7 +11,7 @@ module IRB #:nodoc:
 
   def IRB.setup(ap_path=nil)
     original_setup(ap_path)
-    IRT.before_run
+    IRT.setup
   end
 
   def IRB.init_config(ap_path)

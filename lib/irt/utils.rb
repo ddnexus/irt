@@ -35,7 +35,7 @@ module IRT
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
       FileUtils.cp IRT.irt_file, as_file
       if run && IRT::Prompter.yes?( %(Do you want to run the file "#{as_file_local}" now?) )
-        IRT::Session.start_file as_file
+        IRT::Session.run_file as_file
       end
     end
 

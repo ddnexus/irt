@@ -44,13 +44,13 @@ module IRT
 
       def rerun
         ensure_session
-        IRT::Session.start_file
+        IRT::Session.run_file
       end
       alias_method :rr, :rerun
 
       def run(file_path)
         ensure_session
-        IRT::Session.start_file file_path
+        IRT::Session.run_file file_path
       end
 
       def sh(*args)

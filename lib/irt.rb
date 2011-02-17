@@ -103,7 +103,7 @@ module IRT
     @debug = false
   end
 
-  def before_run
+  def setup
     IRB::ExtendCommandBundle.class_eval do
       [:p, :y, :pp, :ap].each do |m|
         next unless begin
@@ -117,10 +117,10 @@ module IRT
       end
     end
     @initialized = true
-    start_setup
+    init_file
   end
 
-  def start_setup(file = nil)
+  def init_file(file = nil)
     @session_no = 0
     irt_file = file.nil? ? IRB.conf[:SCRIPT] : (IRB.conf[:SCRIPT] = file)
     @irt_file = Pathname.new(irt_file).realpath

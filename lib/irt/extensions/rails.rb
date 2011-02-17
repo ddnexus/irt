@@ -75,9 +75,9 @@ private
 
   module Session
 
-    alias_method :original_start_file, :start_file
-    def start_file(*args)
-      original_start_file *args
+    alias_method :original_run_file, :run_file
+    def run_file(*args)
+      original_run_file *args
     ensure
       if IRT.rails_server
         IRB.irb_at_exit

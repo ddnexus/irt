@@ -56,12 +56,12 @@ module IRT
       IRT.log.add_hunk
     end
 
-    def start_file(file_path=IRT.irt_file)
+    def run_file(file_path=IRT.irt_file)
       raise Errno::ENOENT, "No such file or directory - #{file_path}" unless File.exist?(file_path)
       openfile = proc do
         @@exit_all = false
         IRB.conf[:AT_EXIT].pop
-        IRT.start_setup(file_path)
+        IRT.init_file(file_path)
         irb = IRB::Irb.new(nil, IRT.irt_file.to_s)
         irb.context.irt_mode = :file
         irb.context.irb_path = IRT.irt_file.to_s
