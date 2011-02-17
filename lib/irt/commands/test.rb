@@ -45,9 +45,9 @@ module IRT
       alias_method :tt, :add_test
 
       def save_as(path)
-        IRT::Utils.save_as(IRT.irt_file.to_s, path, IRT.prompter){
+        IRT::Utils.save_as(path) do
           IRT::Session.start_file path
-        }
+        end
       end
       alias_method :sa, :save_as
 

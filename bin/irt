@@ -2,15 +2,10 @@
 
 require 'rubygems'
 require 'fileutils'
-require 'tempfile'
 require 'optparse'
-require 'irt/prompter'
+require 'irt/utils'
 
-prompter = IRT::Prompter.new
-
-version = File.read(File.expand_path('../../VERSION', __FILE__)).strip
-
-copy = Dye.dye "irt #{version} (c) 2010-2011 Domizio Demichelis", :blue, :bold
+copy = IRT::Utils.copyright
 
 options = {}
 
@@ -45,7 +40,7 @@ EOB
    end
 
   opts.on( '-v', '--version', 'Shows the version and exits' ) do
-    puts version
+    puts IRT::Utils.version
     exit
   end
 
@@ -63,31 +58,14 @@ puts copy
 
 paths = if ARGV.empty?
           options[:interactive_eof] = true
-          tmp_file = Tempfile.new(['', '.irt'])
-          tmp_file << "\n" # one empty line makes irb of 1.9.2 happy
-          tmp_file.flush
-          tmp_path = tmp_file.path
-          at_exit do
-            require 'irt/utils'
-            if File.read(tmp_path).length > 1
-              prompter.yes? %(The template file has been modified, do you want to save it?) do
-                prompter.choose %(Enter the file path to save:), /[\w0-9_]/ do |as_file|
-                  IRT::Utils.save_as(tmp_path, as_file, prompter) {
-                    ENV['IRT_COMMAND'] = ENV['IRT_COMMAND'].sub(/#{Regexp.quote(tmp_path)}/, as_file)
-                    system(ENV['IRT_COMMAND'])
-                  }
-                end
-              end
-            end
-          end
-          [ tmp_path ]
+          [ IRT::Utils.create_tmp_file ]
         else
           ARGV.map {|p| File.expand_path(p) }
         end
 
 files = paths.map do |path|
           unless File.exists?(path)
-            next if prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter=y|n]', :default => 'y'
+            next if IRT::Prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter=y|n]', :default => 'y'
             options[:interactive_eof] = true
             dirname = File.dirname(path)
             FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
@@ -97,7 +75,7 @@ files = paths.map do |path|
         end.flatten.compact
 
 if files.empty?
-  prompter.say_notice 'No *.irt files to run'
+  IRT::Prompter.say_notice 'No *.irt files to run'
   exit
 end
 
@@ -106,8 +84,8 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                if File.exists?('./script/rails')
                  gemfile = File.read('Gemfile')
                  unless gemfile.match(/\bgem\b.+\birt\b/)
-                   prompter.say_warning %(The Gemfile doesn't look to include any 'gem "irt"' statement.\nIRT will probably not work until you add it!)
-                   prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[enter=y|n]', :default => 'y') do
+                   IRT::Prompter.say_warning %(The Gemfile doesn't look to include any 'gem "irt"' statement.\nIRT will probably not work until you add it!)
+                   IRT::Prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[enter=y|n]', :default => 'y') do
                      File.open('Gemfile', 'a') do |f|
                        f.puts %(gem "irt")
                      end

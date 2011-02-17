@@ -22,7 +22,11 @@ module Kernel
 
   alias_method :original_irt, :irt
   def irt(bind)
-    IRT.send(:rails_server_notice_wrap) { original_irt(bind) }
+    raise IRT::ArgumentTypeError, "You must pass binding instead of #{bind.class.name} object" unless bind.is_a?(Binding)
+    IRT.send(:rails_server_notice_wrap) do
+      IRT::Utils.load_irt
+      IRT::Session.enter :binding, bind
+    end
   end
 
 end
@@ -34,7 +38,7 @@ module Rack
     def server
       # override the SIGINT trap in the Rack::Server.start method allowing multiple choices
       # since #server is also called after the Rack::Server.start trap
-      IRT::Utils.load_irt
+      IRT::Utils.load_irt(false)
       IRT.rails_server_sigint_trap = trap('SIGINT') { IRT.rails_signal_handle }
       IRT.rails_server = original_server
     end
@@ -47,7 +51,7 @@ module IRT
     puts
     rails_server_notice_wrap do
       trap('SIGINT'){}
-      input = prompter.choose " [s]hutdown, [i]rt or [c]ancel?", /^(s|i|c)$/i,
+      input = IRT::Prompter.choose " [s]hutdown, [i]rt or [c]ancel?", /^(s|i|c)$/i,
                               :hint => '[<enter>=s|i|c]', :default => 's'
       trap('SIGINT') { rails_signal_handle  }
       case input
@@ -63,9 +67,9 @@ private
 
   def rails_server_notice_wrap
     return yield unless rails_server
-    IRT.prompter.say_notice "Server suspended"
+    IRT::Prompter.say_notice "Server suspended"
     yield
-    IRT.prompter.say_notice "Server resumed"
+    IRT::Prompter.say_notice "Server resumed"
   end
 
 

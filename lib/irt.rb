@@ -123,10 +123,8 @@ module IRT
     irt_file = file.nil? ? IRB.conf[:SCRIPT] : (IRB.conf[:SCRIPT] = file)
     @irt_file = Pathname.new(irt_file).realpath
     @log = Log.new
-    if cli?
-      @log.print_running_file
-      IRT::Directives.load_helper_files
-    end
+    IRT::Directives.load_helper_files
+    @log.print_running_file
   end
 
   def lib_path
@@ -140,12 +138,8 @@ module IRT
     yml.gsub(/ +\n/, "\n")
   end
 
-  def prompter
-    @prompter ||= begin
-                    require 'irt/prompter'
-                    IRT::Prompter.new
-                  end
-  end
-
 end
+
+IRT.init_config
+require 'irt/prompter'
 require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)

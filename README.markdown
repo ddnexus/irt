@@ -602,19 +602,32 @@ commands in any session, besides you can set the option IRT.rails_log to true or
 
 ### Rails Server Sessions
 
-Sometimes, you just want to open a session from your Rails code or from a template while the server is running.
-In that case you don't have to use the IRT executable: you can just add an 'irt binding' statement where you want
+The server sessions are a quick way to interact with your application while your server is running,
+without the need to launch a the irt executable: you can do almost everything you can from a regular IRT session
+launched from the irt executable.
+
+If you want to open a session from your Rails code or from a template while the server is running,
+you don't have to use the IRT executable: you can just add an 'irt binding' statement where you want
 (even in a erb template), load the page in the browser and IRT will open a Binding Session right in the server's console.
 
-Sometimes, you just want to open an Interactive Session right in the server console: you have just to type Ctrl-C and
+    # will open an IRT Binding Session in the server window
+    irt binding
+
+Besides, if you want to open an Interactive Session, you have just to type Ctrl-C in the server console and
 you will be asked if you want to shutdown the server or open an IRT session.
 
-The server sessions are just a quick way to interact with your application while your server is running,
-without the need to launch a separate rails console: they are convenient but they still lack of a few commands
-that need to be implemented in the rails server context (e.g. rerun and editing of irt file that I hope to implement soon).
+    => Booting Mongrel
+    => Rails 3.0.4 application starting in development on http://0.0.0.0:3000
+    => Call with -d to detach
+    => Ctrl-C to shutdown server
+    ^C
+       #> Server suspended
+       ?>  [s]hutdown, [i]rt or [c]ancel? [<enter>=s|i|c]
 
 Notice that the execution of the web response is halted until you exit from the session.
 When you exit, the response process will be resumed, and the server will return to its normal behaviour.
+
+Note: The Server Sessions are known to work with WEBrick and Mongrel (using Rack)
 
 ### Rails 3
 
