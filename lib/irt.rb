@@ -1,3 +1,5 @@
+at_exit{ Dye.print_reset_colors }
+
 require 'rubygems'
 
 require 'pp'
