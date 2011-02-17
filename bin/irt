@@ -25,7 +25,7 @@ EOB
   end
 
   options[:irb_options] = nil
-  opts.on( '-b', '--irb-options [OPTIONS]', 'Sets the irb Options' ) do |opt|
+  opts.on( '-b', '--irb-options [OPTIONS]', 'Sets the irb or rails console options' ) do |opt|
     options[:irb_options] = opt
   end
 
@@ -93,7 +93,7 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                  end
                  'rails c %s %s %s'
                elsif File.exists?('./script/console')
-                 'ruby script/console --irb="irt_rails2 %s"'
+                 'ruby script/console --irb="irt_rails2 %2$s" %1$s %3$s'
                end
              else
                'irt_irb %s %s'
@@ -102,7 +102,7 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
 ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:interactive_eof]
 
 files.each do |file|
-  ENV['IRT_COMMAND'] = sprintf cmd_format, file, options[:irb_options], options[:rails_env]
+  ENV['IRT_COMMAND'] = sprintf cmd_format, options[:irb_options], file, options[:rails_env]
   unless system(ENV['IRT_COMMAND'])
     puts Dye.sgr(:clear) if Dye.color?
     exit(1)
