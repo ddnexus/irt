@@ -596,6 +596,14 @@ You can use irt instead of the standard Rails console, by just calling the irt e
 any Rails application dir. If you want to skip the autoloading of the Rails app even from that
 dir, you must pass the -n option (--no-rails).
 
+    $ cd my_rails_app
+
+    # will use the test environment in sandbox mode
+    $ irt -b--sandbox -etest
+
+    # will open a normal irt console, skipping the rails app
+    $ irt -n
+
 By default IRT will output the rails log (colored in blue) right in the console.
 You can switch the rails log ON or OFF by using the 'rails\_log\_on' (or 'rlo') and 'rails\_log\_off' (or 'rlf')
 commands in any session, besides you can set the option IRT.rails_log to true or false in the ~/.irtrc file.
@@ -627,7 +635,9 @@ you will be asked if you want to shutdown the server or open an IRT session.
 Notice that the execution of the web response is halted until you exit from the session.
 When you exit, the response process will be resumed, and the server will return to its normal behaviour.
 
-Note: The Server Sessions are known to work with WEBrick and Mongrel (using Rack)
+Note: The Server Sessions are known to work with WEBrick and Mongrel (using Rack).
+WEBrick might spit some error closing an Interactive Session, while it is ok
+with Binding Sessions. Mongrel works perfectly.
 
 ### Rails 3
 

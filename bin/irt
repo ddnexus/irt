@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+at_exit{ Dye.print_reset_colors }
+
 require 'rubygems'
 require 'fileutils'
 require 'optparse'
@@ -13,9 +15,12 @@ optparse = OptionParser.new do |opts|
 
   opts.banner = <<EOB
 Interactive Ruby Tools:
-    Improved irb and rails console with lots of easy and powerful tools.
+    Improved irb and Rails Console with lots of easy and powerful tools.
 Usage:
-    irt [PATH] [options]
+    irt [PATHS] [options]
+Paths:
+    List of irt files and/or dirs containing irt files.
+    If PATHS is omitted IRT will create and run a temporary empty file.
 Options:
 EOB
 
@@ -25,7 +30,7 @@ EOB
   end
 
   options[:irb_options] = nil
-  opts.on( '-b', '--irb-options [OPTIONS]', 'Sets the irb or rails console options' ) do |opt|
+  opts.on( '-b', '--irb-options [OPTIONS]', 'Sets the irb or Rails Console options' ) do |opt|
     options[:irb_options] = opt
   end
 
@@ -103,8 +108,5 @@ ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:inter
 
 files.each do |file|
   ENV['IRT_COMMAND'] = sprintf cmd_format, options[:irb_options], file, options[:rails_env]
-  unless system(ENV['IRT_COMMAND'])
-    puts Dye.sgr(:clear) if Dye.color?
-    exit(1)
-  end
+  exit(1) unless system ENV['IRT_COMMAND']
 end
