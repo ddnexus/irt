@@ -36,7 +36,6 @@ module IRT
       IRT.log.print_status unless mode == :file
       old_trap = trap('SIGINT'){new_context.irb.signal_handle}
       catch(:IRB_EXIT) { new_context.irb.eval_input }
-      # rethrow if there is a parent context, and it is a reading file
       begin throw(:IRB_EXIT) ; rescue ArgumentError ; end if @@exit_all
     ensure
       IRT::Session.exit unless @@exit_all

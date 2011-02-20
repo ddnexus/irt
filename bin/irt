@@ -63,7 +63,11 @@ puts copy
 
 paths = if ARGV.empty?
           options[:interactive_eof] = true
-          [ IRT::Utils.create_tmp_file ]
+          tmp_path = IRT::Utils.create_tmp_file do |as_file, tmp_path|
+                       ENV['IRT_COMMAND'] = ENV['IRT_COMMAND'].sub(/#{Regexp.quote(tmp_path)}/, as_file)
+                       exec ENV['IRT_COMMAND']
+                     end
+          [ tmp_path ]
         else
           ARGV.map {|p| File.expand_path(p) }
         end
