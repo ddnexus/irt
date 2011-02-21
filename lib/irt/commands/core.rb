@@ -40,7 +40,7 @@ module IRT
         puts
         exec ENV["IRT_COMMAND"]
       end
-      alias_method :r!, :restart
+      alias_method :rs, :restart
 
       def rerun
         ensure_session
