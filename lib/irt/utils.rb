@@ -26,7 +26,8 @@ module IRT
       tmp_file = Tempfile.new(['', '.irt'])
       tmp_file << "\n" # one empty line makes irb of 1.9.2 happy
       tmp_file.flush
-      tmp_path = tmp_file.path
+      # ENV used because with IRT.cli? 2 different processes need to access the same path
+      ENV['IRT_TMP_PATH'] = tmp_path = tmp_file.path
       at_exit { check_save_tmp_file(tmp_file, &block) }
       tmp_path
     end
@@ -40,6 +41,8 @@ module IRT
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
       FileUtils.cp source_path, as_file
       if block && IRT::Prompter.yes?( %(Do you want to run the file "#{as_file_local}" now?) )
+        # reset the tmpfile content so the at_exit proc will not be triggered
+        File.open(source_path, 'w'){|f| f.puts "\n"} if IRT.irt_file == Pathname.new(ENV['IRT_TMP_PATH']).realpath
         block.call as_file, source_path
       end
     end
