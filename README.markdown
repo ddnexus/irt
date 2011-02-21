@@ -12,8 +12,9 @@ that will make your life a lot easier.
 
 - clean colored output for easy reading
 - 3 types of sessions: interactive, inspecting and binding
-- irb opening from your code (or erb templates) as binding session
-- optional colored rails log in the console
+- irb/irt opening from your code (or erb templates) as a binding session
+- irb/irt opening from inside the Rails Server window
+- optional colored Rails log in the console
 - contextual ri doc with completion
 - recording of session steps with filtering
 - easy testing based on recorded steps
@@ -224,6 +225,18 @@ the variables loaded, so you can immediately and interactively try and fix what 
 If you want to edit the running file, just type 'nano' or  'vi' without any argument and you will open
 the file at the current line. Edit, save and exit from the editor, and you will continue your session
 from the point you left. You can also 'rerun' the same file (or 'rr') when you need to reload the whole code.
+
+### Rerun vs restart
+
+When you make any change in an irt file being evaluated you should perform a 'rerun' (or 'rr')
+in order to see the effect of your change.
+The 'rerun' command will exit from all the opened sessions, call the at_exit procs and rerun the same file
+without reloading any library or required file. That is the fastest behaviour when your changes are limited to any irt file.
+
+If you change some library in any required file and you wants to rerun the same file against the changes,
+you need to 'restart' (or 'rs') the whole process, so all the required files will be re-evaluated
+and your irt file will be rerun in the new context. That is notably slower in complex application, but guarantees
+a fresh loaded environment.
 
 ## Editing Tools
 
@@ -590,6 +603,10 @@ irt_helper.rb #1, #2 and #3. If you are running the testA.irt and testB.irt, IRT
 require the irt_helper.rb #1, #2. But if you run the same from the first_level dir, the irt_helper.rb #1
 will not be loaded, so be careful to be in the right dir to make it work properly.
 
+Notice: the irt helpers files are 'require'd (not 'load'ed). For that reason they are
+suitable for adding constants, methods, require(s) that will be loaded only once.
+If you change any irt helper you should 'restart (or 'rs') once before your changes get reloaded.
+
 ## Rails
 
 You can use irt instead of the standard Rails console, by just calling the irt executable from
@@ -608,11 +625,18 @@ By default IRT will output the rails log (colored in blue) right in the console.
 You can switch the rails log ON or OFF by using the 'rails\_log\_on' (or 'rlo') and 'rails\_log\_off' (or 'rlf')
 commands in any session, besides you can set the option IRT.rails_log to true or false in the ~/.irtrc file.
 
+## Rerun, restart, reload!-rerun
+
+The 'rerun' (or 'rr') irt command in rails will also perform a 'reload!' first, so if you are in development mode
+your changes will be reloaded, so the command should do what you need: if it doesn't you
+should use the regular 'restart' (or 'rs') as the last resort. The 'restart' causes the Rails environment
+to be fully reloaded, so it is slower, but guaranteed.
+
 ### Rails Server Sessions
 
 The server sessions are a quick way to interact with your application while your server is running,
 without the need to launch a the irt executable: you can do almost everything you can from a regular IRT session
-launched from the irt executable.
+launched from the irt executable, besides you have access to the server internals.
 
 If you want to open a session from your Rails code or from a template while the server is running,
 you don't have to use the IRT executable: you can just add an 'irt binding' statement where you want

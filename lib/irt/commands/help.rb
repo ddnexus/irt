@@ -5,7 +5,7 @@ module IRT
       def irt_help
         ensure_session
         puts %(
-#{label " NOTICE ", :log_color}
+#{label " Irt Help ", :log_color}
 - The #{IRT.dye "Commands", :interactive_color, :bold} are methods generally available in any IRT session
 - The #{IRT.dye "Directives", :file_color, :bold} are methods available in any file but not in IRT sessions
 - The #{IRT.dye "Extensions", :log_color, :bold} are methods available anywhere
@@ -13,8 +13,8 @@ module IRT
 #{label " Inspecting Commands ", :interactive_color}
     irt object              Opens an inspecting session into object
     vdiff|vd obj_a, obj_b   Prints the visual diff of the yaml dump of 2 objects
-    cat args                Similar to system cat
-    ls args                 Similar to system ls
+    p, pp, ap, y            When invoked with no arguments print the last_value
+                            (e.g. just type 'y' instead 'y _')
 
 #{label " Log Commands ", :interactive_color}
     log|l [limit]           Prints limit or 'tail_size' lines of the virtual log
@@ -50,15 +50,11 @@ module IRT
                             by automatically choosing the :_eql?, or :_yaml_eql?
                             method, depending on the type of the last value (_)
     add_test|tt desc        Like add_test but adds a 'desc' directive first'
-    save_as|sa path         Saves the current irt file as path and runs it
+    save_as|sa path         Saves the current irt file as path
 
 #{label " FileUtils Commands ", :interactive_color}
     All the FileUtils methods are availabe as IRT Commands
     (e.g. pwd, touch, mkdir, mv, cp, rm, rm_rf, compare_files, ...)
-
-#{label " Enhanced Commands ", :interactive_color}
-    p, pp, ap, y            When invoked with no arguments print the last_value
-                            (e.g. just type 'y' instead 'y _')
 
 #{label " Documentation Commands ", :interactive_color}
     ri to_search            Search the ri doc for to_search (no quotes needed)
@@ -82,7 +78,7 @@ module IRT
     run file                Run an irt file (exiting from the current sessions)
     rerun|rr                Reruns the current irt file (exiting from the
                             current sessions)
-    restart|r!              Restart the executable, reload IRT (and Rails) and
+    restart|rs              Restart the executable, reload IRT (and Rails) and
                             rerun the current file
     irt_help|hh             Shows this screen
     sh command              Alias for system("command") (no quotes needed)
