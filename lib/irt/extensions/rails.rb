@@ -87,6 +87,20 @@ private
 
   end
 
+
+  module Commands
+    module Core
+
+      alias_method :original_rerun, :rerun
+      def rerun
+        reload!
+        original_rerun
+      end
+
+    end
+  end
+
+
   module Commands
     module Rails
 
