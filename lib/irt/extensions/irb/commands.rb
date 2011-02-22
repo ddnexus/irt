@@ -25,6 +25,7 @@ module IRB
     def abort
       ensure_cli
       IRT::Session.exit_all = true
+      IRT::History.save_history
       original_abort
     end
     alias_method :xx, :abort
