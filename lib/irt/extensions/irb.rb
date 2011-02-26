@@ -41,7 +41,7 @@ module IRB #:nodoc:
 
   module HistorySavingAbility
     def HistorySavingAbility.extended(obj)
-    # save_history has to be called just one time at exit
+    # save_history has to be called just once at exit
     # IRB.conf[:AT_EXIT].push proc{obj.save_history}
       obj.load_history
       obj

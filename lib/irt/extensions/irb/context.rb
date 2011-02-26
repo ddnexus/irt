@@ -101,7 +101,7 @@ private
 
     def process_exception(e)
       bktr = e.backtrace.reject do |m|
-               workspace.filter_backtrace(m).nil? || !IRT.debug && File.expand_path(m).match(/^#{IRT.lib_path}/)
+               workspace.filter_backtrace(m).nil? || !IRT.debug && File.expand_path(m).match(/^#{Regexp.quote(IRT.lib_path)}/)
              end
       e.set_backtrace map_backtrace(bktr)
     end

@@ -50,10 +50,6 @@ module IRT
                 :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :initialized
 
-  def cli?
-    !!ENV['IRT_COMMAND']
-  end
-
   def force_color=(bool)
     Dye.color = bool
   end
@@ -138,6 +134,16 @@ module IRT
   def yaml_dump(val)
     yml = "\n" + YAML.dump(val)
     yml.gsub(/ +\n/, "\n")
+  end
+
+  # this will create a tmp file and start IRB
+  # but it will be left in file mode at EOF (sort of irt-standby)
+  def start
+    return if initialized
+    puts IRT::Utils.copyright
+    ARGV.clear
+    ARGV.push IRT::Utils.create_tmp_file
+    IRB.start
   end
 
 end

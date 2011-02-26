@@ -24,7 +24,7 @@ module Kernel
   def irt(bind)
     raise IRT::ArgumentTypeError, "You must pass binding instead of #{bind.class.name} object" unless bind.is_a?(Binding)
     IRT.send(:rails_server_notice_wrap) do
-      IRT::Utils.load_irt
+      IRT.start
       IRT::Session.enter :binding, bind
     end
   end
@@ -38,7 +38,7 @@ module Rack
     def server
       # override the SIGINT trap in the Rack::Server.start method allowing multiple choices
       # since #server is also called after the Rack::Server.start trap
-      IRT::Utils.load_irt(false)
+      IRT.start
       IRT.rails_server_sigint_trap = trap('SIGINT') { IRT.rails_signal_handle }
       IRT.rails_server = original_server
     end
@@ -85,6 +85,17 @@ private
       end
     end
 
+  end
+
+
+  module Utils
+    alias_method :original_ask_run_new_file, :ask_run_new_file
+    # skips asking to run the save file if it is a tmp file in a server session
+    # because the server is exiting so no rerun is possible
+    def ask_run_new_file(new_file_path, source_path, tmp)
+      return if tmp && IRT.rails_server
+      original_ask_run_new_file(new_file_path, source_path, tmp)
+    end
   end
 
 

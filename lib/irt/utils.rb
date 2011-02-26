@@ -2,49 +2,37 @@ require 'irt/prompter'
 
 module IRT
 
+  extend self
+
+  def cli?
+    !!ENV['IRT_COMMAND']
+  end
+
+
   module Utils
 
     extend self
 
-    # this will create a tmp file and start IRB
-    # but it will be left in file mode at EOF (sort of irt-standby)
-    def load_irt(run=true)
-      return if IRT.initialized
-      puts IRT::Utils.copyright
-      ARGV.clear
-      tmp_path = if run
-                   create_tmp_file {|as_file| IRT::Session.run_file as_file}
-                 else
-                   create_tmp_file
-                 end
-      ARGV.push tmp_path
-      IRB.start
-    end
-
-    def create_tmp_file(&block)
+    def create_tmp_file()
       require 'tempfile'
       tmp_file = Tempfile.new(['', '.irt'])
       tmp_file << "\n" # one empty line makes irb of 1.9.2 happy
       tmp_file.flush
       # ENV used because with IRT.cli? 2 different processes need to access the same path
-      ENV['IRT_TMP_PATH'] = tmp_path = tmp_file.path
-      at_exit { check_save_tmp_file(tmp_file, &block) }
-      tmp_path
+      ENV['IRT_TMP_PATH'] = tmp_file.path
+      at_exit { check_save_tmp_file(tmp_file) }
+      ENV['IRT_TMP_PATH']
     end
 
-    def save_as(as_file_local, source_path=IRT.irt_file, &block)
-      as_file = File.expand_path(as_file_local)
-      if File.exists?(as_file)
-        return false if IRT::Prompter.no? %(Do you want to overwrite "#{as_file}"?), :hint => '[y|<enter=n]', :default => 'n'
+    def save_as(file_path, source_path=IRT.irt_file, tmp=false)
+      new_file_path = File.expand_path(file_path)
+      if File.exists?(new_file_path)
+        return false if IRT::Prompter.no? %(Do you want to overwrite "#{new_file_path}"?), :hint => '[y|<enter=n]', :default => 'n'
       end
-      dirname = File.dirname(as_file)
+      dirname = File.dirname(new_file_path)
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
-      FileUtils.cp source_path, as_file
-      if block && IRT::Prompter.yes?( %(Do you want to run the file "#{as_file_local}" now?) )
-        # reset the tmpfile content so the at_exit proc will not be triggered
-        File.open(source_path, 'w'){|f| f.puts "\n"} if IRT.irt_file == Pathname.new(ENV['IRT_TMP_PATH']).realpath
-        block.call as_file, source_path
-      end
+      FileUtils.cp source_path, new_file_path
+      ask_run_new_file new_file_path, source_path, tmp
     end
 
     def version
@@ -57,11 +45,28 @@ module IRT
 
   private
 
-    def check_save_tmp_file(tmp_file, &block)
+    def ask_run_new_file(new_file_path, source_path, tmp)
+      if IRT::Prompter.yes?( %(Do you want to run the file "#{File.basename(new_file_path)}" now?) )
+        # if we are saving a tmp_file from a save_as command (not from an at_exit block)
+        if ENV['IRT_TMP_PATH'] && IRT.respond_to?(:irt_file) && IRT.irt_file == Pathname.new(ENV['IRT_TMP_PATH']).realpath
+          ENV.delete('IRT_TMP_PATH')
+          # reset tmp file content so check_save_tmp_file will be skipped
+          File.open(source_path, 'w'){|f| f.puts "\n"}
+        end
+        if tmp && IRT.cli?
+          ENV['IRT_COMMAND'] = ENV['IRT_COMMAND'].sub(/#{Regexp.quote(source_path)}/, new_file_path)
+          exec ENV['IRT_COMMAND']
+        else
+          IRT::Session.run_file new_file_path
+        end
+      end
+    end
+
+    def check_save_tmp_file(tmp_file)
       if tmp_file.size > 1
         IRT::Prompter.yes? %(The template file has been modified, do you want to save it?) do
-          IRT::Prompter.choose %(Enter the file path to save:), /[\w0-9_]/ do |as_file|
-            save_as(as_file, tmp_file.path, &block)
+          IRT::Prompter.choose %(Enter the file path to save:), /[\w0-9_]/ do |file_path|
+            save_as(file_path, tmp_file.path, tmp=true)
           end
         end
       end

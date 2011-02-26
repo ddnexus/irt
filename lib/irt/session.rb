@@ -84,13 +84,12 @@ module IRT
     def set_binding_file_pointers(context)
       caller.each do |c|
         file, line = c.sub(/:in .*$/,'').split(':', 2)
-        next if File.expand_path(file).match(/^#{IRT.lib_path}/) # exclude irt internal callers
+        next if File.expand_path(file).match(/^#{Regexp.quote(IRT.lib_path)}/) # exclude irt internal callers
         context.binding_file = file
         context.binding_line_no = line
         break
       end
     end
-
 
   end
 end
