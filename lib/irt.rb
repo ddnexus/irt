@@ -1,3 +1,6 @@
+# allows standard rails 3 console to run without loading irt
+unless defined?(Rails::Console) && !ENV['IRT_COMMAND']
+
 at_exit{ Dye.print_reset_colors }
 
 require 'rubygems'
@@ -151,3 +154,5 @@ end
 IRT.init_config
 require 'irt/prompter'
 require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
+
+end
