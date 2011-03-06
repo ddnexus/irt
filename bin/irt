@@ -7,7 +7,7 @@ require 'fileutils'
 require 'optparse'
 require 'irt/utils'
 
-copy = IRT::Utils.copyright
+copy = IRT.copyright
 
 options = {}
 
@@ -45,7 +45,7 @@ EOB
    end
 
   opts.on( '-v', '--version', 'Shows the version and exits' ) do
-    puts IRT::Utils.version
+    puts IRT.version
     exit
   end
 
@@ -63,7 +63,7 @@ puts copy
 
 paths = if ARGV.empty?
           options[:interactive_eof] = true
-          [ IRT::Utils.create_tmp_file ]
+          [ IRT.create_tmp_file ]
         else
           ARGV.map {|p| File.expand_path(p) }
         end

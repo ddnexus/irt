@@ -25,8 +25,6 @@ require 'irt/utils'
 
 module IRT
 
-  VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
-
   OS = case RbConfig::CONFIG['host_os']
        when /mswin|msys|mingw32|windows/i
          :windows
@@ -128,24 +126,13 @@ module IRT
     @log.print_running_file
   end
 
-  def lib_path
-    File.expand_path '../../lib', __FILE__
-  end
-
-  # this fixes a little imperfection of the YAML::dump method
-  # which adds a space at the end of the class
-  def yaml_dump(val)
-    yml = "\n" + YAML.dump(val)
-    yml.gsub(/ +\n/, "\n")
-  end
-
   # this will create a tmp file and start IRB
   # but it will be left in file mode at EOF (sort of irt-standby)
   def start
     return if initialized
-    puts IRT::Utils.copyright
+    puts copyright
     ARGV.clear
-    ARGV.push IRT::Utils.create_tmp_file
+    ARGV.push create_tmp_file
     IRB.start
   end
 

@@ -2,16 +2,22 @@ require 'irt/prompter'
 
 module IRT
 
-  extend self
-
   def cli?
     !!ENV['IRT_COMMAND']
   end
 
+  def lib_path
+    File.expand_path '../../../lib', __FILE__
+  end
+
+  # this fixes a little imperfection of the YAML::dump method
+  # which adds a space at the end of the class
+  def yaml_dump(val)
+    yml = "\n" + YAML.dump(val)
+    yml.gsub(/ +\n/, "\n")
+  end
 
   module Utils
-
-    extend self
 
     def create_tmp_file()
       require 'tempfile'
@@ -73,4 +79,8 @@ module IRT
     end
 
   end
+
+  extend self
+  extend Utils
+
 end
