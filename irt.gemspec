@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors = ["Domizio Demichelis"]
   s.email = 'dd.nexus@gmail.com'
   s.homepage = 'http://github.com/ddnexus/irt'
-  s.summary = 'Interactive Ruby Tools - Improved irb and rails console with a lot of easy and powerful tools.'
-  s.description = 'If you use IRT in place of irb or rails console, you will have more tools that will make your life a lot easier.'
+  s.summary = 'Interactive Ruby Tools - Very improved irb and Rails Console with a lot of cool features.'
+  s.description = 'If you use IRT in place of irb or Rails Console, you will have more tools that will make your life a lot easier.'
 
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('dye', [">= 0.1.3"])
@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
   s.rdoc_options = ["--charset=UTF-8"]
+  s.extra_rdoc_files = ["README.markdown"]
   s.require_paths = ["lib"]
 
 end
