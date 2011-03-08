@@ -484,6 +484,18 @@ You can use the 'sh' as an alias of 'system' with the difference that you don't 
     >> sh git rebase -i HEAD~5
     >> sh cat #{file_path}
 
+### Pager
+
+When you have any long string to inspect, or some code printing a lot of text to stdout
+you can use the 'pager' (or 'pg') command, and the output will be managed by the pager
+('less' by default, but you can change it with the pager\_format\_command option).
+
+    # with a string
+    pg some_long_string
+
+    # with a block of code printing to stdout
+    pg { irt_help }
+
 ### FileUtils
 
 All the FileUtils methods are included as commands: just call them in the session

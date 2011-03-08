@@ -80,6 +80,8 @@ module IRT
                             rerun the current file
     irt_help|hh             Shows this screen
     sh command              Alias for system("command") (no quotes needed)
+    pager|pg string|block   Uses the pager to show a long string or executes
+                            block and shows its captured stdout
 
 #{label " Session Directives ", :file_color}
     irt                     Opens an interactive session which retains the
