@@ -672,11 +672,22 @@ You must add the gem to your Gemfile, to make the bundler happy:
 eventually adding it only to the group that you prefer. Anyway, if the irt executable detects that you don't have it set,
 it will ask and eventually add it for you.
 
-## Known Issue
+## Known Issues
+
+### Yaml serialization
 
 IRT uses yaml serialization, and inherits its limits (e.g.: Yaml cannot dump anonymous classes, MatchData, object that contains binding, etc.)
 so if you stumble upon on one of them, you have just to test the subparts of the object that you cannot dump. For example, instead of testing one whole anonymous
 class, (which is however a bad idea) you can add tests for the values returned by its methods or variables.
+
+### Irb jobs
+
+IRT disables the traditionals irb jobs. You can still open any session like you do with the standard irb,
+but the new session is not created as a new thread, therefore the 'jobs' related commands are useless.
+In practice the only real limitation is that you have to exit from an inspecting or binding session
+in order to switch back to an interactive session, while threaded sessions would allow you to switch and kill the thread
+indipendently. This will probably be addressed in a next version of irt.
+Please, send me a line if this issue is bugging you, so I will try to fix it faster.
 
 ## Copyright
 
