@@ -23,13 +23,16 @@ module IRT
         else
           segm = arg.split('.')
           to_search = segm.pop
-          unless segm.empty?
-            begin
-              meth = eval "#{segm.join('.')}.method(:#{to_search})", IRB.CurrentContext.workspace.binding
-              to_search = "#{meth.owner.name}##{meth.name}"
-            rescue
-              raise NoMethodError, %(undefined method "#{to_search}" for "#{segm.join('.')}")
-            end
+          receiver = eval segm.join('.'), IRB.CurrentContext.workspace.binding
+          raise NoMethodError, %(undefined method "#{to_search}" for "#{segm.join('.')}") \
+            unless receiver.respond_to? to_search.to_sym
+
+          meth = receiver.method(to_search.to_sym).inspect
+          meth = meth.match(/^\#<Method: (.+)>$/)[1]
+          if m = meth.match(/\((.+)\)(.+)/)
+            to_search = m[1] + m[2]
+          else
+            to_search = meth
           end
         end
         process_ri to_search
