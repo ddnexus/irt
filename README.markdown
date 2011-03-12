@@ -276,7 +276,7 @@ the stdin to the clipboard.
 
 I have never been a big fan of CLI editors like vi or nano, but I really appreciate them
 when combined with IRT. Having the file I need to edit, opened at the right line at the touch of a 2 letter
-command ('nn' or 'vi') is really fast and powerful.
+command ('nn', 'vi' or 'em') is really fast and powerful.
 
 You have just to know a few very basic commands
 like paste, save, quit, and eventually a couple of other, and you will save a lot of time and steps.
@@ -310,6 +310,17 @@ For those (like me) that are not used to CLI editors here's a quick reference fo
                     type 'dd' (or 'cc' that will return to insert mode)
     paste (line)    [Esc (return to command mode)]
                     type 'p'
+
+    EMACS
+    paste from clipboard with your usual OS command
+    quit            Ctrl-X Ctrl-C
+                    type 'y'<enter> confirming that you want also to save
+                    type 'n' confirming that you don't want to save
+    Editing
+    copy (line)     Ctrl-A Ctrl-SPACE Ctrl-N Alt-w
+    cut (line)      Ctrl-K
+    uncut (paste)   Ctrl-Y
+
 
 ## Inspecting Tools
 
