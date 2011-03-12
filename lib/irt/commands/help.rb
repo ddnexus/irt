@@ -24,7 +24,7 @@ module IRT
     print_all_lines|pll     Like print_line but prints all the sessions lines
 
 #{label " In Place Editing Commands ", :interactive_color}
-    (<editor> can be 'vi', 'nano|nn', 'edit|ed')
+    (<editor> can be 'vi', 'nano|nn', 'emacs|em', 'edit|ed')
     <editor>                Uses <editor> to open the current evalued file at
                             the current evalued line for in place edit
     <editor> file[, line]   Uses <editor> to open file [at line] for in place

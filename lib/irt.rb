@@ -48,7 +48,7 @@ module IRT
   attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
                 :rails_log, :dye_rails_log, :rails_server, :rails_server_sigint_trap,
                 :full_exit, :session_no, :autoload_helper_files, :dye_styles,
-                :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :edit_command_format, :ri_command_format
+                :copy_to_clipboard_command, :nano_command_format, :vi_command_format, :emacs_command_format, :edit_command_format, :ri_command_format
   attr_reader :log, :irt_file, :initialized
 
   def force_color=(bool)
@@ -96,6 +96,7 @@ module IRT
     end
     @vi_command_format = %(vi "%1$s" +%2$d)
     @nano_command_format = %(nano +%2$d "%1$s")
+    @emacs_command_format = %(nano +%2$d "%1$s")
     @ri_command_format =  IRT::RubyVersion >= '1.9.2' ? %(bri "%s") : %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
     @debug = false
   end

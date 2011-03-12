@@ -14,7 +14,7 @@ module IRT
       end
       alias_method :cll, :copy_all_lines
 
-      [:vi, :nano, :edit].each do |n|
+      [:vi, :nano, :emacs, :edit].each do |n|
 
         define_method(n) do |*args|
           ensure_session
@@ -30,8 +30,10 @@ module IRT
       end
       alias_method :nn, :nano
       alias_method :ed, :edit
+      alias_method :em, :emacs
       alias_method :cnn, :cnano
       alias_method :ced, :cedit
+      alias_method :cem, :cemacs
 
     private
 

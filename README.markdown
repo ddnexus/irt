@@ -148,7 +148,7 @@ It works also from the rails code, while the server is running. (See Rails)
 The 'self' of the new session will be the 'self' at the line you called it, so you can play with local variables
 and methods as you would do it at that line.
 
-If you use 'nano' or 'vi' in a binding session you will open the file that contains the 'irt binding'
+If you use 'nano', 'emacs' or 'vi' in a binding session you will open the file that contains the 'irt binding'
 call at that line: very handy to edit your code in place.
 
 When you close the session with 'exit' (or 'x' or 'q'), IRT will not pass back anything from the binding session.
@@ -191,7 +191,7 @@ or if your system supports it you can use 'copy_lines' (or 'cl') and have them r
 You can also do the same with all the session lines using 'print_all_lines' (or 'pll')
 or copy them all 'copy_all_lines' (or 'cll').
 
-That 'pl'-copy or 'cl' plus the 'vi' or 'nano' irt command (or the 'cnn' and 'cvi' commands)
+That 'pl'-copy or 'cl' plus the 'vi', 'nano' or 'emacs' irt command (or the 'cnn' and 'cvi' commands)
 are a very time saver combination. See the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial") for details.
 
 ## Testing
@@ -222,7 +222,7 @@ IRT.tail_on_irt = true for automatic tail) so you have an instant feedback about
 failure comes from. It also opens an interactive session at that point with all
 the variables loaded, so you can immediately and interactively try and fix what went wrong.
 
-If you want to edit the running file, just type 'nano' or  'vi' without any argument and you will open
+If you want to edit the running file, just type 'nano, 'emacs' or 'vi' without any argument and you will open
 the file at the current line. Edit, save and exit from the editor, and you will continue your session
 from the point you left. You can also 'rerun' the same file (or 'rr') when you need to reload the whole code.
 
@@ -242,7 +242,7 @@ a fresh loaded environment.
 
 ### In Place Editing
 
-You can open the current executed file at the current line by just typing 'nano' or 'vi'
+You can open the current executed file at the current line by just typing 'nano, 'emacs' or 'vi'
 and the editor with that name will be opened (in insert mode). Paste and/or edit and save what
 you want and 'rerun' (or 'rr') the file to try/test the changes.
 
@@ -256,13 +256,13 @@ or nano. See "Goodies" below.
 ### Copy-Open
 
 You can combine the copy to clipboard feature, with the in place edit feature by using one of the
-commands 'cnano', 'cvi' or 'cedit', so saving a lot of boring steps. It use the copy_to_clipboard
+commands 'cnano', 'cemacs' 'cvi' or 'cedit', so saving a lot of boring steps. It use the copy_to_clipboard
 command from your system. see below.
 
 ### Copy to Clipboard Command
 
 IRT provides a few commands that will use an external command of your system to copy the
-last lines to the clipboard: 'copy_lines' (or 'cl'), 'cnano', 'cvi', 'cedit' use that command
+last lines to the clipboard: 'copy_lines' (or 'cl'), 'cnano', 'cemacs', 'cvi', 'cedit' use that command
 avoiding you the boring task to select the output from the terminal and copy it.
 
 It uses 'pbcopy' on MacOS (which should be already installed on any mac),
@@ -362,7 +362,7 @@ are also enhanced a bit: when invoked with no arguments, they use the last value
 When an error occurs, IRT shows you an indexed exception backtrace: each file:line in the backtrace
 has an index number (in brackets) that you can use to open that file at that line with your preferred in-place editor.
 
-You have just to type '&lt;editor&gt; &lt;index&gt;' (&lt;editor&gt; is one of 'vi', 'nano' (or 'nn') 'edit' (or 'ed'),
+You have just to type '&lt;editor&gt; &lt;index&gt;' (&lt;editor&gt; is one of 'vi', 'nano' (or 'nn'), 'emacs' (or 'em'), 'edit' (or 'ed'),
 and &lt;index&gt; is the index number shown in the backtrace), and you will open it in insert mode. Example:
 
     # backtraced line: from /Users/dd/dev/hobo3/hobo/lib/hobo/controller/model.rb:57:in `each' [3]
@@ -529,6 +529,9 @@ which should work quite well without any change:
 
     # the format to build the command to launch vi
     # IRT.vi_command_format = %(vi "%1$s" +%2$d)
+
+    # the format to build the command to lauch emacs
+    # IRT.emacs_command_format = %(emacs +%2$d "%1$s")
 
     # the format to build the command to launch the ri tool
     # if RUBY_VERSION < 1.9.2 uses qri (from fastri) else bri
