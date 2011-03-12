@@ -92,7 +92,7 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                    IRT::Prompter.say_warning %(The Gemfile doesn't look to include any 'gem "irt"' statement.\nIRT will probably not work until you add it!)
                    IRT::Prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[enter=y|n]', :default => 'y') do
                      File.open('Gemfile', 'a') do |f|
-                       f.puts %(gem "irt")
+                       f.puts %(\ngem "irt")
                      end
                    end
                  end
