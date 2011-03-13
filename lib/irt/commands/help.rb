@@ -38,11 +38,9 @@ module IRT
                             the backtraced line
 
 #{label( " Copy-Edit Commands ", :interactive_color ) + IRT.dye(" (use copy_to_clipboard_command)", :interactive_color, :bold)}
-    copy_lines|cl           Copy the last session lines
-    copy_all_lines|cll      Copy the lines of all the sessions
-    cnano|cnn               Like nano, but copy the last session lines first
-    cvi                     Like vi, but copy the last session lines first
-    cedit|ced               Like edit, but copy the last session lines first
+    copy_lines|cl           Copies the last session lines to the clipboard
+    copy_all_lines|cll      Copies all the sessions' lines to the clipboard
+    c<editor>               Like `copy_lines` and <editor> in just one step
 
 #{label(" Test Commands ", :interactive_color) + IRT.dye(" (only available in interactive sessions)", :interactive_color, :bold)}
     add_desc|dd desc        Adds a description for the test in the log
