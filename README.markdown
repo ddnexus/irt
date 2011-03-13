@@ -322,6 +322,30 @@ For those (like me) that are not used to CLI editors here's a quick reference fo
     uncut (paste)   Ctrl-Y
 
 
+### Note about IDEs
+
+If you prefer to inspect/edit your files with your preferred IDE, you should add a line to
+the ~/.irtrc file (create it if you don't have one) indicating the command format for your IDE,
+in order to open a file at a certain line.
+
+These are exaples of a few setups for different IDEs:
+
+    # Plain Eclipse on Mac X (opens the file but misses the line number)
+    IRT.edit_command_format = %(open -a "/Applications/eclipse/Eclipse.app" %1$s)
+
+    # Eclipse with installed EclipseCall plugin (platform independent, file and line number ok)
+    # Eclipse should be running
+    # http://www.jaylib.org/pmwiki/pmwiki.php/EclipsePlugins/EclipseCall
+    # update site: http://www.jaylib.org/eclipsecall
+    IRT.edit_command_format = %(java -jar eclipsecall.jar %1$s -G%2$s)
+
+    # NetBeans
+    IRT.edit_command_format = %(netbeans --open %1$s:%2$s)
+
+You will use the 'edit' (or 'ed') command to inspect/edit your file with the IDE you setup.
+If you create a format for any IDE not listed in the example, please, send it to me, so I will
+add it to the list for other users. Thank you.
+
 ## Inspecting Tools
 
 ### Call irt from your code
