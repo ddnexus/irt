@@ -96,7 +96,7 @@ module IRT
     end
     @vi_command_format = %(vi "%1$s" +%2$d)
     @nano_command_format = %(nano +%2$d "%1$s")
-    @emacs_command_format = %(nano +%2$d "%1$s")
+    @emacs_command_format = %(emacs +%2$d "%1$s")
     @ri_command_format =  IRT::RubyVersion >= '1.9.2' ? %(bri "%s") : %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
     @debug = false
   end
