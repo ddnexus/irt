@@ -14,15 +14,21 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('dye', [">= 0.1.3"])
   s.add_runtime_dependency('prompter', [">= 0.1.4"])
-  if IRT::RubyVersion >= '1.9.2'
-    s.add_runtime_dependency('bri', [">= 0.1.5"])
-  else
-    s.add_runtime_dependency('fastri', [">= 0.3.1.1"])
-  end
+  s.requirements << "In order to use the IRT contextual ri command you must install the gem 'bri' (ruby >=1.9.2) or 'fastri' (ruby < 1.9.2)"
 
   s.executables = ['irt', 'irt_irb', 'irt_rails2']
   s.files = `git ls-files -z`.split("\0") - %w[irt-tutorial.pdf]
+  s.post_install_message = <<EOM
 
+********************************************************************************
+
+  In order to use the IRT contextual ri command you must also install the gem:
+  "bri"    if you run ruby >= 1.9.2
+  "fastri" if you run ruby  < 1.9.2
+
+********************************************************************************
+
+EOM
   s.name = name
   s.version = version
   s.date = Date.today.to_s

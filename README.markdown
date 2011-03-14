@@ -19,8 +19,8 @@ that will make your life a lot easier.
 - recording of session steps with filtering
 - easy testing based on recorded steps
 - easy in place opening of backtraced files
-- in place editing with syntax highlight
-- visual comparing tool and navigation aids
+- in place editing of objects and files with syntax highlight
+- visual comparing tool, navigation and inspecting aids
 - system and session shortcuts... and much more
 
 ### Testing made easy
@@ -425,8 +425,9 @@ the wanted line. Example:
 
 ### Contextual ri doc with autocompletion
 
-IRT offers the 'ri' command, (implemented with fastri for RUBY_VERSION < 1.9.2, or 'bri' for RUBY_VERSION >= 1.9.2)
-See also the IRT.ri_command_format option if you want to change it.
+IRT offers the 'ri' command implemented with fastri for RUBY_VERSION < 1.9.2, or 'bri' for RUBY_VERSION >= 1.9.2:
+you must install the right gem for your ruby version in order to make it work.
+See also the IRT.ri_command_format option if you want to customize it.
 
 In its basic form the 'ri' command can accept a string as the system ri command does (you can even omit the quotes).
 
@@ -469,6 +470,12 @@ Example:
     ------------------------------------------------------------------------
          Returns true if array and other are the same object, or are both
          arrays with the same content.
+
+If you want to search a literal string (i.e. not interpreted) you must use single or double quotes
+and the string will be passed verbatim to the system ri command.
+
+If you have a long documentation coming from the ri search, or even if you want just to keep your screen clean,
+you can use the 'pri' (i.e. paged ri). It works exactly like 'ri', but uses the pager to show any result from the ri search.
 
 ### IRT Help
 

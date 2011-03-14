@@ -41,12 +41,16 @@ module IRB
         # skip setting last_value for non_setting_commands
         if line =~ /^\s*(#{quoted_option_string(IRT.log.non_setting_commands)})\b(.*)$/
           command, args = $1, $2
-          if command =~ /^(sh|ri)$/ && irt_mode != :file
+          if command =~ /^(sh|ri|pri)$/ && irt_mode != :file
             args = args.strip if args
-            args = "%(#{args})" unless args.empty? || args.match(/^('|").+\1$/)
-            line = "#{command} #{args}"
+            line = if args.match(/^('|").+\1$/)
+                     command == 'sh' ? "#{command} #{args}" : "#{command} #{args}, true"
+                   else
+                     args = "%(#{args})" unless args.empty?
+                     "#{command} #{args}"
+                   end
           end
-          IRT::Commands::Ri.reset_choices_map unless command == 'ri'
+          IRT::Commands::Ri.reset_choices_map unless command =~ /^(ri|pri)$/
           self.echo = false
           res = @workspace.evaluate(self, line, irb_path, line_no)
           if command =~ /^(#{IRT.log.ignored_echo_commands * '|'})$/

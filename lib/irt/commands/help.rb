@@ -55,13 +55,20 @@ module IRT
     (e.g. pwd, touch, mkdir, mv, cp, rm, rm_rf, compare_files, ...)
 
 #{label " Documentation Commands ", :interactive_color}
-    ri to_search            Search the ri doc for to_search (no quotes needed)
+    ri "string_to_search"   Search the ri doc for the literal string_to_search
+    ri to_search            Search the ri doc for to_search (without quote)
+                            If to_search represents any object in your code
+                            it looks for the obj.class documentation
+                            e.g.: ri arr #=> (where arr=[]) ri doc for Array
+                                  ri ""  #=> ri doc for String
     ri obj.any_method       Search the method.owner ri doc for of any_method
                             (no quotes needed, and completion available)
                             e.g.: ri "".eql?  #=> ri doc for String#eql?
                                   ri [].eql?  #=> ri doc for Array#eql?
     ri n                    Search the ri doc for the method n in a multiple
                             choices list
+    pri ...                 Like the above commands for `ri ...` but uses the
+                            pager to show the result
 
 #{label(" Rails Commands ", :interactive_color) + IRT.dye(" (only available for Rails Apps)", :interactive_color, :bold)}
     rails_log_on            Turn the rails log-in-console ON
