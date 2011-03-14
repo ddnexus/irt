@@ -9,11 +9,6 @@ require 'pp'
 require 'yaml'
 require 'rbconfig'
 require 'pathname'
-require 'irt/extensions/kernel'
-require 'irt/extensions/object'
-require 'irt/extensions/method'
-require 'irt/extensions/irb'
-require 'irb/completion'
 require 'dye'
 require 'irt/log'
 require 'irt/hunks'
@@ -38,6 +33,13 @@ module IRT
          :unknown
        end
 
+  EDITORS = { :vi    => nil,
+              :nano  => :nn,
+              :emacs => :em,
+              :edit  => :ed }
+
+  EDITORS.keys.each {|k| attr_accessor :"#{k}_command_format" }
+
   class IndexError < RuntimeError ; end
   class SessionModeError < RuntimeError ; end
   class ArgumentTypeError < RuntimeError ; end
@@ -48,8 +50,8 @@ module IRT
   attr_accessor :irt_on_diffs, :tail_on_irt, :fix_readline_prompt, :debug,
                 :rails_log, :dye_rails_log, :rails_server, :rails_server_sigint_trap,
                 :full_exit, :session_no, :autoload_helper_files, :dye_styles,
-                :copy_to_clipboard_command, :pager_command,
-                :nano_command_format, :vi_command_format, :emacs_command_format, :edit_command_format, :ri_command_format
+                :copy_to_clipboard_command, :pager_command, :ri_command_format
+
   attr_reader :log, :irt_file, :initialized
 
   def force_color=(bool)
@@ -141,7 +143,12 @@ module IRT
 
 end
 
+require 'irt/extensions/irb'
+require 'irb/completion'
 IRT.init_config
+require 'irt/extensions/kernel'
+require 'irt/extensions/object'
+require 'irt/extensions/method'
 require 'irt/prompter'
 require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
 

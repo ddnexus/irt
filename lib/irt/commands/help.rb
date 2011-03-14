@@ -104,6 +104,11 @@ module IRT
                             captured stdout
     Object#own_methods      Returns the methods implemented by the receiver
                             itself (not inherited)
+    Object#<editor>         (<editor> can be 'vi', 'nano|nn', 'emacs|em')
+                            Yaml-dump the object in a tmp.yml file and opens it
+                            with <editor>. After your editing and save returns
+                            the evaluated yaml file
+                            e.g.: {:a => 2}.vi  #=> {:an_edited => 'value'}
     Method#location         When possible, it returns file and line where the
                             method is defined. It is uitable to be passed to the
                             in place editing commands.

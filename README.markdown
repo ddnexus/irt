@@ -240,7 +240,7 @@ a fresh loaded environment.
 
 ## Editing Tools
 
-### In Place Editing
+### In Place Editing of Files
 
 You can open the current executed file at the current line by just typing 'nano, 'emacs' or 'vi'
 and the editor with that name will be opened (in insert mode). Paste and/or edit and save what
@@ -252,6 +252,14 @@ If you don't like the default editor, you have just to set the IRT.edit_command_
 
 You will also find the info about how to automatically have your files syntax highlighted when opened in vi
 or nano. See "Goodies" below.
+
+### In Place Editing of Object
+
+With just calling your preferred CLI editor on any object, you can edit the yaml-dumped object and have it
+returned in your console:
+
+    >> {:a => 2}.vi  # opens the yaml-dump with vi
+    #=> {:an_edited => 'value'}
 
 ### Copy-Open
 

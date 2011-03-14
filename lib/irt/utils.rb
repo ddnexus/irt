@@ -41,6 +41,12 @@ module IRT
       ask_run_new_file new_file_path, source_path, tmp
     end
 
+    def edit_with(editor, file, line=nil)
+      cmd_format = IRT.send("#{editor}_command_format".to_sym)
+      raise IRT::NotImplementedError, "#{cmd}_command_format missing" unless cmd_format
+      system sprintf(cmd_format, file, line||0)
+    end
+
     def version
       @version ||= File.read(File.expand_path('../../../VERSION', __FILE__)).strip
     end

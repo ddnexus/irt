@@ -14,32 +14,26 @@ module IRT
       end
       alias_method :cll, :copy_all_lines
 
-      [:vi, :nano, :emacs, :edit].each do |n|
+      IRT::EDITORS.each_pair do |name, short|
 
-        define_method(n) do |*args|
+        define_method(name) do |*args|
           ensure_session
-          run_editor(n, *args)
+          run_editor(name, *args)
         end
 
-        define_method(:"c#{n}") do |*args|
+        define_method(:"c#{name}") do |*args|
           ensure_session
           copy_lines
-          send n, *args
+          send name, *args
         end
 
+        alias_method short, name if short
+        alias_method :"c#{short}", :"c#{name}" if short
       end
-      alias_method :nn, :nano
-      alias_method :ed, :edit
-      alias_method :em, :emacs
-      alias_method :cnn, :cnano
-      alias_method :ced, :cedit
-      alias_method :cem, :cemacs
 
     private
 
       def run_editor(cmd, *args)
-        cmd_format = IRT.send("#{cmd}_command_format".to_sym)
-        raise IRT::NotImplementedError, "#{cmd}_command_format missing" unless cmd_format
         arg = args.first if args.size == 1
         file, line = case
                      when args.empty?
@@ -68,7 +62,7 @@ module IRT
                      else
                        args
                      end
-        system sprintf(cmd_format, file, line||0)
+        IRT.edit_with(cmd, file, line)
       end
 
       def copy_to_clipboard(cmd)
