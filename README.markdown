@@ -737,7 +737,29 @@ You must add the gem to your Gemfile, to make the bundler happy:
 eventually adding it only to the group that you prefer. Anyway, if the irt executable detects that you don't have it set,
 it will ask and eventually add it for you.
 
-## Known Issues
+## Known Issues (and fixes)
+
+### Readline history
+
+The ruby readline library may have a problem with the history when you use an ANSI colored prompt.
+If your prompt get messed up while you are navigating the history, you need to enable the 'fix\_readline\_prompt'
+configuration option (see the Configuration session). That option fixes the prompt when it get messed, but messed
+it if it is ok. If you switch different ruby versions, you might need to make it conditional. For example:
+
+    if IRT::RubyVersion <= '1.8.7'
+      IRT.fix_readline_prompt = true
+    end
+
+#### MacOS X and libedit
+
+If you are on MacOS X, your ruby might use libedit instead of readline. In that case you are not affected
+by the above readline bug, but you will be bothered by a few other problems, so you might want to link your ruby
+to readline. Depending on your installation, you have a few different choices to avoid to reinstall ruby.
+
+Useful links you can start with:
+
+* [RVM-readline](http://rvm.beginrescueend.com/packages/readline/)
+* [MacPort-readline](http://henrik.nyh.se/2008/03/irb-readline)
 
 ### Yaml serialization
 
