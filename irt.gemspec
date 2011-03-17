@@ -14,19 +14,31 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('differ', [">= 0.1.1"])
   s.add_runtime_dependency('dye', [">= 0.1.3"])
   s.add_runtime_dependency('prompter', [">= 0.1.4"])
-  s.requirements << "In order to use the IRT contextual ri command you must install the gem 'bri' (ruby >=1.9.2) or 'fastri' (ruby < 1.9.2)"
 
   s.executables = ['irt', 'irt_irb', 'irt_rails2']
   s.files = `git ls-files -z`.split("\0") - %w[irt-tutorial.pdf]
   s.post_install_message = <<EOM
+________________________________________________________________________________
 
-********************************************************************************
+                                IMPORTANT NOTES
+________________________________________________________________________________
 
-  In order to use the IRT contextual ri command you must also install the gem:
-  "bri"    if you run ruby >= 1.9.2
-  "fastri" if you run ruby  < 1.9.2
+  1. If you notice a messed prompt while navigating the history, you must
+     enable the 'fix_readline_prompt' option in the ~/.irtrc file:
 
-********************************************************************************
+        IRT.fix_readline_prompt = true
+
+     (see the README file for details)
+
+________________________________________________________________________________
+
+  2. In order to use the IRT contextual ri command, one of the following gems
+     must be installed:
+
+       "bri"    if you run ruby >= 1.9.2
+       "fastri" if you run ruby  < 1.9.2
+
+________________________________________________________________________________
 
 EOM
   s.name = name

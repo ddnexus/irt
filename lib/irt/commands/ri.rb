@@ -2,6 +2,7 @@ module IRT
   module Commands
     module Ri
 
+      GEM = IRT::RubyVersion >= '1.9.2' ? 'bri' : 'fastri'
       @@choices_map = {}
 
       def self.reset_choices_map
@@ -25,6 +26,9 @@ module IRT
             puts(output)
             return
           end
+
+        when arg =~ /^[A-Z]\w+\#[^.]+/
+          to_search = arg
 
         when arg !~ /\./
           begin
@@ -63,7 +67,13 @@ module IRT
     private
 
       def process_ri(to_search)
-        ri = `#{sprintf(IRT.ri_command_format, to_search)}`
+        ri = if defined?(Bundler)
+               Bundler.with_clean_env do
+                 `#{sprintf(IRT.ri_command_format, to_search)}`
+               end
+             else
+               `#{sprintf(IRT.ri_command_format, to_search)}`
+             end
         ri_problem unless $?.to_i == 0
         return if ri.match(/^(nil|No matching results found)$/)
         if m = ri.match(/^(-+.*Multiple choices:.*\n\n)(.+)/m)
@@ -82,10 +92,9 @@ module IRT
       end
 
       def ri_problem
-        ri_gem = IRT::RubyVersion >= '1.9.2' ? 'bri' : 'fastri'
-        message = system("#{required} -v") ?
-                    "Bad ri_command_format for this system." :
-                    %(You must install the "#{ri_gem}" gem to use this command with ruby #{RUBY_VERSION}.)
+        cmds = {'bri' => 'bri', 'fastri' => 'qri'}
+        message = `#{cmds[GEM]}` ? "Bad ri_command_format for this system." :
+                           %(You must install the "#{GEM}" gem to use this command with ruby #{RUBY_VERSION}.)
         raise IRT::NotImplementedError, message
       end
 

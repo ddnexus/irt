@@ -109,10 +109,8 @@ private
       end
 
     end
-  end
 
 
-  module Commands
     module Rails
 
       extend self # ignored_echo_commands
