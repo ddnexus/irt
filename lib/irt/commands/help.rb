@@ -43,11 +43,11 @@ module IRT
     c<editor>               Like `copy_lines` and <editor> in just one step
 
 #{label(" Test Commands ", :interactive_color) + IRT.dye(" (only available in interactive sessions)", :interactive_color, :bold)}
-    add_desc|dd desc        Adds a description for the test in the log
-    add_test|tt             Adds a test in the log, checking the last value (_)
+    add_desc|ad|dd desc     Adds a description for the test in the log
+    add_test|at|tt          Adds a test in the log, checking the last value (_)
                             by automatically choosing the :_eql?, or :_yaml_eql?
                             method, depending on the type of the last value (_)
-    add_test|tt desc        Like add_test but adds a 'desc' directive first'
+    add_test|at|tt desc     Like add_test but adds a 'desc' directive first'
     save_as|sa path         Saves the current irt file as path
 
 #{label " FileUtils Commands ", :interactive_color}

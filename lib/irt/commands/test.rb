@@ -14,6 +14,7 @@ module IRT
         puts
       end
       alias_method :dd, :add_desc
+      alias_method :ad, :add_desc
 
       def add_test(description='')
         mode = context.irt_mode
@@ -43,6 +44,7 @@ module IRT
         puts
       end
       alias_method :tt, :add_test
+      alias_method :at, :add_test
 
       def save_as(file_path)
         IRT.save_as(file_path)
