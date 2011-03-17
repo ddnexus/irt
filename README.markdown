@@ -423,6 +423,13 @@ the wanted line. Example:
 
 ## General Tools
 
+### Permanent last value (_)
+
+IRT tries to keep the relevant results from running code, separated from the results of the inspecting
+and documentation commands. In practice all the IRT commands, and the inspecting commands (like 'p', 'pp', 'y' and 'ap')
+don't set the last value, so you can mix them with your code and the '_' will remain set to your last relevant result.
+That is specially useful when you want to add a test with the 'add_test' (or 'tt') command.
+
 ### Contextual ri doc with autocompletion
 
 IRT offers the 'ri' command implemented with fastri for RUBY_VERSION < 1.9.2, or 'bri' for RUBY_VERSION >= 1.9.2:
@@ -741,10 +748,11 @@ it will ask and eventually add it for you.
 
 ### Readline history
 
-The ruby readline library may have a problem with the history when you use an ANSI colored prompt.
+The ruby readline library may have a problem with the history when you use an ANSI colored prompt
+(see this [readline bug](http://www.ruby-forum.com/topic/213807)).
 If your prompt get messed up while you are navigating the history, you need to enable the 'fix\_readline\_prompt'
 configuration option (see the Configuration session). That option fixes the prompt when it get messed, but messed
-it if it is ok. If you switch different ruby versions, you might need to make it conditional. For example:
+it if it doesn't, so if you switch among different ruby versions, you might need to make it conditional. For example:
 
     if IRT::RubyVersion <= '1.8.7'
       IRT.fix_readline_prompt = true
