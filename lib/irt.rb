@@ -136,8 +136,6 @@ module IRT
   def start
     return if initialized
     puts copyright
-    ARGV.clear
-    ARGV.push create_tmp_file
     IRB.start
   end
 

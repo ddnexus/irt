@@ -8,6 +8,7 @@ module IRB #:nodoc:
   class << self
     alias_method :original_init_config, :init_config
     alias_method :original_setup, :setup
+    alias_method :original_parse_opts, :parse_opts
   end
 
   def IRB.setup(ap_path=nil)
@@ -38,6 +39,13 @@ module IRB #:nodoc:
     @CONF[:RC_NAME_GENERATOR] = proc {|rc| File.expand_path '~/.irtrc' }
   end
 
+  def IRB.parse_opts
+    IRB.original_parse_opts
+    unless @CONF[:SCRIPT]
+      @CONF[:SCRIPT] = IRT.create_tmp_file
+      $0 = @CONF[:SCRIPT]
+    end
+  end
 
   module HistorySavingAbility
     def HistorySavingAbility.extended(obj)
