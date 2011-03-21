@@ -117,8 +117,8 @@ module IRT
                             the evaluated yaml file
                             e.g.: {:a => 2}.vi  #=> {:an_edited => 'value'}
     Method#location         When possible, it returns file and line where the
-                            method is defined. It is uitable to be passed to the
-                            in place editing commands.
+                            method is defined. It is suitable to be passed to
+                            the in place editing commands.
     Method#info             Returns useful info about the method. It is suitable
                             to be passed to the in place editing commands.
 )
