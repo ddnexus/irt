@@ -153,6 +153,12 @@ module IRT
 
 end
 
+# before we patch irb
+if defined?(Debugger)
+  require 'ruby-debug/command'
+  require 'ruby-debug/commands/irb'
+end
+
 require 'irt/extensions/irb'
 require 'irb/completion'
 IRT.init_config
@@ -165,5 +171,6 @@ if defined?(ActiveSupport::BufferedLogger)
   require 'irt/helpers/rails'
 end
 
+require 'irt/extensions/debugger' if defined?(Debugger)
 
 end

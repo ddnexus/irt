@@ -1,8 +1,10 @@
 module IRT
   module Commands
     module Core
+      extend self
 
       def irt(obj=nil)
+        context ||= IRB.CurrentContext
         irt_mode = context.irt_mode
         to_mode = case obj
                   when nil
