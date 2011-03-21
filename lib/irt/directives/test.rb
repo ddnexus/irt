@@ -46,10 +46,7 @@ module IRT
       down_path = IRT.irt_file.relative_path_from container_path
       down_path.dirname.descend do |p|
        helper_path = container_path.join(p, 'irt_helper.rb')
-       begin
-         require helper_path
-       rescue LoadError
-       end
+       require helper_path if File.exist?(helper_path)
       end
     end
 
