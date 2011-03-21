@@ -75,6 +75,11 @@ module IRT
       IRB.conf[:AT_EXIT].push(openfile)
       @@exit_all = true
       throw(:IRB_EXIT)
+    ensure
+      unless IRT.cli?
+        IRB.irb_at_exit
+        enter :interactive
+      end
     end
 
 

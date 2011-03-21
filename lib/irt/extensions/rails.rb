@@ -72,22 +72,6 @@ private
     IRT::Prompter.say_notice "Server resumed"
   end
 
-
-  module Session
-
-    alias_method :original_run_file, :run_file
-    def run_file(*args)
-      original_run_file *args
-    ensure
-      if IRT.rails_server
-        IRB.irb_at_exit
-        enter :interactive
-      end
-    end
-
-  end
-
-
   module Utils
     alias_method :original_ask_run_new_file, :ask_run_new_file
     # skips asking to run the save file if it is a tmp file in a server session
