@@ -338,6 +338,9 @@ in order to open a file at a certain line.
 
 These are exaples of a few setups for different IDEs:
 
+    # RubyMine
+    IRT.edit_command_format = %(mine --line %2$s %1$s)
+
     # Plain Eclipse on Mac X (opens the file but misses the line number)
     IRT.edit_command_format = %(open -a "/Applications/eclipse/Eclipse.app" %1$s)
 
