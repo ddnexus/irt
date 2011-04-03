@@ -43,7 +43,6 @@ module IRT
                          context.backtrace_map[arg]
                        else
                          raise IRT::IndexError, "No such backtrace index -- [#{arg}]"
-                         return
                        end
                      when arg.is_a?(Array)
                        arg
@@ -76,7 +75,7 @@ module IRT
           end
           print lines_str
         rescue Exception
-          raise IRT::NotImplementedError, "This system does not appear to support the \`#{IRT.copy_to_clipboard_command}\` command."
+          raise IRT::NotImplementedError, "This system does not appear to support the `#{IRT.copy_to_clipboard_command}` command."
         end
       end
 
