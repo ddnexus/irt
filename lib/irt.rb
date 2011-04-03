@@ -27,7 +27,7 @@ module IRT
          :macosx
        when /linux/i
          :linux
-       when /(solaris|bsd)/i
+       when /solaris|bsd/i
          :unix
        else
          :unknown
@@ -136,7 +136,10 @@ module IRT
   def start
     return if initialized
     puts copyright
+    argv = ARGV
+    ARGV.clear
     IRB.start
+    ARGV.replace(argv)
   end
 
 end
