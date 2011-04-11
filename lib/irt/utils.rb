@@ -1,3 +1,8 @@
+if RUBY_PLATFORM == "java"
+  require 'jruby'
+  JRuby.runtime.instance_config.run_ruby_in_process = false
+end
+
 require 'irt/prompter'
 
 module IRT

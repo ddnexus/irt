@@ -19,8 +19,11 @@
 # loads irt_helper.rb files automatically
 # IRT.autoload_helper_files = true
 
-# force true/false regardless the terminal ANSI support
-# IRT.force_color = true
+# forces tty (standard use with jruby)
+# IRT.force_tty(true)
+
+# forces color regardless the terminal ANSI support  (standard use with jruby)
+# IRT.force_color(true)
 
 # the command that should set the clipboard to the last lines from STDIN
 # default to 'pbcopy' on mac, 'xclip -selection c' on linux/unix and 'clip' on windoze

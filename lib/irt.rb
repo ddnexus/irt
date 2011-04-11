@@ -55,7 +55,16 @@ module IRT
   attr_reader :log, :irt_file, :initialized
 
   def force_color=(bool)
+    force_color(bool)
+    IRT::Prompter.say_warning "The 'IRT.force_color=' method is deprecated: use 'IRT.force_color(true/false)'"
+  end
+
+  def force_color(bool)
     Dye.color = bool
+  end
+
+  def force_tty(bool)
+    eval %(def STDIN.tty?; #{bool}; end)
   end
 
   def init_config

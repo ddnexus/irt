@@ -94,6 +94,10 @@ If you want to enable it there is an [official Microsoft page](http://support.mi
 about that matter, or you can eventually find useful this
 [simple tutorial](http://www.windowsnetworking.com/kbase/WindowsTips/Windows2000/UserTips/Miscellaneous/CommandInterpreterAnsiSupport.html "Command Interpreter Ansi Support").
 
+### ANSI colors on jruby
+
+You should use the `IRT.force_color(true)` and `IRT.force_tty(true)` options in the `~/.irtrc` file in order to see colors when you use jruby.
+
 ## Sessions / Modes
 
 There are 4 irt modes / session types: file, interactive, inspect, binding.
@@ -336,7 +340,7 @@ If you prefer to inspect/edit your files with your preferred IDE, you should add
 the ~/.irtrc file (create it if you don't have one) indicating the command format for your IDE,
 in order to open a file at a certain line.
 
-These are exaples of a few setups for different IDEs:
+These are examples of a few setups for different IDEs:
 
     # RubyMine
     IRT.edit_command_format = %(mine --line %2$s %1$s)
@@ -589,8 +593,11 @@ which should work quite well without any change:
     # loads irt_helper.rb files automatically
     # IRT.autoload_helper_files = true
 
-    # force true/false regardless the terminal ANSI support
-    # IRT.force_color = true
+    # forces tty (standard use with jruby)
+    # IRT.force_tty(true)
+
+    # forces color regardless the terminal ANSI support (standard use with jruby)
+    # IRT.force_color(true)
 
     # the command to pipe to the copied lines that should set the clipboard
     # default to 'pbcopy' on mac, 'xclip -selection c' on linux/unix and 'clip' on windoze
@@ -632,7 +639,7 @@ which should work quite well without any change:
 ### Colors
 
 The default color styles of IRT should be OK in most situation, anyway, if you really don't like the colors,
-you can switch off the color completely (IRT.force_color = false) or you can also
+you can switch off the color completely with `IRT.force_color(false)` or you can also
 redefine the colors by redefining them in your .irtrc file.
 
 The following are the default Dye (gem) styles, change them at will:
