@@ -20,7 +20,7 @@ module IRB #:nodoc:
     original_init_config(ap_path)
     @CONF[:AP_NAME] = 'irt'
     @CONF[:PROMPT][:IRT] = { :PROMPT_I => "%02n >> ",
-                             :PROMPT_S => '   "> ',
+                             :PROMPT_S => '   %l> ',
                              :PROMPT_C => "%02n .> ",
                              :PROMPT_N => "%02n -> ",
                              :RETURN   => "   => %s\n",
