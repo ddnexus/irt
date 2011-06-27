@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'irt/utils'
+
 ARGV.pop               # remove --simple-prompt
 ARGV.push ARGV.shift   # move the irt file to the end
 exec "irt_irb #{ARGV.join(' ')}"
