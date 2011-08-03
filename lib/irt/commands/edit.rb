@@ -67,7 +67,7 @@ module IRT
       def copy_to_clipboard(cmd)
         raise IRT::NotImplementedError, "No known copy_to_clipboard_command for this system." \
           unless IRT.copy_to_clipboard_command
-        lines_str = capture { send(cmd) }
+        lines_str = capture(:stdout) { send(cmd) }
         return unless lines_str.match(/\w/m)
         begin
           IO.popen(IRT.copy_to_clipboard_command, 'w') do |io|

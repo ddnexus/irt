@@ -108,7 +108,7 @@ module IRT
 
 #{label " Extensions ", :log_color}
     Kernel#capture stream {} Executes block and returns a string containing the
-                             captured str(eam).
+                             captured stream
     Kernel#silence stream {} Alias for capture
     Object#own_methods       Returns the methods implemented by the receiver
                              itself (not inherited)

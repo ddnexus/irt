@@ -61,7 +61,7 @@ module IRT
         ensure_session
         raise ArgumentError, "You must pass an arguent or a block" if arg.nil? && block.nil?
         # in case of a block we will just capture in memory its whole output to stdout
-        output = arg || capture(&block)
+        output = arg || capture(:stdout, &block)
         IO.popen(IRT.pager_command, 'w') do |io|
           io.puts output
         end
