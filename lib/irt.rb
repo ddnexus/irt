@@ -160,6 +160,10 @@ require 'irt/extensions/kernel'
 require 'irt/extensions/object'
 require 'irt/extensions/method'
 require 'irt/prompter'
-require 'irt/extensions/rails' if defined?(ActiveSupport::BufferedLogger)
+if defined?(ActiveSupport::BufferedLogger)
+  require 'irt/extensions/rails'
+  require 'irt/helpers/rails'
+end
+
 
 end
