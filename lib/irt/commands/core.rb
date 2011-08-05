@@ -44,6 +44,7 @@ module IRT
 
       def rerun
         ensure_session
+        Directives::Test.test_summary
         Directives::Test.reset_variables
         IRT::Session.run_file
       end
