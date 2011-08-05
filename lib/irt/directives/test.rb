@@ -3,11 +3,14 @@ module IRT
     module Test
       extend self
 
-      @@tests = 0
-      @@oks = 0
-      @@diffs = 0
-      @@errors = 0
-      @@last_desc = nil
+      def reset_variables
+        @@tests = 0
+        @@oks = 0
+        @@diffs = 0
+        @@errors = 0
+        @@last_desc = nil
+      end
+      reset_variables
 
       def desc(description)
         @@last_desc = description

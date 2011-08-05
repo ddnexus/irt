@@ -44,6 +44,7 @@ module IRT
 
       def rerun
         ensure_session
+        Directives::Test.reset_variables
         IRT::Session.run_file
       end
       alias_method :rr, :rerun
