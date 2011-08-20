@@ -114,6 +114,8 @@ files.each do |file|
                          sprintf cmd_format, options[:irb_options], file, options[:rails_env]
                        when '>=3.1.*'
                          sprintf cmd_format, options[:rails_env], options[:irb_options], file
+                       else
+                         sprintf cmd_format, options[:irb_options], file
                        end
   exit(1) unless system ENV['IRT_COMMAND']
 end
