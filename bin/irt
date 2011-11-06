@@ -96,10 +96,11 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                      end
                    end
                  end
-                 rails_version = gemfile.match(/\bgem\b.+\brails\b.+3\.0\.\d/) ? '=3.0.*' : '>=3.1.*'
+                 minor, patch = gemfile.match(/\bgem\b.+\brails\b.+3\.(\d+)\.(\d+)/).captures
+                 rails_version = (minor.to_i > 0 || patch.to_i > 9) ? :new : :old
                  'rails c %s %s %s'
                elsif File.exists?('./script/console')
-                 rails_version = '2.*'
+                 rails_version = :old
                  'ruby script/console --irb="irt_rails2 %2$s" %1$s %3$s'
                end
              else
@@ -110,10 +111,10 @@ ENV['IRT_INTERACTIVE_EOF'] = options[:interactive_eof].inspect if options[:inter
 
 files.each do |file|
   ENV['IRT_COMMAND'] = case rails_version
-                       when '2.*', '=3.0.*'
-                         sprintf cmd_format, options[:irb_options], file, options[:rails_env]
-                       when '>=3.1.*'
+                       when :new
                          sprintf cmd_format, options[:rails_env], options[:irb_options], file
+                       when :old
+                         sprintf cmd_format, options[:irb_options], file, options[:rails_env]
                        else
                          sprintf cmd_format, options[:irb_options], file
                        end
