@@ -41,8 +41,8 @@ EOB
 
   options[:no_rails] = false
   opts.on( '-n', '--no-rails', 'Does not autoload the Rails Environment' ) do
-     options[:no_rails] = true
-   end
+    options[:no_rails] = true
+  end
 
   opts.on( '-v', '--version', 'Shows the version and exits' ) do
     puts IRT.version
@@ -85,7 +85,7 @@ if files.empty?
 end
 
 cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
-               ENV['RAILS_ENV'] = options[:rails_env]
+               ENV['RAILS_ENV'] = options[:rails_env] if options[:rails_env]
                if File.exists?('./script/rails')
                  gemfile = File.read('Gemfile')
                  unless gemfile.match(/\bgem\b.+\birt\b/)
