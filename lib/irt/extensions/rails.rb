@@ -3,7 +3,8 @@ class ActiveSupport::BufferedLogger
   alias_method :original_add, :add
 
   def add(*args)
-    message = original_add(*args)
+    original_add(*args)
+    message = args[1]
     # no inline log when in rails server and not interactive mode
     return message if IRB.CurrentContext.nil? || IRT.rails_server && IRB.CurrentContext.irt_mode != :interactive
     if IRT.rails_log
