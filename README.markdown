@@ -716,6 +716,9 @@ to be fully reloaded, so it is slower, but guaranteed.
 
 ### Rails Server Sessions
 
+Notice: this feature is optional. If you want to enable it you must `require 'irt/extensions/rails_server'` after
+the irt gem gets loaded.
+
 The server sessions are a quick way to interact with your application while your server is running,
 without the need to launch a the irt executable: you can do almost everything you can from a regular IRT session
 launched from the irt executable, besides you have access to the server internals.
