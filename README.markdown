@@ -799,4 +799,4 @@ Please, send me a line if this issue is bugging you, so I will try to fix it fas
 
 ## Copyright
 
-Copyright (c) 2010-2011 Domizio Demichelis. See LICENSE for details.
+Copyright (c) 2010-2012 Domizio Demichelis. See LICENSE for details.
