@@ -34,7 +34,7 @@ EOB
     options[:irb_options] = opt
   end
 
-  options[:rails_env] = 'development'
+  options[:rails_env] = ENV['RAILS_ENV'] || 'development'
   opts.on( '-e', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
      options[:rails_env] = env
    end
