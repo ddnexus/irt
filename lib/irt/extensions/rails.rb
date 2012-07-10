@@ -9,7 +9,7 @@ class ActiveSupport::BufferedLogger
     return message if IRB.CurrentContext.nil? || IRT.rails_server && IRB.CurrentContext.irt_mode != :interactive
     if IRT.rails_log
       if IRT.dye_rails_log
-        plain_message = Dye.strip_ansi(message).chomp
+        plain_message = message.match(/\e\[[\d;]+m/) ? Dye.strip_ansi(message).chomp : message
         irt_message = IRT.dye(plain_message, :log_color) + "\n"
       end
       puts irt_message || message
