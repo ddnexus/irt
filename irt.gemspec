@@ -1,10 +1,10 @@
-name = File.basename( __FILE__, '.gemspec' )
 version = File.read(File.expand_path('../VERSION', __FILE__)).strip
 require 'date'
 require File.expand_path('../lib/irt/ruby_version.rb', __FILE__)
 
 Gem::Specification.new do |s|
 
+  s.name = 'irt'
   s.authors = ["Domizio Demichelis"]
   s.email = 'dd.nexus@gmail.com'
   s.homepage = 'http://github.com/ddnexus/irt'
@@ -41,7 +41,6 @@ ________________________________________________________________________________
 ________________________________________________________________________________
 
 EOM
-  s.name = name
   s.version = version
   s.date = Date.today.to_s
 
