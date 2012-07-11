@@ -441,6 +441,20 @@ That is specially useful when you want to add a test with the 'add_test' (or 'tt
 
 IRT offers the 'ri' command implemented with fastri for RUBY_VERSION < 1.9.2, or 'bri' for RUBY_VERSION >= 1.9.2:
 you must install the right gem for your ruby version in order to make it work.
+
+You may also need:
+
+    $ gem install rdoc-data
+
+    # Regenerate system docs
+    $ rdoc-data --install
+
+    # Regenerate all gem docs #mistake were here
+    $ gem rdoc --all --overwrite
+
+    # Regenerate specific gem doc with specific version
+    $ gem rdoc gemname -v 1.2.3 --overwrite
+
 See also the IRT.ri_command_format option if you want to customize it.
 
 In its basic form the 'ri' command can accept a string as the system ri command does (you can even omit the quotes).
