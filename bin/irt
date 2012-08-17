@@ -36,7 +36,7 @@ EOB
 
   options[:rails_env] = ENV['RAILS_ENV'] || 'development'
   opts.on( '-e', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
-     options[:rails_env] = env
+    ENV['RAILS_ENV'] = options[:rails_env] = env
    end
 
   options[:no_rails] = false
@@ -85,13 +85,13 @@ if files.empty?
 end
 
 cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
-               ENV['RAILS_ENV'] = options[:rails_env] if options[:rails_env]
                if File.exists?('./script/rails')
-                 gemfile = File.read('Gemfile')
+                 gemfile_path = ENV['BUNDLE_GEMFILE'] || 'Gemfile'
+                 gemfile = File.read(gemfile_path)
                  unless gemfile.match(/\bgem\b.+\birt\b/)
                    IRT::Prompter.say_warning %(The Gemfile doesn't look to include any 'gem "irt"' statement.\nIRT will probably not work until you add it!)
                    IRT::Prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[enter=y|n]', :default => 'y') do
-                     File.open('Gemfile', 'a') do |f|
+                     File.open(gemfile_path, 'a') do |f|
                        f.puts %(\ngem "irt")
                      end
                    end

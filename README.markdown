@@ -43,17 +43,9 @@ but that you actually want to fix it! IRT assumes that...
 - you want to eventually edit and possibly fix it, right in the console
 - you want to rerun the fix right away, without waiting for the end of the whole suite
 
-### Feedback!!!
-
-This is feedback-driven software. Just send me a line about you and/or what you think about IRT:
-that will be a wonderful contribution that will help me to keep improving (and documenting) this software.
-
-My email address is ddnexus at gmail.com ... waiting for your. Ciao.
-
 ## Try the Tutorial first!
 
-You can have a quick enlightening look (with a lot of screenshots) by reading the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial")
-first, then if you want more details you can read this documentation.
+You can have a quick enlightening look (with a lot of screenshots) by reading the [IRT Tutorial](https://github.com/ddnexus/irt/raw/master/irt-tutorial.pdf "IRT Tutorial") first, then if you want more details you can read this documentation.
 
 ## Installation
 
