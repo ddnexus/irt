@@ -38,14 +38,30 @@
 # the format to build the command to lauch emacs
 # IRT.emacs_command_format = %(emacs +%2$d "%1$s")
 
+# the formats to build the commnd to launch your preferred IDE
+# add your command format if you want to use another editor than nano or vi
+
+# RubyMine
+#IRT.edit_command_format = %(mine --line %2$s %1$s)
+
+# Plain Eclipse on Mac X (opens the file but misses the line number)
+#IRT.edit_command_format = %(open -a "/Applications/eclipse/Eclipse.app" %1$s)
+
+# Eclipse with installed EclipseCall plugin (platform independent, file and line number ok)
+# Eclipse should be running
+# http://www.jaylib.org/pmwiki/pmwiki.php/EclipsePlugins/EclipseCall
+# update site: http://www.jaylib.org/eclipsecall
+#IRT.edit_command_format = %(java -jar eclipsecall.jar %1$s -G%2$s)
+
+# NetBeans
+#IRT.edit_command_format = %(netbeans --open %1$s:%2$s)
+
 # the format to build the command to launch the ri tool
 # if RUBY_VERSION < 1.9.2 uses qri (from fastri) else bri
 # IRT.ri_command_format = %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
 # IRT.ri_command_format = %(bri "%s")
-
-# add your command format if you want to use another editor than nano or vi
-# default 'open -t %1$s' on MacOX; 'kde-open %1$s' or 'gnome-open %1$s' un unix/linux; '%1$s' on windoze
-# IRT.edit_command_format = "your_preferred_GUI_editor %1$s +%2$d"
+# for ruby >= 1.9.3 the vanilla ri is better
+# IRT.ri_command_format = %(qri -f #{Dye.color? ? 'ansi' : 'bs'} "%s")
 
 # any log-ignored-echo command you want to add
 # IRT.log.ignored_echo_commands << [:commandA, :commandB ...]

@@ -109,7 +109,11 @@ module IRT
     @vi_command_format = %(vi "%1$s" +%2$d)
     @nano_command_format = %(nano +%2$d "%1$s")
     @emacs_command_format = %(emacs +%2$d "%1$s")
-    @ri_command_format =  IRT::Commands::Ri::GEM == 'bri' ? %(bri "%s") : %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
+    @ri_command_format =  case IRT::Commands::Ri::GEM
+                          when 'bri'    then %(bri "%s")
+                          when 'fastri' then %(qri -f #{Dye.color? ? 'ansi' : 'plain'} "%s")
+                          when 'ri'     then %(ri -f #{Dye.color? ? 'ansi' : 'bs'} "%s")
+                          end
     @pager_command = 'less -R'
     @debug = false
   end

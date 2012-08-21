@@ -2,7 +2,12 @@ module IRT
   module Commands
     module Ri
 
-      GEM = IRT::RubyVersion >= '1.9.2' ? 'bri' : 'fastri'
+      GEM = case
+            when IRT::RubyVersion >= '1.9.3' then 'ri'
+            when IRT::RubyVersion >= '1.9.2' then 'bri'
+            else 'fastri'
+            end
+
       @@choices_map = {}
 
       def self.reset_choices_map
@@ -92,6 +97,7 @@ module IRT
       end
 
       def ri_problem
+        return if GEM == 'ri'
         cmds = {'bri' => 'bri', 'fastri' => 'qri'}
         message = `#{cmds[GEM]}` ? "Bad ri_command_format for this system." :
                            %(You must install the "#{GEM}" gem to use this command with ruby #{RUBY_VERSION}.)

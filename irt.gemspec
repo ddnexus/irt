@@ -31,12 +31,13 @@ ________________________________________________________________________________
 
 ________________________________________________________________________________
 
-  2. In order to use the IRT contextual ri command, one of the following gems
-     must be installed:
+  2. In order to use the IRT contextual ri command, on ruby < 1.9.3,
+     one of the following gems must be installed:
 
        "bri"    if you run ruby >= 1.9.2
        "fastri" if you run ruby  < 1.9.2
 
+     (no extra installation needed if you use ruby >= 1.9.3)
 ________________________________________________________________________________
 
 EOM
