@@ -70,7 +70,7 @@ paths = if ARGV.empty?
 
 files = paths.map do |path|
           unless File.exists?(path)
-            next if IRT::Prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter=y|n]', :default => 'y'
+            next if IRT::Prompter.no? %(Do you want to create the file "#{path}"?), :hint => '[<enter>=y|n]', :default => 'y'
             options[:interactive_eof] = true
             dirname = File.dirname(path)
             FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
@@ -90,7 +90,7 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                  gemfile = File.read(gemfile_path)
                  unless gemfile.match(/\bgem\b.+\birt\b/)
                    IRT::Prompter.say_warning %(The Gemfile doesn't look to include any 'gem "irt"' statement.\nIRT will probably not work until you add it!)
-                   IRT::Prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[enter=y|n]', :default => 'y') do
+                   IRT::Prompter.yes?("Do you want to add irt to your Gemfile?", :hint => '[<enter>=y|n]', :default => 'y') do
                      File.open(gemfile_path, 'a') do |f|
                        f.puts %(\ngem "irt")
                      end
