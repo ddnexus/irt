@@ -131,6 +131,11 @@ module IRT
         end
       end
     end
+    # sets the AR logger to Rails logger, so it will be available
+    # inline in the IRT console (with the same log color)
+    if defined?(ActiveRecord::Base)
+      ActiveRecord::Base.logger = ::Rails.logger
+    end
     @initialized = true
     init_file
   end
