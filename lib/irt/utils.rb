@@ -57,7 +57,7 @@ module IRT
     end
 
     def copyright
-      @copyrignt ||= Dye.dye "irt #{version} (c) 2010-2011 Domizio Demichelis", :blue, :bold
+      @copyrignt ||= Dye.dye "irt #{version} (c) 2010-2013 Domizio Demichelis", :blue, :bold
     end
 
   private

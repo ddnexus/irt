@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.post_install_message      = <<EOM
 ________________________________________________________________________________
 
-                                IMPORTANT NOTES
+                              IRT IMPORTANT NOTES
 ________________________________________________________________________________
 
   1. If you notice a messed prompt while navigating the history, you must

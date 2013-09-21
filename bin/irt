@@ -37,7 +37,7 @@ EOB
   options[:rails_env] = ENV['RAILS_ENV'] || 'development'
   opts.on( '-e', '--rails-env [ENVIRONMENT]', 'Sets the Rails Environment' ) do |env|
     ENV['RAILS_ENV'] = options[:rails_env] = env
-   end
+  end
 
   options[:no_rails] = false
   opts.on( '-n', '--no-rails', 'Does not autoload the Rails Environment' ) do
@@ -85,7 +85,7 @@ if files.empty?
 end
 
 cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
-               if File.exists?('./script/rails')
+               if File.exists?('./script/rails') || File.exists?('./bin/rails')
                  gemfile_path = ENV['BUNDLE_GEMFILE'] || 'Gemfile'
                  gemfile = File.read(gemfile_path)
                  unless gemfile.match(/\bgem\b.+\birt\b/)
@@ -96,7 +96,7 @@ cmd_format = if File.exists?('./config/environment.rb') && !options[:no_rails]
                      end
                    end
                  end
-                 minor, patch = gemfile.match(/\bgem\b.+\brails\b.+3\.(\d+)\.(\d+)/).captures
+                 minor, patch = gemfile.match(/\bgem\b.+\brails\b.+(3|4)\.(\d+)\.(\d+)/).captures
                  rails_version = (minor.to_i > 0 || patch.to_i > 9) ? :new : :old
                  'rails c %s %s %s'
                elsif File.exists?('./script/console')
