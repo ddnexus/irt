@@ -91,7 +91,7 @@ module IRT
     def print_header(tail_str='')
       puts
       log_head = "Virtual Log#{' '+ tail_str unless tail_str.empty?}"
-      puts IRT.dye("      #{log_head}      ", '***** #{log_head} *****', :log_color, :bold, :reversed)
+      puts IRT.dye("      #{log_head}      ", "***** #{log_head} *****", :log_color, :bold, :reversed)
     end
 
     def status_segment(name, mode)
