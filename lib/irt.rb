@@ -1,5 +1,6 @@
-# allows standard rails 3 console to run without loading irt
-unless defined?(Rails::Console) && !ENV['IRT_COMMAND']
+# allows to skip irb overriding, so you can use the regular irb/rails console
+# even if irt is required in the Gemfile
+if ENV['IRT_COMMAND']
 
 at_exit{ Dye.print_reset_colors }
 
