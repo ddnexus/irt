@@ -36,7 +36,7 @@ module IRB #:nodoc:
                                  if !!ENV['IRT_INTERACTIVE_EOF']
     @CONF[:AT_EXIT] << proc{ IRT::Directives.test_summary }
     @CONF[:AT_EXIT] << proc{ IRT::History.save_history }
-    @CONF[:RC_NAME_GENERATOR] = proc {|rc| File.expand_path '~/.irtrc' }
+    @CONF[:RC_NAME_GENERATOR] = proc {|rc| ENV["IRTRC_PATH"] || File.expand_path('~/.irtrc') }
   end
 
   def IRB.parse_opts
